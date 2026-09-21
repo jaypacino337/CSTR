@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSTR Lending — Fast, Fair Loans</title>
+  <meta name="description" content="CSTR Lending offers personal, business and home loans with transparent rates, same-day decisions and funding in as little as 24 hours." />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ===== Top bar ===== -->
+  <div class="topbar">
+    <div class="container topbar__inner">
+      <span>📞 Call us: <a href="tel:+18005550199">1-800-555-0199</a></span>
+      <span>Mon–Fri 8am–8pm · Sat 9am–5pm EST</span>
+    </div>
+  </div>
+
+  <!-- ===== Header ===== -->
+  <header class="header" id="top">
+    <div class="container header__inner">
+      <a href="#top" class="logo" aria-label="CSTR Lending home">
+        <img src="assets/logo.svg" alt="" width="36" height="36" />
+        <span>CSTR <em>Lending</em></span>
+      </a>
+
+      <nav class="nav" id="nav">
+        <a href="#loans">Loans</a>
+        <a href="#how">How It Works</a>
+        <a href="#calculator">Calculator</a>
+        <a href="#rates">Rates</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="header__actions">
+        <a href="#login" class="btn btn--ghost">Log In</a>
+        <a href="#apply" class="btn btn--primary">Apply Now</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <div class="hero__content">
+          <span class="eyebrow">Trusted by 120,000+ borrowers</span>
+          <h1>Fast, fair loans <span class="accent">built around you.</span></h1>
+          <p class="lead">
+            Borrow $1,000 to $500,000 with transparent fixed rates, no hidden fees and a
+            decision in minutes. Funds can land in your account as soon as the next business day.
+          </p>
+          <div class="hero__cta">
+            <a href="#apply" class="btn btn--primary btn--lg">Check Your Rate</a>
+            <a href="#how" class="btn btn--outline btn--lg">See How It Works</a>
+          </div>
+          <p class="hero__note">✓ Checking your rate won't affect your credit score</p>
+
+          <ul class="hero__stats">
+            <li><strong>$2.4B+</strong><span>Funded to date</span></li>
+            <li><strong>4.9/5</strong><span>Customer rating</span></li>
+            <li><strong>24 hrs</strong><span>Average funding time</span></li>
+          </ul>
+        </div>
+
+        <div class="hero__card">
+          <div class="quote-card">
+            <h3>Get a quick quote</h3>
+            <p>See what you could qualify for in under 60 seconds.</p>
+            <form class="quote-form" id="quoteForm" novalidate>
+              <label>
+                <span>Loan type</span>
+                <select name="type" id="quoteType">
+                  <option value="personal">Personal Loan</option>
+                  <option value="business">Business Loan</option>
+                  <option value="home">Home Loan</option>
+                  <option value="auto">Auto Loan</option>
+                </select>
+              </label>
+              <label>
+                <span>Amount needed</span>
+                <div class="input-prefix">
+                  <i>$</i>
+                  <input type="number" name="amount" id="quoteAmount" placeholder="15,000" min="1000" step="500" required />
+                </div>
+              </label>
+              <label>
+                <span>Credit score (estimate)</span>
+                <select name="credit" id="quoteCredit">
+                  <option value="excellent">Excellent (750+)</option>
+                  <option value="good" selected>Good (700–749)</option>
+                  <option value="fair">Fair (640–699)</option>
+                  <option value="poor">Building (below 640)</option>
+                </select>
+              </label>
+              <button type="submit" class="btn btn--primary btn--block">Get My Quote</button>
+              <div class="quote-result" id="quoteResult" hidden>
+                <p>Estimated rate from</p>
+                <strong id="quoteRate">—</strong>
+                <span id="quotePayment">—</span>
+              </div>
+            </form>
+            <p class="fineprint">No obligation. Soft credit check only.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Trust bar ===== -->
+    <section class="trust">
+      <div class="container trust__inner">
+        <span>As featured in</span>
+        <ul>
+          <li>Forbes</li>
+          <li>Bloomberg</li>
+          <li>WSJ</li>
+          <li>TechCrunch</li>
+          <li>CNBC</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== Loan products ===== -->
+    <section class="section" id="loans">
+      <div class="container">
+        <div class="section__head">
+          <span class="eyebrow">Our loan products</span>
+          <h2>The right loan for every goal</h2>
+          <p>Whether you're consolidating debt, growing a business or buying a home, we have a loan designed for it.</p>
+        </div>
+
+        <div class="grid grid--4">
+          <article class="card product">
+            <div class="product__icon">💳</div>
+            <h3>Personal Loans</h3>
+            <p>Consolidate debt, cover a big expense or fund a life event with one simple monthly payment.</p>
+            <ul class="product__meta">
+              <li>$1,000 – $50,000</li>
+              <li>From 6.49% APR</li>
+              <li>2 – 7 year terms</li>
+            </ul>
+            <a href="#apply" class="link-arrow">Apply now</a>
+          </article>
+
+          <article class="card product product--featured">
+            <span class="badge">Most popular</span>
+            <div class="product__icon">🏢</div>
+            <h3>Business Loans</h3>
+            <p>Flexible working capital, equipment financing and lines of credit to keep your business moving.</p>
+            <ul class="product__meta">
+              <li>$10,000 – $500,000</li>
+              <li>From 7.25% APR</li>
+              <li>1 – 10 year terms</li>
+            </ul>
+            <a href="#apply" class="link-arrow">Apply now</a>
+          </article>
+
+          <article class="card product">
+            <div class="product__icon">🏡</div>
+            <h3>Home Loans</h3>
+            <p>Competitive mortgages and refinancing with dedicated advisors from pre-approval to closing.</p>
+            <ul class="product__meta">
+              <li>Up to $2,000,000</li>
+              <li>From 5.89% APR</li>
+              <li>15 – 30 year terms</li>
+            </ul>
+            <a href="#apply" class="link-arrow">Apply now</a>
+          </article>
+
+          <article class="card product">
+            <div class="product__icon">🚗</div>
+            <h3>Auto Loans</h3>
+            <p>New, used or refinance — get pre-approved before you visit the dealership and negotiate with confidence.</p>
+            <ul class="product__meta">
+              <li>$5,000 – $150,000</li>
+              <li>From 5.49% APR</li>
+              <li>2 – 7 year terms</li>
+            </ul>
+            <a href="#apply" class="link-arrow">Apply now</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== How it works ===== -->
+    <section class="section section--alt" id="how">
+      <div class="container">
+        <div class="section__head">
+          <span class="eyebrow">Simple process</span>
+          <h2>Funded in three easy steps</h2>
+          <p>No paperwork mountains, no waiting weeks. Most customers finish in under 10 minutes.</p>
+        </div>
+
+        <ol class="steps">
+          <li class="step">
+            <span class="step__num">1</span>
+            <h3>Check your rate</h3>
+            <p>Answer a few questions online. It takes two minutes and won't impact your credit score.</p>
+          </li>
+          <li class="step">
+            <span class="step__num">2</span>
+            <h3>Choose your offer</h3>
+            <p>Compare personalized loan options with clear terms. Pick the amount and payment that fits.</p>
+          </li>
+          <li class="step">
+            <span class="step__num">3</span>
+            <h3>Get your money</h3>
+            <p>Sign electronically and receive funds directly in your bank account — often the next business day.</p>
+          </li>
+        </ol>
+
+        <div class="center">
+          <a href="#apply" class="btn btn--primary btn--lg">Start My Application</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Calculator ===== -->
+    <section class="section" id="calculator">
+      <div class="container calc">
+        <div class="calc__text">
+          <span class="eyebrow">Loan calculator</span>
+          <h2>Know your payment before you apply</h2>
+          <p>Drag the sliders to estimate your monthly payment. Actual rates depend on your credit profile, loan type and term.</p>
+          <ul class="checklist">
+            <li>Fixed rates — your payment never changes</li>
+            <li>No prepayment penalties, ever</li>
+            <li>No origination fee on most loans</li>
+          </ul>
+        </div>
+
+        <div class="card calc__panel">
+          <div class="calc__row">
+            <div class="calc__label"><span>Loan amount</span><output id="amountOut">$15,000</output></div>
+            <input type="range" id="amountRange" min="1000" max="100000" step="500" value="15000" />
+          </div>
+          <div class="calc__row">
+            <div class="calc__label"><span>Term</span><output id="termOut">36 months</output></div>
+            <input type="range" id="termRange" min="12" max="84" step="12" value="36" />
+          </div>
+          <div class="calc__row">
+            <div class="calc__label"><span>Interest rate (APR)</span><output id="rateOut">8.99%</output></div>
+            <input type="range" id="rateRange" min="4" max="30" step="0.25" value="8.99" />
+          </div>
+
+          <div class="calc__result">
+            <div>
+              <span>Monthly payment</span>
+              <strong id="monthlyOut">$477</strong>
+            </div>
+            <div>
+              <span>Total interest</span>
+              <strong id="interestOut">$2,177</strong>
+            </div>
+            <div>
+              <span>Total repaid</span>
+              <strong id="totalOut">$17,177</strong>
+            </div>
+          </div>
+          <a href="#apply" class="btn btn--primary btn--block">Apply for this loan</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Rates ===== -->
+    <section class="section section--alt" id="rates">
+      <div class="container">
+        <div class="section__head">
+          <span class="eyebrow">Transparent pricing</span>
+          <h2>Today's rates</h2>
+          <p>Rates shown are our lowest available. Your rate is based on credit history, income and loan term.</p>
+        </div>
+
+        <div class="table-wrap">
+          <table class="rates-table">
+            <thead>
+              <tr>
+                <th>Loan type</th>
+                <th>APR range</th>
+                <th>Amount</th>
+                <th>Term</th>
+                <th>Funding</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Loan type"><strong>Personal</strong></td>
+                <td data-label="APR">6.49% – 24.99%</td>
+                <td data-label="Amount">$1K – $50K</td>
+                <td data-label="Term">2 – 7 yrs</td>
+                <td data-label="Funding">1 business day</td>
+                <td><a href="#apply" class="btn btn--sm btn--outline">Apply</a></td>
+              </tr>
+              <tr>
+                <td data-label="Loan type"><strong>Business</strong></td>
+                <td data-label="APR">7.25% – 29.99%</td>
+                <td data-label="Amount">$10K – $500K</td>
+                <td data-label="Term">1 – 10 yrs</td>
+                <td data-label="Funding">1 – 3 business days</td>
+                <td><a href="#apply" class="btn btn--sm btn--outline">Apply</a></td>
+              </tr>
+              <tr>
+                <td data-label="Loan type"><strong>Home</strong></td>
+                <td data-label="APR">5.89% – 8.75%</td>
+                <td data-label="Amount">Up to $2M</td>
+                <td data-label="Term">15 – 30 yrs</td>
+                <td data-label="Funding">21 – 30 days</td>
+                <td><a href="#apply" class="btn btn--sm btn--outline">Apply</a></td>
+              </tr>
+              <tr>
+                <td data-label="Loan type"><strong>Auto</strong></td>
+                <td data-label="APR">5.49% – 18.99%</td>
+                <td data-label="Amount">$5K – $150K</td>
+                <td data-label="Term">2 – 7 yrs</td>
+                <td data-label="Funding">Same day</td>
+                <td><a href="#apply" class="btn btn--sm btn--outline">Apply</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="fineprint center">Rates effective as of today and subject to change. All loans subject to credit approval.</p>
+      </div>
+    </section>
+
+    <!-- ===== Why us ===== -->
+    <section class="section" id="why">
+      <div class="container">
+        <div class="section__head">
+          <span class="eyebrow">Why CSTR</span>
+          <h2>Lending that puts people first</h2>
+        </div>
+        <div class="grid grid--3">
+          <div class="feature">
+            <div class="feature__icon">⚡</div>
+            <h3>Decisions in minutes</h3>
+            <p>Our smart underwriting reviews your application instantly, so you're never left waiting.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">🔒</div>
+            <h3>Bank-level security</h3>
+            <p>256-bit encryption and strict data policies keep your information safe at every step.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">💬</div>
+            <h3>Real human support</h3>
+            <p>Talk to a licensed loan specialist by phone, chat or email — seven days a week.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">📉</div>
+            <h3>No hidden fees</h3>
+            <p>What you see is what you pay. No prepayment penalties, no surprise charges.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">📈</div>
+            <h3>Build your credit</h3>
+            <p>We report on-time payments to all three bureaus to help strengthen your credit profile.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">🤝</div>
+            <h3>Flexible repayment</h3>
+            <p>Choose your due date, change it later and pay extra anytime with zero penalties.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Testimonials ===== -->
+    <section class="section section--dark" id="reviews">
+      <div class="container">
+        <div class="section__head section__head--light">
+          <span class="eyebrow">Customer stories</span>
+          <h2>Loved by borrowers nationwide</h2>
+        </div>
+        <div class="grid grid--3">
+          <blockquote class="testimonial">
+            <div class="stars">★★★★★</div>
+            <p>"I consolidated three credit cards into one payment and cut my interest almost in half. The whole thing took ten minutes."</p>
+            <footer><strong>Maria G.</strong><span>Personal loan · Austin, TX</span></footer>
+          </blockquote>
+          <blockquote class="testimonial">
+            <div class="stars">★★★★★</div>
+            <p>"We needed equipment fast to take on a big contract. CSTR funded us in two days when our bank said six weeks."</p>
+            <footer><strong>Derek L.</strong><span>Business loan · Denver, CO</span></footer>
+          </blockquote>
+          <blockquote class="testimonial">
+            <div class="stars">★★★★★</div>
+            <p>"First-time home buyer and honestly terrified. My advisor walked me through every step. Closed in 24 days."</p>
+            <footer><strong>Priya S.</strong><span>Home loan · Raleigh, NC</span></footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="section" id="faq">
+      <div class="container container--narrow">
+        <div class="section__head">
+          <span class="eyebrow">FAQ</span>
+          <h2>Frequently asked questions</h2>
+        </div>
+
+        <div class="accordion" id="faqAccordion">
+          <details open>
+            <summary>Will checking my rate affect my credit score?</summary>
+            <p>No. Checking your rate uses a soft credit inquiry, which is not visible to other lenders and does not affect your score. A hard inquiry is only made if you accept an offer and proceed with the loan.</p>
+          </details>
+          <details>
+            <summary>How quickly can I receive my funds?</summary>
+            <p>Most personal and auto loans are funded within one business day of signing. Business loans typically fund in 1–3 business days, and home loans close in 21–30 days on average.</p>
+          </details>
+          <details>
+            <summary>What do I need to apply?</summary>
+            <p>You'll need to be 18 or older, have a valid U.S. bank account, a verifiable source of income and a Social Security or Tax ID number. Business applicants also need at least 6 months of operating history.</p>
+          </details>
+          <details>
+            <summary>Are there any fees?</summary>
+            <p>Most of our loans have no origination fee and never carry prepayment penalties. If a fee applies to your specific offer, it will be clearly displayed before you sign anything.</p>
+          </details>
+          <details>
+            <summary>Can I pay off my loan early?</summary>
+            <p>Absolutely. You can make extra payments or pay off your full balance at any time with no penalty, and you'll save on interest by doing so.</p>
+          </details>
+          <details>
+            <summary>What credit score do I need?</summary>
+            <p>We work with a wide range of credit profiles. While a score of 640+ gives you access to our best rates, we regularly approve applicants with lower scores based on income and overall financial picture.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Apply / CTA ===== -->
+    <section class="section section--apply" id="apply">
+      <div class="container apply">
+        <div class="apply__text">
+          <span class="eyebrow">Ready when you are</span>
+          <h2>Check your rate in 2 minutes</h2>
+          <p>Free, no obligation and no impact on your credit score. See real offers, not estimates.</p>
+          <ul class="checklist checklist--light">
+            <li>Instant decision</li>
+            <li>Funds as soon as tomorrow</li>
+            <li>Support from real people</li>
+          </ul>
+        </div>
+
+        <form class="card apply__form" id="applyForm" novalidate>
+          <h3>Start your application</h3>
+          <div class="form-grid">
+            <label><span>First name</span><input type="text" name="first" required /></label>
+            <label><span>Last name</span><input type="text" name="last" required /></label>
+            <label class="span-2"><span>Email</span><input type="email" name="email" required /></label>
+            <label><span>Phone</span><input type="tel" name="phone" required /></label>
+            <label><span>ZIP code</span><input type="text" name="zip" inputmode="numeric" pattern="[0-9]{5}" required /></label>
+            <label>
+              <span>Loan type</span>
+              <select name="type">
+                <option>Personal Loan</option>
+                <option>Business Loan</option>
+                <option>Home Loan</option>
+                <option>Auto Loan</option>
+              </select>
+            </label>
+            <label>
+              <span>Amount</span>
+              <div class="input-prefix"><i>$</i><input type="number" name="amount" min="1000" step="500" required /></div>
+            </label>
+            <label class="span-2 checkbox">
+              <input type="checkbox" name="consent" required />
+              <span>I agree to the <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>, and authorize a soft credit check.</span>
+            </label>
+          </div>
+          <button type="submit" class="btn btn--primary btn--block btn--lg">Check My Rate</button>
+          <p class="form-msg" id="applyMsg" role="status" aria-live="polite"></p>
+          <p class="fineprint">🔒 Your information is encrypted and never sold.</p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer" id="contact">
+    <div class="container footer__grid">
+      <div class="footer__brand">
+        <a href="#top" class="logo logo--light">
+          <img src="assets/logo.svg" alt="" width="32" height="32" />
+          <span>CSTR <em>Lending</em></span>
+        </a>
+        <p>Fast, fair and transparent loans for people and businesses across the country.</p>
+        <p class="footer__contact">
+          <a href="tel:+18005550199">1-800-555-0199</a><br />
+          <a href="mailto:hello@cstrlending.com">hello@cstrlending.com</a><br />
+          123 Market Street, Suite 400<br />San Francisco, CA 94105
+        </p>
+      </div>
+
+      <div>
+        <h4>Loans</h4>
+        <ul>
+          <li><a href="#loans">Personal Loans</a></li>
+          <li><a href="#loans">Business Loans</a></li>
+          <li><a href="#loans">Home Loans</a></li>
+          <li><a href="#loans">Auto Loans</a></li>
+          <li><a href="#rates">Current Rates</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#why">About Us</a></li>
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#careers">Careers</a></li>
+          <li><a href="#press">Press</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#faq">Help Center</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="#login">Account Login</a></li>
+          <li><a href="#privacy">Privacy Policy</a></li>
+          <li><a href="#terms">Terms of Service</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__newsletter">
+        <h4>Stay in the loop</h4>
+        <p>Rate updates and money tips, once a month.</p>
+        <form class="newsletter" id="newsletterForm" novalidate>
+          <input type="email" placeholder="you@email.com" required aria-label="Email address" />
+          <button type="submit" class="btn btn--primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="container footer__bottom">
+      <p>© <span id="year"></span> CSTR Lending, Inc. All rights reserved. NMLS #000000. Equal Housing Lender.</p>
+      <p class="fineprint">
+        All loans are subject to credit approval and program guidelines. APR ranges shown are representative and may vary by state, creditworthiness and loan term. Not an offer to lend.
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
