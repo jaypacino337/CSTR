@@ -178,7 +178,7 @@ export const Fight: React.FC = () => {
         />
       </div>
       <div style={{position: 'absolute', top: 1004, width: '100%', textAlign: 'center', fontFamily: UI, fontSize: 19, letterSpacing: '0.28em', color: A.dim, opacity: prog(f, 124, 16)}}>
-        72-HOUR ROUND · SAME STOCK-PERP MARKET · DISTINCT FIXED STRATEGIES
+        EQUAL STARTING CAPITAL · LOCKED STRATEGIES · 72 HOURS
       </div>
     </AbsoluteFill>
   );

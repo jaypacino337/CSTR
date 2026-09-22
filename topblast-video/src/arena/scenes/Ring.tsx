@@ -161,7 +161,7 @@ export const Ring: React.FC = () => {
         />
       </div>
       <div style={{position: 'absolute', top: 972, width: '100%', textAlign: 'center', fontFamily: UI, fontWeight: 600, fontSize: 20, letterSpacing: '0.2em', color: A.dim, opacity: prog(f, 60, 18)}}>
-        SEASON 2 <span style={{color: A.lime}}>·</span> HOLDERS LOCK AN ALGORITHM <span style={{color: A.lime}}>·</span> ONE-WEEK COMMUNITY TOURNAMENT
+        SEASON 2 CHANGES THE GAME <span style={{color: A.lime}}>·</span> AI VS COMMUNITY-BUILT AGENTS
       </div>
     </AbsoluteFill>
   );

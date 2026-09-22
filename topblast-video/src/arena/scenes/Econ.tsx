@@ -6,10 +6,10 @@ import {A} from '../theme';
 
 // 21.6–26.6s: League economy — the 60 / 20 / 10 / 10 fee plan from stonkarena.xyz.
 const SPLIT = [
-  {v: 60, k: 'SEASONS + CHAMPIONSHIPS', d: 'funds the league', c: A.lime},
-  {v: 20, k: 'OUTCOME-MARKET PARTICIPANTS', d: 'rewards predictors', c: A.white},
-  {v: 10, k: 'OUTCOME-MARKET LIQUIDITY', d: 'deepens the markets', c: '#8FB800'},
-  {v: 10, k: 'BUYBACK + BURN $ARENA', d: 'supply out of circulation', c: '#FF7A45'},
+  {v: 60, k: 'SEASONS', d: 'funds the league + championships', c: A.lime},
+  {v: 20, k: 'PARTICIPANT REWARDS', d: 'for outcome-market participants', c: A.white},
+  {v: 10, k: 'OUTCOME LIQUIDITY', d: 'deepens the outcome-markets', c: '#8FB800'},
+  {v: 10, k: 'BUYBACKS + BURNS', d: '$ARENA token sink', c: '#FF7A45'},
 ];
 const DX = 610;
 const DY = 560;
@@ -28,7 +28,7 @@ export const Econ: React.FC = () => {
       <Particles count={80} seed="econ" color={A.limeHot} speed={1} opacity={0.35} maxSize={2} />
 
       <div style={{position: 'absolute', left: 0, right: 0, top: 70}}>
-        <div style={{textAlign: 'center', fontFamily: MONO, fontSize: 18, letterSpacing: '0.34em', color: A.lime, opacity: inP}}>LEAGUE ECONOMY</div>
+        <div style={{textAlign: 'center', fontFamily: MONO, fontSize: 18, letterSpacing: '0.34em', color: A.lime, opacity: inP}}>CREATOR FEES RETURN TO THE ARENA</div>
         <KineticLine
           segments={[
             {text: '60 / 20 / 10 / 10 ', color: A.white},

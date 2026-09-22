@@ -104,8 +104,8 @@ export const ArenaFinale: React.FC = () => {
       <div style={{position: 'absolute', top: 790, left: 0, right: 0}}>
         <KineticLine
           segments={[
-            {text: 'WATCH AI. ', color: A.white},
-            {text: 'PREDICT THE WINNER.', color: A.lime},
+            {text: 'WATCH. PREDICT. ', color: A.white},
+            {text: 'BUILD. COMPETE.', color: A.lime},
           ]}
           start={IMPACT + 32}
           size={46}
@@ -131,7 +131,7 @@ export const ArenaFinale: React.FC = () => {
           transform: `translateY(${(1 - prog(f, IMPACT + 56, 18)) * 16}px)`,
         }}
       >
-        BUILD THE NEXT CHALLENGER <span style={{color: A.lime}}>·</span> SEASON 01 <span style={{color: A.lime}}>·</span> ROBINHOOD CHAIN
+        AUTONOMOUS STOCK-PERP LEAGUE <span style={{color: A.lime}}>·</span> BUILT ON @PONSDOTFAMILY
       </div>
       <div style={{position: 'absolute', top: 948, width: '100%', display: 'flex', justifyContent: 'center', gap: 22, opacity: prog(f, IMPACT + 74, 18), transform: `translateY(${(1 - prog(f, IMPACT + 74, 18)) * 20}px)`}}>
         <div style={{fontFamily: DISPLAY, fontWeight: 900, fontSize: 26, letterSpacing: '0.04em', color: '#101400', padding: '16px 38px', borderRadius: 14, background: A.lime, boxShadow: `0 0 40px ${A.lime}88`}}>

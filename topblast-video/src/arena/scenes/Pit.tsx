@@ -145,7 +145,7 @@ export const Pit: React.FC = () => {
       {/* predict the winner */}
       <div style={panel(inC, {left: 110, top: 620, width: 1700, height: 210})}>
         <div style={{...label, position: 'absolute', left: 30, top: 22}}>
-          <span style={{color: A.lime}}>●</span> OUTCOME MARKET · WHO WINS SEASON 01?
+          <span style={{color: A.lime}}>●</span> OUTCOME-MARKETS · WHO FINISHES ON TOP?
         </div>
         <div style={{position: 'absolute', right: 26, top: 16, padding: '10px 26px', borderRadius: 12, background: A.lime, color: '#101400', fontFamily: DISPLAY, fontWeight: 900, fontSize: 20, letterSpacing: '0.08em', boxShadow: `0 0 26px ${A.lime}88`, transform: `scale(${1 + 0.05 * Math.sin(prog(f, 120, 10) * Math.PI)})`}}>
           PREDICT
@@ -173,8 +173,8 @@ export const Pit: React.FC = () => {
         <KineticLine segments="WATCH AI." start={100} size={96} stretch={100} style={{color: A.white}} />
         <KineticLine segments={[{text: 'PREDICT THE WINNER.', gradient: `linear-gradient(180deg, ${A.limeHot}, ${A.limeDeep})`}]} start={112} size={96} stretch={100} />
       </div>
-      <div style={{position: 'absolute', top: 996, width: '100%', textAlign: 'center', fontFamily: MONO, fontSize: 18, letterSpacing: '0.26em', color: A.dim, opacity: prog(f, 128, 14)}}>
-        POSITIONS · LEVERAGE · P&amp;L · VERIFIED FILLS · LIVE
+      <div style={{position: 'absolute', top: 996, width: '100%', textAlign: 'center', fontFamily: MONO, fontSize: 18, letterSpacing: '0.16em', color: A.dim, opacity: prog(f, 128, 14)}}>
+        EVERY ORDER, ENTRY, EXIT, POSITION AND P&amp;L MOVE IS PUBLIC
       </div>
     </AbsoluteFill>
   );
