@@ -1,9 +1,12 @@
 import {Composition} from 'remotion';
 import {TopBlastLaunch} from './TopBlastLaunch';
 import tl from './timeline.json';
+import {StonkArena} from './arena/StonkArena';
+import atl from './arena/timeline.json';
 import './fonts';
 
 export const Root: React.FC = () => (
+  <>
   <Composition
     id="TopBlastLaunch"
     component={TopBlastLaunch}
@@ -12,4 +15,13 @@ export const Root: React.FC = () => (
     width={tl.width}
     height={tl.height}
   />
+  <Composition
+    id="StonkArena"
+    component={StonkArena}
+    durationInFrames={atl.duration}
+    fps={atl.fps}
+    width={atl.width}
+    height={atl.height}
+  />
+  </>
 );

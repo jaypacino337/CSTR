@@ -5,7 +5,10 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const tl = JSON.parse(fs.readFileSync(path.join(here, '../src/timeline.json'), 'utf8'));
+// `node make-audio.mjs` → TopBlast score; `node make-audio.mjs arena` → Stonk Arena score.
+const PROJECT = process.argv[2] === 'arena' ? 'arena' : 'topblast';
+const tlPath = PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
+const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
 const FPS = tl.fps;
 const LEN = Math.ceil((tl.duration / FPS) * SR);
@@ -124,6 +127,24 @@ const sweepDown = (t, dur, g = 0.4) => {
   }, {gain: g, verb: 0.3});
 };
 
+const clank = (t, g = 0.4, pan = 0) => {
+  const f = svf();
+  add(t, SR * 0.5, (x) => {
+    const ring = [180, 263, 397, 611].reduce((a, hz, j) => a + Math.sin(2 * Math.PI * hz * x) * Math.exp(-(8 + j * 4) * x), 0) * 0.3;
+    return ring + f(rnd(), 1200, 0.8).bp * Math.exp(-30 * x) * 1.5;
+  }, {gain: g, pan, verb: 0.4});
+};
+
+const crowd = (t, dur, g = 0.4) => {
+  const f1 = svf();
+  const f2 = svf();
+  add(t, SR * dur, (x) => {
+    const u = x / dur;
+    const env = Math.sin(Math.PI * Math.min(1, u * 1.1)) * (0.7 + 0.3 * Math.sin(x * 5.3) * Math.sin(x * 2.1));
+    return (f1(rnd(), 700, 2.2).bp + f2(rnd(), 1400, 2.4).bp * 0.6) * env * 1.5;
+  }, {gain: g, verb: 0.6});
+};
+
 // ─── Pad + bass bed ────────────────────────────────────────
 const chord = [55, 82.41, 110, 130.81, 164.81, 246.94]; // A minor add9 voicing
 const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A major on the logo
@@ -156,18 +177,19 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
 
 // ─── Arrangement (all times from the video timeline) ───────
 const beat = 15; // 120bpm at 30fps
-const gridFrom = S.rails.from + 2;
-const dropGap = [S.chart.from + 75, S.chart.from + 90];
+const SC = Object.values(S); // scenes in order
+const gridFrom = SC[1].from + 2;
+const dropGap = PROJECT === 'arena' ? [S.fight.from - 2, S.fight.from + 12] : [S.chart.from + 75, S.chart.from + 90];
 const gridTo = S.finale.from - 8;
 for (let fr = gridFrom, n = 0; fr < gridTo; fr += beat / 2, n++) {
   const inGap = fr >= dropGap[0] && fr < dropGap[1];
   if (inGap) continue;
   if (n % 2 === 0) {
-    kick(F(fr), fr > S.chart.from + 90 ? 0.95 : 0.8);
+    kick(F(fr), fr > dropGap[1] ? 0.95 : 0.8);
     // sub bass under each kick
     const t0 = F(fr);
     add(t0, SR * 0.45, (x) => Math.sin(2 * Math.PI * 55 * x) * Math.min(1, x * 80) * Math.exp(-4 * x), {gain: 0.35, verb: 0});
-  } else if (fr > S.chart.from) {
+  } else if (fr > SC[2].from) {
     hat(F(fr), 0.1, n % 4 === 1 ? 0.35 : -0.35);
   }
 }
@@ -181,6 +203,7 @@ whoosh(F(58), F(16), 0.7, 200, 8000);
 impact(F(72), 1, 1.1);
 whoosh(F(82), F(14), 0.4, 6000, 300);
 
+if (PROJECT === 'topblast') {
 // 02 Rails
 whoosh(F(S.rails.from + 2), 0.9, 0.35, 400, 3000, -0.6);
 whoosh(F(S.rails.from + 8), 0.9, 0.35, 400, 3000, 0.6);
@@ -221,6 +244,46 @@ whoosh(F(S.creator.from + 104), F(16), 0.5, 5000, 200);
 impact(F(S.creator.from + 120), 0.85, 0.9);
 riser(F(S.creator.from + 124), F(40), 0.45);
 sweepDown(F(S.creator.from + 146), F(20), 0.5);
+
+} else {
+// 02 Gates
+whoosh(F(S.gates.from + 2), 0.9, 0.35, 400, 3000, -0.5);
+whoosh(F(S.gates.from + 8), 0.9, 0.35, 400, 3000, 0.5);
+for (let i = 0; i < 6; i++) {
+  clank(F(S.gates.from + 22 + i * 7), 0.45, (i / 2.5) - 1);
+  ding(F(S.gates.from + 30 + i * 7), 0.05, 1320 * Math.pow(1.06, i), (i / 2.5) - 1);
+}
+[22, 36].forEach((o) => click(F(S.gates.from + o), 0.25, 1800));
+kick(F(S.gates.from + 66), 0.6);
+ding(F(S.gates.from + 66), 0.12, 880);
+riser(F(S.gates.from + 90), F(30), 0.25);
+whoosh(F(S.gates.from + 112), F(22), 0.7, 300, 9000);
+
+// 03 Fight
+impact(F(S.fight.from + 12), 1.15, 1.2);
+clank(F(S.fight.from + 12), 0.6, 0);
+for (let k = 0; k < 10; k++) click(F(S.fight.from + 34 + k * 9), 0.12, 2200 + (k % 3) * 400, k % 2 ? 0.5 : -0.5);
+riser(F(S.fight.from + 70), F(40), 0.3);
+kick(F(S.fight.from + 112), 0.7);
+ding(F(S.fight.from + 112), 0.1, 1100);
+whoosh(F(S.fight.from + 140), F(22), 0.6, 300, 8000);
+
+// 04 Leaderboard
+for (let i = 0; i < 6; i++) click(F(S.ranks.from + 6 + i * 3), 0.16, 2600 + i * 120, 0.2);
+[44, 84].forEach((o) => { whoosh(F(S.ranks.from + o), F(18), 0.35, 800, 5000); click(F(S.ranks.from + o + 18), 0.35, 1500); });
+impact(F(S.ranks.from + 104), 0.7, 0.8);
+[0, 3, 6].forEach((d, i) => ding(F(S.ranks.from + 104 + d), 0.1, 1320 * [1, 1.26, 1.5][i], 0));
+whoosh(F(S.ranks.from + 140), F(22), 0.6, 300, 8000);
+
+// 05 Arena ring
+crowd(F(S.ring.from), F(S.ring.dur + 10), 0.5);
+whoosh(F(S.ring.from + 2), 1.1, 0.4, 5000, 300);
+ding(F(S.ring.from + 24), 0.12, 660);
+click(F(S.ring.from + 20), 0.25, 1600);
+riser(F(S.ring.from + 110), F(54), 0.45);
+sweepDown(F(S.ring.from + 146), F(20), 0.5);
+
+}
 
 // 06 Finale
 rumble(F(S.finale.from + 2), F(40), 0.7);
@@ -291,6 +354,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, '../public/topblast-score.wav');
+const outPath = path.join(here, PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);
