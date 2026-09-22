@@ -2,7 +2,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "duration": 840,
+  "duration": 966,
   "scenes": {
     "intro": {
       "from": 0,
@@ -16,16 +16,20 @@
       "from": 210,
       "dur": 162
     },
-    "ranks": {
+    "pit": {
       "from": 360,
       "dur": 162
     },
     "ring": {
       "from": 510,
-      "dur": 164
+      "dur": 150
+    },
+    "econ": {
+      "from": 648,
+      "dur": 150
     },
     "finale": {
-      "from": 660,
+      "from": 786,
       "dur": 180
     }
   }

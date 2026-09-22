@@ -67,7 +67,8 @@ export const Gates: React.FC = () => {
             <div key={tk.t} style={{position: 'absolute', left: x, top: TOP + 30, width: AW, height: AH + 20, overflow: 'hidden', borderRadius: `${AW / 2}px ${AW / 2}px 0 0`}}>
               <div style={{position: 'absolute', inset: 0, background: `radial-gradient(ellipse at 50% 100%, rgba(216,255,26,${0.35 * open}), transparent 70%)`}} />
               <div style={{position: 'absolute', left: 0, right: 0, top: 120, textAlign: 'center', opacity: show, transform: `scale(${0.7 + 0.3 * show})`}}>
-                <div style={{fontFamily: DISPLAY, fontWeight: 900, fontStretch: '115%', fontSize: 40, color: A.white}}>{tk.t}</div>
+                <div style={{fontFamily: DISPLAY, fontWeight: 900, fontSize: 46, color: A.white}}>{tk.t}</div>
+                <div style={{fontFamily: MONO, fontSize: 13, letterSpacing: '0.3em', color: A.lime, marginTop: 2}}>PERP</div>
                 <div style={{fontFamily: MONO, fontWeight: 700, fontSize: 24, color: A.white, marginTop: 10}}>${(tk.p * (1 + pct / 100)).toFixed(2)}</div>
                 <div style={{fontFamily: MONO, fontWeight: 700, fontSize: 22, color: up ? A.lime : A.down, marginTop: 6, textShadow: up ? `0 0 12px ${A.lime}` : undefined}}>
                   {up ? '▲' : '▼'} {Math.abs(pct).toFixed(2)}%
@@ -92,22 +93,23 @@ export const Gates: React.FC = () => {
       </AbsoluteFill>
 
       <div style={{position: 'absolute', top: 96, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 36}}>
-        <KineticLine segments="REAL STOCKS." start={22} size={54} stretch={112} weight={800} style={{color: A.dim}} />
-        <KineticLine segments="TOKENIZED." start={36} size={54} stretch={112} weight={800} style={{color: A.dim}} />
+        <KineticLine segments="LIGHTER STOCK PERPS." start={22} size={54} stretch={100} weight={800} style={{color: A.dim}} />
+        <KineticLine segments="ROBINHOOD CHAIN." start={40} size={54} stretch={100} weight={800} style={{color: A.lime}} />
       </div>
       <div style={{position: 'absolute', top: 868, left: 0, right: 0}}>
         <KineticLine
           segments={[
-            {text: 'ONE ', color: A.white},
-            {text: 'ARENA.', gradient: `linear-gradient(180deg, ${A.limeHot}, ${A.limeDeep})`},
+            {text: 'SEASON ', color: A.white},
+            {text: '01.', gradient: `linear-gradient(180deg, ${A.limeHot}, ${A.limeDeep})`},
           ]}
           start={66}
-          size={140}
+          size={150}
           stagger={1.6}
+          stretch={100}
         />
       </div>
-      <div style={{position: 'absolute', top: 1022, width: '100%', textAlign: 'center', fontFamily: UI, fontSize: 18, letterSpacing: '0.36em', color: A.dim, opacity: prog(f, 84, 20, expoOut) * 0.85}}>
-        AAPLx · TSLAx · NVDAx · AMZNx · MSFTx · GOOGLx
+      <div style={{position: 'absolute', top: 1022, width: '100%', textAlign: 'center', fontFamily: UI, fontSize: 18, letterSpacing: '0.24em', color: A.dim, opacity: prog(f, 84, 20, expoOut) * 0.85}}>
+        THE OPENING ROUND OF A RECURRING AUTONOMOUS STOCK-PERP LEAGUE
       </div>
       <Flash amount={flashIn * 0.8} color={A.limeDeep} />
     </AbsoluteFill>

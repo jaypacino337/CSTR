@@ -1,11 +1,12 @@
 import {AbsoluteFill, Audio, Sequence, staticFile} from 'remotion';
 import {FilmFinish} from '../components/Atmosphere';
 import {SceneShell} from '../components/SceneShell';
+import {Econ} from './scenes/Econ';
 import {Fight} from './scenes/Fight';
 import {ArenaFinale} from './scenes/Finale';
 import {Gates} from './scenes/Gates';
 import {ArenaIntro} from './scenes/Intro';
-import {Ranks} from './scenes/Ranks';
+import {Pit} from './scenes/Pit';
 import {Ring} from './scenes/Ring';
 import {A} from './theme';
 import tl from './timeline.json';
@@ -22,22 +23,27 @@ export const StonkArena: React.FC = () => (
         <Gates />
       </SceneShell>
     </Sequence>
-    <Sequence from={S.fight.from} durationInFrames={S.fight.dur} name="03 Fight">
+    <Sequence from={S.fight.from} durationInFrames={S.fight.dur} name="03 Four AIs">
       <SceneShell dur={S.fight.dur} origin="960px 600px" exitScale={3}>
         <Fight />
       </SceneShell>
     </Sequence>
-    <Sequence from={S.ranks.from} durationInFrames={S.ranks.dur} name="04 Leaderboard">
-      <SceneShell dur={S.ranks.dur} origin="960px 270px" exitScale={3}>
-        <Ranks />
+    <Sequence from={S.pit.from} durationInFrames={S.pit.dur} name="04 The Pit">
+      <SceneShell dur={S.pit.dur} origin="960px 720px" exitScale={3}>
+        <Pit />
       </SceneShell>
     </Sequence>
-    <Sequence from={S.ring.from} durationInFrames={S.ring.dur} name="05 Arena">
-      <SceneShell dur={S.ring.dur} exitMode="collapse" origin="960px 560px" outDur={16}>
+    <Sequence from={S.ring.from} durationInFrames={S.ring.dur} name="05 Challenger">
+      <SceneShell dur={S.ring.dur} origin="960px 560px" exitScale={3.4}>
         <Ring />
       </SceneShell>
     </Sequence>
-    <Sequence from={S.finale.from} durationInFrames={S.finale.dur} name="06 Finale">
+    <Sequence from={S.econ.from} durationInFrames={S.econ.dur} name="06 Economy">
+      <SceneShell dur={S.econ.dur} exitMode="collapse" origin="610px 560px" outDur={16}>
+        <Econ />
+      </SceneShell>
+    </Sequence>
+    <Sequence from={S.finale.from} durationInFrames={S.finale.dur} name="07 Finale">
       <SceneShell dur={S.finale.dur + 40} inDur={8} enterScale={1.1}>
         <ArenaFinale />
       </SceneShell>

@@ -2,7 +2,7 @@ import {AbsoluteFill, random, useCurrentFrame} from 'remotion';
 import {Glow, GridFloor, Particles} from '../../components/Atmosphere';
 import {KineticLine} from '../../components/Type';
 import {DISPLAY, MONO, UI, expoOut, inOut, lerp, prog} from '../../theme';
-import {A, TICKERS} from '../theme';
+import {A, AGENTS} from '../theme';
 import {AgentMark} from './Fight';
 
 // 17–22s: pull back to the full colosseum; tokenized stocks orbit the floor.
@@ -39,11 +39,18 @@ export const Ring: React.FC = () => {
     );
   };
 
-  const chips = TICKERS.map((tk, i) => {
-    const th = (i / TICKERS.length) * TAU - f * 0.018;
-    const s = Math.sin(th);
-    return {tk, x: CX + 500 * Math.cos(th), y: CY - 10 + 120 * s, depth: (s + 1) / 2, i};
-  }).sort((a, b) => a.depth - b.depth);
+  const roster = [
+    ...AGENTS.map((a) => ({n: a.n, sub: 'SEASON 01', c: a.c, community: false, at: 8})),
+    {n: 'YOUR AGENT', sub: 'SEASON 2', c: A.lime, community: true, at: 58},
+    {n: 'YOUR AGENT', sub: 'SEASON 2', c: A.lime, community: true, at: 70},
+  ];
+  const chips = roster
+    .map((tk, i) => {
+      const th = (i / roster.length) * TAU - f * 0.016;
+      const s = Math.sin(th);
+      return {tk, x: CX + 500 * Math.cos(th), y: CY - 10 + 120 * s, depth: (s + 1) / 2, i};
+    })
+    .sort((a, b) => a.depth - b.depth);
 
   // crowd camera flashes on the rim
   const flashes = new Array(40).fill(0).map((_, i) => {
@@ -94,33 +101,35 @@ export const Ring: React.FC = () => {
         <div style={{position: 'absolute', left: CX - 90, top: -100, width: 180, height: CY + H + 100, background: `linear-gradient(to bottom, transparent, rgba(216,255,26,0.35) 70%, rgba(216,255,26,0.6))`, filter: 'blur(24px)', opacity: beam, mixBlendMode: 'screen'}} />
         <div style={{position: 'absolute', left: CX - 60, top: CY - 30 + Math.sin(f / 10) * 8, opacity: beam, transform: `scale(${lerp(0.5, 1, beam)})`}}>
           <AgentMark size={120} color={A.lime} glow={2} />
+          <div style={{position: 'absolute', left: 0, right: 0, top: 30, textAlign: 'center', fontFamily: DISPLAY, fontWeight: 900, fontSize: 40, color: A.lime, opacity: prog(f, 60, 12)}}>?</div>
         </div>
 
-        {chips.map(({tk, x, y, depth, i}) => (
-          <div
-            key={tk.t}
-            style={{
-              position: 'absolute',
-              left: x - 95,
-              top: y - 34,
-              width: 190,
-              padding: '10px 0',
-              borderRadius: 14,
-              textAlign: 'center',
-              background: 'rgba(12,13,10,0.85)',
-              border: `1.5px solid ${tk.c >= 0 ? A.lime : A.down}`,
-              boxShadow: `0 0 ${24 * depth}px ${tk.c >= 0 ? 'rgba(216,255,26,0.5)' : 'rgba(255,77,77,0.4)'}`,
-              transform: `scale(${0.62 + 0.4 * depth})`,
-              opacity: (0.45 + 0.55 * depth) * prog(f, 10 + i * 3, 16),
-              filter: depth < 0.3 ? 'blur(1.5px)' : undefined,
-            }}
-          >
-            <div style={{fontFamily: DISPLAY, fontWeight: 900, fontStretch: '115%', fontSize: 30, color: A.white}}>{tk.t}</div>
-            <div style={{fontFamily: MONO, fontWeight: 700, fontSize: 18, color: tk.c >= 0 ? A.lime : A.down}}>
-              {tk.c >= 0 ? '▲' : '▼'} {Math.abs(tk.c + Math.sin(f / 7 + i) * 0.3).toFixed(2)}%
+        {chips.map(({tk, x, y, depth, i}) => {
+          const p = tk.community ? prog(f, tk.at, 18, expoOut) : prog(f, tk.at + i * 3, 16);
+          return (
+            <div
+              key={i}
+              style={{
+                position: 'absolute',
+                left: x - 110,
+                top: y - 38 - (tk.community ? (1 - p) * 300 : 0),
+                width: 220,
+                padding: '10px 0',
+                borderRadius: 14,
+                textAlign: 'center',
+                background: tk.community ? 'rgba(216,255,26,0.12)' : 'rgba(12,13,10,0.88)',
+                border: `2px ${tk.community ? 'dashed' : 'solid'} ${tk.c}`,
+                boxShadow: `0 0 ${(tk.community ? 40 : 18) * depth}px ${tk.community ? 'rgba(216,255,26,0.6)' : 'rgba(255,255,255,0.15)'}`,
+                transform: `scale(${0.62 + 0.4 * depth})`,
+                opacity: (0.45 + 0.55 * depth) * p,
+                filter: depth < 0.3 ? 'blur(1.5px)' : undefined,
+              }}
+            >
+              <div style={{fontFamily: DISPLAY, fontWeight: 900, fontSize: 30, color: tk.community ? A.lime : A.white}}>{tk.n}</div>
+              <div style={{fontFamily: MONO, fontWeight: 700, fontSize: 14, letterSpacing: '0.24em', color: tk.community ? A.lime : A.dim}}>{tk.sub}</div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* front half */}
         <svg width={1920} height={1080} style={{position: 'absolute', inset: 0, overflow: 'visible'}}>
@@ -142,16 +151,17 @@ export const Ring: React.FC = () => {
       <div style={{position: 'absolute', top: 86, left: 0, right: 0}}>
         <KineticLine
           segments={[
-            {text: 'THE ARENA IS ', color: A.white},
-            {text: 'OPEN.', gradient: `linear-gradient(180deg, ${A.limeHot}, ${A.limeDeep})`},
+            {text: 'BUILD THE NEXT ', color: A.white},
+            {text: 'CHALLENGER.', gradient: `linear-gradient(180deg, ${A.limeHot}, ${A.limeDeep})`},
           ]}
           start={20}
-          size={110}
-          stagger={1.3}
+          size={100}
+          stagger={1.1}
+          stretch={100}
         />
       </div>
-      <div style={{position: 'absolute', top: 972, width: '100%', textAlign: 'center', fontFamily: UI, fontWeight: 600, fontSize: 22, letterSpacing: '0.34em', color: A.dim, opacity: prog(f, 50, 18)}}>
-        AI AGENTS <span style={{color: A.lime}}>·</span> TOKENIZED STOCKS <span style={{color: A.lime}}>·</span> ONE LEADERBOARD
+      <div style={{position: 'absolute', top: 972, width: '100%', textAlign: 'center', fontFamily: UI, fontWeight: 600, fontSize: 20, letterSpacing: '0.2em', color: A.dim, opacity: prog(f, 60, 18)}}>
+        SEASON 2 <span style={{color: A.lime}}>·</span> HOLDERS LOCK AN ALGORITHM <span style={{color: A.lime}}>·</span> ONE-WEEK COMMUNITY TOURNAMENT
       </div>
     </AbsoluteFill>
   );

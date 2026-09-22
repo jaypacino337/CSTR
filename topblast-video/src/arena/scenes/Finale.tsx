@@ -93,8 +93,9 @@ export const ArenaFinale: React.FC = () => {
             {text: 'ARENA', gradient: `linear-gradient(180deg, ${A.limeHot} 0%, ${A.lime} 50%, ${A.limeDeep} 100%)`},
           ]}
           start={IMPACT + 6}
-          size={164}
+          size={170}
           stagger={1.8}
+          stretch={100}
           dur={26}
           tracking={0.01}
           style={{filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.8))'}}
@@ -103,15 +104,15 @@ export const ArenaFinale: React.FC = () => {
       <div style={{position: 'absolute', top: 790, left: 0, right: 0}}>
         <KineticLine
           segments={[
-            {text: 'ENTER THE ARENA. ', color: A.white},
-            {text: 'OUTTRADE THE FIELD.', color: A.lime},
+            {text: 'WATCH AI. ', color: A.white},
+            {text: 'PREDICT THE WINNER.', color: A.lime},
           ]}
           start={IMPACT + 32}
           size={46}
           stagger={0.55}
-          stretch={112}
-          weight={700}
-          tracking={0.22}
+          stretch={100}
+          weight={800}
+          tracking={0.16}
           rise={0.8}
         />
       </div>
@@ -130,10 +131,13 @@ export const ArenaFinale: React.FC = () => {
           transform: `translateY(${(1 - prog(f, IMPACT + 56, 18)) * 16}px)`,
         }}
       >
-        AI AGENTS <span style={{color: A.lime}}>·</span> TOKENIZED STOCKS <span style={{color: A.lime}}>·</span> ONE LEADERBOARD
+        BUILD THE NEXT CHALLENGER <span style={{color: A.lime}}>·</span> SEASON 01 <span style={{color: A.lime}}>·</span> ROBINHOOD CHAIN
       </div>
-      <div style={{position: 'absolute', top: 960, width: '100%', display: 'flex', justifyContent: 'center', opacity: prog(f, IMPACT + 74, 18)}}>
-        <div style={{fontFamily: DISPLAY, fontWeight: 700, fontStretch: '110%', fontSize: 24, letterSpacing: '0.18em', color: A.white, padding: '12px 30px', borderRadius: 999, border: `1px solid ${A.lime}99`, background: 'rgba(216,255,26,0.07)', boxShadow: '0 0 30px rgba(216,255,26,0.2)'}}>
+      <div style={{position: 'absolute', top: 948, width: '100%', display: 'flex', justifyContent: 'center', gap: 22, opacity: prog(f, IMPACT + 74, 18), transform: `translateY(${(1 - prog(f, IMPACT + 74, 18)) * 20}px)`}}>
+        <div style={{fontFamily: DISPLAY, fontWeight: 900, fontSize: 26, letterSpacing: '0.04em', color: '#101400', padding: '16px 38px', borderRadius: 14, background: A.lime, boxShadow: `0 0 40px ${A.lime}88`}}>
+          ENTER TRADING PIT
+        </div>
+        <div style={{fontFamily: DISPLAY, fontWeight: 800, fontSize: 26, letterSpacing: '0.08em', color: A.white, padding: '16px 34px', borderRadius: 14, border: '1px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.05)'}}>
           STONKARENA.XYZ
         </div>
       </div>

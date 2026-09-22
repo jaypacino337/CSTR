@@ -168,7 +168,8 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
     let cut = 300 + 1800 * Math.pow(Math.min(1, t / 22), 1.5);
     if (t > impactT) cut = 3200 * Math.exp(-(t - impactT) * 0.25) + 700;
     const intro = Math.min(1, t / 2.2);
-    const out = t > 27 ? Math.max(0, 1 - (t - 27) / 1.0) : 1;
+    const endT = tl.duration / FPS - 1;
+    const out = t > endT ? Math.max(0, 1 - (t - endT) / 1.0) : 1;
     const g = 0.055 * intro * out * duck[i] * (t > impactT ? 1.5 : 1);
     L[i] += fl(sl, cut, 0.5).lp * g;
     R[i] += fr(sr, cut, 0.5).lp * g;
@@ -179,7 +180,7 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
 const beat = 15; // 120bpm at 30fps
 const SC = Object.values(S); // scenes in order
 const gridFrom = SC[1].from + 2;
-const dropGap = PROJECT === 'arena' ? [S.fight.from - 2, S.fight.from + 12] : [S.chart.from + 75, S.chart.from + 90];
+const dropGap = PROJECT === 'arena' ? [S.fight.from - 2, S.fight.from + 24] : [S.chart.from + 75, S.chart.from + 90];
 const gridTo = S.finale.from - 8;
 for (let fr = gridFrom, n = 0; fr < gridTo; fr += beat / 2, n++) {
   const inGap = fr >= dropGap[0] && fr < dropGap[1];
@@ -259,30 +260,38 @@ ding(F(S.gates.from + 66), 0.12, 880);
 riser(F(S.gates.from + 90), F(30), 0.25);
 whoosh(F(S.gates.from + 112), F(22), 0.7, 300, 9000);
 
-// 03 Fight
-impact(F(S.fight.from + 12), 1.15, 1.2);
-clank(F(S.fight.from + 12), 0.6, 0);
+// 03 Four AIs
+for (let i = 0; i < 4; i++) whoosh(F(S.fight.from + 2 + i * 4), 0.5, 0.18, 2000, 400, (i / 1.5) - 1);
+[14, 19].forEach((o, i) => clank(F(S.fight.from + o), 0.4, i ? 0.3 : -0.3));
+clank(F(S.fight.from + 24), 0.5, 0);
+impact(F(S.fight.from + 24), 1.1, 1.1);
 for (let k = 0; k < 10; k++) click(F(S.fight.from + 34 + k * 9), 0.12, 2200 + (k % 3) * 400, k % 2 ? 0.5 : -0.5);
-riser(F(S.fight.from + 70), F(40), 0.3);
-kick(F(S.fight.from + 112), 0.7);
-ding(F(S.fight.from + 112), 0.1, 1100);
+riser(F(S.fight.from + 70), F(38), 0.3);
+kick(F(S.fight.from + 108), 0.7);
+ding(F(S.fight.from + 108), 0.1, 1100);
 whoosh(F(S.fight.from + 140), F(22), 0.6, 300, 8000);
 
-// 04 Leaderboard
-for (let i = 0; i < 6; i++) click(F(S.ranks.from + 6 + i * 3), 0.16, 2600 + i * 120, 0.2);
-[44, 84].forEach((o) => { whoosh(F(S.ranks.from + o), F(18), 0.35, 800, 5000); click(F(S.ranks.from + o + 18), 0.35, 1500); });
-impact(F(S.ranks.from + 104), 0.7, 0.8);
-[0, 3, 6].forEach((d, i) => ding(F(S.ranks.from + 104 + d), 0.1, 1320 * [1, 1.26, 1.5][i], 0));
-whoosh(F(S.ranks.from + 140), F(22), 0.6, 300, 8000);
+// 04 The Pit
+for (let i = 0; i < 6; i++) { click(F(S.pit.from + 12 + i * 15), 0.28, 2400 + (i % 3) * 300, 0.4); ding(F(S.pit.from + 13 + i * 15), 0.04, 1760, 0.4); }
+[42, 86].forEach((o) => { whoosh(F(S.pit.from + o), F(16), 0.35, 800, 5000, -0.4); click(F(S.pit.from + o + 16), 0.35, 1500, -0.4); });
+kick(F(S.pit.from + 100), 0.7);
+impact(F(S.pit.from + 112), 0.55, 0.7);
+click(F(S.pit.from + 120), 0.5, 900);
+whoosh(F(S.pit.from + 140), F(22), 0.6, 300, 8000);
 
-// 05 Arena ring
+// 05 Build the next challenger
 crowd(F(S.ring.from), F(S.ring.dur + 10), 0.5);
 whoosh(F(S.ring.from + 2), 1.1, 0.4, 5000, 300);
-ding(F(S.ring.from + 24), 0.12, 660);
 click(F(S.ring.from + 20), 0.25, 1600);
-riser(F(S.ring.from + 110), F(54), 0.45);
-sweepDown(F(S.ring.from + 146), F(20), 0.5);
+[58, 70].forEach((o) => { sweepDown(F(S.ring.from + o - 10), F(12), 0.3); impact(F(S.ring.from + o + 2), 0.45, 0.5); ding(F(S.ring.from + o + 2), 0.1, 1320); });
+riser(F(S.ring.from + 100), F(30), 0.3);
+whoosh(F(S.ring.from + 128), F(22), 0.6, 300, 8000);
 
+// 06 Economy
+for (let i = 0; i < 4; i++) { click(F(S.econ.from + 16 + i * 12), 0.3, 1800 + i * 200); ding(F(S.econ.from + 18 + i * 12), 0.08, 880 * Math.pow(1.26, i)); }
+kick(F(S.econ.from + 64), 0.6);
+riser(F(S.econ.from + 96), F(54), 0.45);
+sweepDown(F(S.econ.from + 132), F(20), 0.5);
 }
 
 // 06 Finale

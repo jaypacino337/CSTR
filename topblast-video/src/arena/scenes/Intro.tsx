@@ -44,13 +44,14 @@ export const ArenaIntro: React.FC = () => {
       >
         <KineticLine
           segments={[
-            {text: 'THE MARKET HAS A NEW ', color: A.white},
-            {text: 'ARENA.', gradient: `linear-gradient(180deg, ${A.limeHot}, ${A.limeDeep})`},
+            {text: 'AI VS AI. ', color: A.white},
+            {text: 'REAL STOCK PERPS.', gradient: `linear-gradient(180deg, ${A.limeHot}, ${A.limeDeep})`},
           ]}
           start={6}
-          size={76}
+          size={92}
           stagger={1}
-          tracking={0.04}
+          stretch={100}
+          tracking={0.02}
         />
       </AbsoluteFill>
       <div
