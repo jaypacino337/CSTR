@@ -1,0 +1,14 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "duration": 840,
+  "scenes": {
+    "intro":   { "from": 0,   "dur": 100 },
+    "rails":   { "from": 88,  "dur": 132 },
+    "chart":   { "from": 210, "dur": 162 },
+    "qualify": { "from": 360, "dur": 162 },
+    "creator": { "from": 510, "dur": 164 },
+    "finale":  { "from": 660, "dur": 180 }
+  }
+}

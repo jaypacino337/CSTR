@@ -1,0 +1,23 @@
+{
+  "name": "topblast-launch-video",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "studio": "remotion studio",
+    "audio": "node scripts/make-audio.mjs",
+    "render": "npm run audio && remotion render TopBlastLaunch out/topblast-launch.mp4",
+    "still": "remotion still TopBlastLaunch out/frame.png"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@remotion/cli": "^4.0.527",
+    "@remotion/google-fonts": "^4.0.527",
+    "@types/react": "^18.3.31",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.527",
+    "typescript": "^7.0.2"
+  }
+}
