@@ -3,6 +3,8 @@ import {TopBlastLaunch} from './TopBlastLaunch';
 import {TopBlastClean} from './TopBlastClean';
 import {TopBlastPremium} from './premium/TopBlastPremium';
 import ptl from './premium/timeline.json';
+import {TopBlastV2} from './v2/TopBlastV2';
+import v2tl from './v2/timeline.json';
 import tl from './timeline.json';
 import {StonkArena} from './arena/StonkArena';
 import {StonkArenaClean} from './arena/StonkArenaClean';
@@ -18,6 +20,14 @@ export const Root: React.FC = () => (
     fps={tl.fps}
     width={tl.width}
     height={tl.height}
+  />
+  <Composition
+    id="TopBlastV2"
+    component={TopBlastV2}
+    durationInFrames={v2tl.duration}
+    fps={v2tl.fps}
+    width={v2tl.width}
+    height={v2tl.height}
   />
   <Composition
     id="TopBlastPremium"

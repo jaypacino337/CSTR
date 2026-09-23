@@ -49,6 +49,16 @@ lit from the bottom up by StonkFun blue and Pump.fun green. The score is a low p
 a small hit when the price crosses the line and one deeper hit on the mark.
 Render: `npm run render:premium` → `out/topblast-premium.mp4`
 
+### v2: clear in 5 seconds + $TOPBLAST loop
+
+`TopBlastV2` (`src/v2/`, ~36.5s) opens with what TopBlast is: LAUNCH WITH TOPBLAST, holders rewarded through the Blast Zone,
+StonkFun / Pump.fun as launch rails, and the protocol revenue → $TOPBLAST buyback + burn loop. It then walks through
+BUY → ENTRY LINE → BELOW ENTRY → BLAST ZONE → REWARDS with a step tracker ($100 entry; $112 → $105 → $98 → $82),
+the creator split, the architecture (venues underneath, TopBlast above), the $TOPBLAST loop (protocol revenue → buy → burn, supply
+shrinking), and the whole system collapsing into the mark.
+Render: `npm run render:v2` → `out/topblast-v2.mp4`
+The "100% of protocol revenue buys back + burns $TOPBLAST" claim appears in `src/v2/Hook.tsx`, `src/v2/Loop.tsx` and `src/v2/Finale.tsx`.
+
 ## Structure
 
 ```

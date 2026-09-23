@@ -9,13 +9,14 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 // `arena-clean` → the calmer Stonk Arena mix (same cues, softer hits).
 // `topblast-clean` → the calmer TopBlast mix.
 // `topblast-premium` → the premium cut: pulse, ticks, data routing, two impacts.
-const PREMIUM = process.argv[2] === 'topblast-premium';
+const V2 = process.argv[2] === 'topblast-v2';
+const PREMIUM = process.argv[2] === 'topblast-premium' || V2;
 const CALM = process.argv[2] === 'arena-clean' || process.argv[2] === 'topblast-clean' || PREMIUM;
 const PROJECT = process.argv[2] === 'arena' || process.argv[2] === 'arena-clean' ? 'arena' : 'topblast';
 const K = CALM
   ? {impact: 0.35, whoosh: 0.4, riser: 0.35, rumble: 0, crowd: 0.35, clank: 0.35, kick: 0.6, sweep: 0.4}
   : {impact: 1, whoosh: 1, riser: 1, rumble: 1, crowd: 1, clank: 1, kick: 1, sweep: 1};
-const tlPath = PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
+const tlPath = V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
 const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
 const FPS = tl.fps;
@@ -168,7 +169,7 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   const fl = svf();
   const fr = svf();
   const phases = chord.map(() => [(rnd() + 1) / 2, (rnd() + 1) / 2]);
-  const impactT = F(S.finale.from + (PREMIUM ? 64 : 40));
+  const impactT = F(S.finale.from + (V2 ? 120 : PREMIUM ? 64 : 40));
   for (let i = 0; i < LEN; i++) {
     const t = i / SR;
     const notes = t >= impactT ? finalChord : chord;
@@ -229,7 +230,88 @@ const glide = (t, dur, g = 0.08, from = 220, to = 880) => {
 };
 
 // low-end pulse (75 bpm), resting under the final hold
-for (let fr = 12; fr < S.finale.from + 60; fr += 24) sub(F(fr), fr < S.entry.from ? 0.16 : 0.22);
+for (let fr = 12; fr < S.finale.from + (V2 ? 116 : 60); fr += 24) sub(F(fr), fr < S.entry.from ? 0.16 : 0.22);
+
+if (V2) {
+// 01 Hook — say what it is
+tick(F(4), 0.06, 2600);
+glide(F(6), 0.9, 0.04, 330, 660);
+tick(F(12), 0.08, 2200);
+tick(F(28), 0.07, 2600);
+route(F(64), 1.1, 0.1, -0.5, 1100);
+route(F(66), 1.1, 0.1, 0.5, 1300);
+tick(F(72), 0.07, 3000);
+[74, 88].forEach((o) => tick(F(o), 0.07, 2600));
+tick(F(104), 0.05, 3400);
+route(F(126), 0.8, 0.07, 0, 900);
+
+// 02 Entry line → Blast Zone
+const E = S.entry.from;
+for (let k = 0; k < 5; k++) tick(F(E + k * 4), 0.05, 3000 - k * 150);
+tick(F(E + 40), 0.12, 1800);
+glide(F(E + 40), 0.4, 0.05, 880, 1320);
+for (let k = 0; k < 6; k++) tick(F(E + 44 + k * 3), 0.05, 3600, 0.3);
+tick(F(E + 54), 0.06, 2600);
+[90, 110].forEach((o) => tick(F(E + o), 0.07, 1500));
+impact(F(E + 124), 1.0, 0.7);
+sub(F(E + 124), 0.35, 38);
+tick(F(E + 162), 0.07, 1300);
+for (let k = 0; k < 17; k++) tick(F(E + 136 + k / 0.9), 0.035, 4200, 0.2);
+swell(F(E + 176), 3.0, 0.3);
+glide(F(E + 206), 1.4, 0.05, 220, 440);
+tick(F(E + 228), 0.06, 2400);
+
+// 03 Funded rewards
+const R = S.rewards.from;
+for (let k = 0; k < 7; k++) tick(F(R + 12 + k * 3), 0.05, 2600 + k * 120, (k / 3) - 1);
+tick(F(R + 14), 0.07, 2600);
+route(F(R + 34), 1.4, 0.13, -0.3, 1500);
+route(F(R + 40), 1.4, 0.13, 0.3, 1700);
+for (let k = 0; k < 5; k++) tick(F(R + 60 + k * 5), 0.08, 1760 * Math.pow(1.12, k), (k / 2) - 1);
+
+// 04 Creator split
+const CR = S.creator.from;
+tick(F(CR + 4), 0.07, 2600);
+for (let k = 0; k < 12; k++) tick(F(CR + 22 + k * 3), 0.045, 3000 + k * 60, 0.4);
+tick(F(CR + 60), 0.08, 1800);
+ding(F(CR + 60), 0.05, 1320);
+
+// 05 Architecture
+const ST = S.stack.from;
+sub(F(ST + 6), 0.2, 48);
+route(F(ST + 20), 0.9, 0.08, 0, 700);
+sub(F(ST + 46), 0.26, 44);
+[30, 40].forEach((o) => tick(F(ST + o), 0.05, 2200));
+route(F(ST + 44), 1.0, 0.09, 0, 1400);
+[52, 64].forEach((o) => tick(F(ST + o), 0.07, 2600));
+
+// 06 $TOPBLAST loop
+const L = S.loop.from;
+route(F(L), 1.2, 0.13, -0.6, 1000);
+[16, 40, 62].forEach((o, i) => { tick(F(L + o), 0.1, 1600 + i * 300); sub(F(L + o), 0.16 + i * 0.05, 50 - i * 4); });
+{
+  const fb = svf();
+  add(F(L + 64), SR * F(96), (x) => {
+    const u = x / F(96);
+    return fb(rnd(), 160 + 60 * Math.sin(x * 3), 1.4).lp * Math.sin(Math.PI * Math.min(1, u * 1.2)) * 0.9;
+  }, {gain: 0.22, pan: 0.3, verb: 0.3});
+}
+for (let k = 0; k < 22; k++) tick(F(L + 72 + k * 4.2), 0.03, 900 + (k % 5) * 70, 0.45);
+tick(F(L + 92), 0.08, 2400);
+sub(F(L + 92), 0.24, 42);
+tick(F(L + 104), 0.08, 2400);
+
+// 07 System → mark
+const M = S.finale.from;
+for (let k = 0; k < 4; k++) tick(F(M + 4 + k * 10), 0.06, 2000 + k * 250);
+route(F(M + 40), 1.0, 0.08, 0, 1200);
+route(F(M + 72), 0.9, 0.09, 0, 700);
+tick(F(M + 88), 0.06, 1800);
+glide(F(M + 92), 0.95, 0.07, 110, 440);
+impact(F(M + 120), 1.5, 1.6);
+sub(F(M + 120), 0.4, 34);
+[134, 142, 156, 170].forEach((o) => tick(F(M + o), 0.05, 2400));
+} else {
 
 // 01 Opening
 tick(F(8), 0.06, 2600);
@@ -304,6 +386,7 @@ sub(F(M + 64), 0.4, 34);
 tick(F(M + 82), 0.05, 2400);
 tick(F(M + 90), 0.05, 2400);
 
+}
 } else {
 // ─── Arrangement (all times from the video timeline) ───────
 const beat = 15; // 120bpm at 30fps
@@ -503,6 +586,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
+const outPath = path.join(here, V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);
