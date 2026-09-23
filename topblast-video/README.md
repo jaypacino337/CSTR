@@ -40,10 +40,11 @@ Render: `npm run render:clean` → `out/topblast-clean.mp4`
 
 ### Premium cut
 
-`TopBlastPremium` (`src/premium/`, 28s) is the calm version pushed toward a premium product film. It tells one continuous story:
+`TopBlastPremium` (`src/premium/`, 32s) is the calm version pushed toward a premium product film. It tells one continuous story:
 the opening line becomes the TopBlast layer, the layer becomes the chart, the entry line locks at $100 ($112 → $104 → $96),
 the UI below the line changes state, the camera pulls back to reveal the Blast Zone, the zone becomes the reward network
-(funded pool → eligible wallets, creator split), which pulls back into the three-layer stack, which resolves into the mark,
+(funded pool → eligible wallets, creator split), which pulls back into the three-layer stack, then the native token beat (100% of launchpad revenue → buybacks;
+xSOL paid to the Blast Zone every 15 minutes), then the mark,
 lit from the bottom up by StonkFun blue and Pump.fun green. The score is a low pulse, ticks and data-routing texture,
 a small hit when the price crosses the line and one deeper hit on the mark.
 Render: `npm run render:premium` → `out/topblast-premium.mp4`

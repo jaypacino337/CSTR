@@ -281,7 +281,19 @@ route(F(A2 + 60), 0.8, 0.07, 0, 1200);
 tick(F(A2 + 70), 0.07, 2600);
 tick(F(A2 + 80), 0.07, 2600);
 
-// 06 Mark
+// 06 Native token
+const T = S.token.from;
+tick(F(T + 4), 0.07, 2600);
+for (let k = 0; k < 14; k++) tick(F(T + 8 + k * 2.4), 0.035, 3200 + k * 40, -0.4);   // 0 → 100%
+route(F(T + 20), 0.9, 0.09, -0.4, 1000);                                               // revenue → buybacks
+sub(F(T + 22), 0.2, 46);
+for (let k = 0; k < 13; k++) tick(F(T + 26 + k * 4), 0.04, 2200, 0.4);                 // cycle clock
+glide(F(T + 26), 1.7, 0.04, 220, 330);
+ding(F(T + 78), 0.07, 1320, 0.4);                                                       // xSOL paid out
+route(F(T + 78), 0.8, 0.1, 0.4, 1600);
+sub(F(T + 78), 0.22, 50);
+
+// 07 Mark
 const M = S.finale.from;
 route(F(M), 1.2, 0.12, -0.7, 1100);
 route(F(M + 2), 1.2, 0.12, 0.7, 1300);

@@ -5,6 +5,7 @@ import {Final} from './Final';
 import {Opening} from './Opening';
 import {Rewards} from './Rewards';
 import {Stack} from './Stack';
+import {Token} from './Token';
 import tl from './timeline.json';
 import {Fade, INK} from './ui';
 import {Venue} from './Venue';
@@ -38,7 +39,12 @@ export const TopBlastPremium: React.FC = () => (
         <Stack />
       </Fade>
     </Sequence>
-    <Sequence from={S.finale.from} durationInFrames={S.finale.dur} name="06 Mark">
+    <Sequence from={S.token.from} durationInFrames={S.token.dur} name="06 Native token">
+      <Fade dur={S.token.dur} inDur={12} outDur={12}>
+        <Token />
+      </Fade>
+    </Sequence>
+    <Sequence from={S.finale.from} durationInFrames={S.finale.dur} name="07 Mark">
       <Fade dur={S.finale.dur + 20} inDur={10}>
         <Final />
       </Fade>
