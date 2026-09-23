@@ -1,6 +1,7 @@
 import {AbsoluteFill, useCurrentFrame} from 'remotion';
 import {Glow, Particles, Shockwave} from '../components/Atmosphere';
 import {KineticLine} from '../components/Type';
+import {useCalm} from '../components/calm';
 import {C, DISPLAY, MONO, UI, backOut, expoOut, inOut, keys, lerp, prog} from '../theme';
 
 // 7–12s: verified entry at 100 locks a line; price slides to 70 → BLAST ZONE.
@@ -45,8 +46,9 @@ export const Chart: React.FC = () => {
   const panelIn = prog(f, 0, 20);
   const lock = prog(f, 30, 14, expoOut);
   const buyPop = prog(f, 28, 16, backOut);
-  const slam = prog(f, 90, 16, expoOut);
-  const shake = f >= 90 && f < 104 ? (1 - (f - 90) / 14) * 16 : 0;
+  const calm = useCalm();
+  const slam = prog(f, 90, calm ? 22 : 16, expoOut);
+  const shake = !calm && f >= 90 && f < 104 ? (1 - (f - 90) / 14) * 16 : 0;
   const sx = Math.sin(f * 7.3) * shake;
   const sy = Math.cos(f * 9.1) * shake;
 
@@ -218,15 +220,15 @@ export const Chart: React.FC = () => {
               whiteSpace: 'nowrap',
               display: 'flex',
               justifyContent: 'center',
-              transform: `scale(${lerp(1.9, 1, slam)})`,
+              transform: calm ? `translateY(${(1 - slam) * 24}px)` : `scale(${lerp(1.9, 1, slam)})`,
               opacity: Math.min(1, slam * 2),
-              filter: `blur(${(1 - slam) * 12}px)`,
+              filter: `blur(${(1 - slam) * (calm ? 4 : 12)}px)`,
             }}
           >
-            {[
+            {(calm ? [] : [
               {c: C.red, dx: -8 * (1 - slam) - 3, o: 0.8},
               {c: C.yellow, dx: 8 * (1 - slam) + 3, o: 0.5},
-            ].map((l, i) => (
+            ]).map((l, i) => (
               <div key={i} style={{position: 'absolute', transform: `translateX(${l.dx}px)`, fontFamily: DISPLAY, fontWeight: 900, fontStretch: '125%', fontSize: 196, color: l.c, opacity: l.o, mixBlendMode: 'screen', lineHeight: 1, whiteSpace: 'nowrap'}}>
                 BLAST ZONE
               </div>
@@ -243,7 +245,7 @@ export const Chart: React.FC = () => {
                 backgroundImage: `linear-gradient(180deg, #FFF6EC 0%, #FFD0A0 40%, ${C.orange} 70%, ${C.red} 100%)`,
                 WebkitBackgroundClip: 'text',
                 color: 'transparent',
-                filter: `drop-shadow(0 0 40px rgba(255,80,0,0.8))`,
+                filter: calm ? 'drop-shadow(0 6px 20px rgba(0,0,0,0.7))' : `drop-shadow(0 0 40px rgba(255,80,0,0.8))`,
               }}
             >
               BLAST ZONE

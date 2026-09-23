@@ -1,6 +1,7 @@
 import {AbsoluteFill, random, useCurrentFrame} from 'remotion';
 import {Flash, Glow, GridFloor, Particles, Shockwave} from '../components/Atmosphere';
 import {Logo} from '../components/Logo';
+import {useCalm} from '../components/calm';
 import {KineticLine} from '../components/Type';
 import {C, DISPLAY, MONO, expoOut, inOut, keys, lerp, prog} from '../theme';
 
@@ -12,8 +13,9 @@ const IMPACT = 40;
 
 export const Finale: React.FC = () => {
   const f = useCurrentFrame();
+  const calm = useCalm();
   const rise = keys(f, [2, IMPACT], [1, 0], inOut);
-  const ly = LY + rise * 1000 + (f > IMPACT ? Math.sin((f - IMPACT) / 14) * 5 : 0);
+  const ly = LY + rise * (calm ? 60 : 1000) + (f > IMPACT ? Math.sin((f - IMPACT) / 14) * 5 : 0);
   const beams = prog(f, 12, 26, inOut);
   const impact = prog(f, IMPACT, 30, expoOut);
   const hit = f >= IMPACT;
@@ -47,7 +49,7 @@ export const Finale: React.FC = () => {
       />
 
       {/* venue energy converging */}
-      <svg width={1920} height={1080} style={{position: 'absolute', inset: 0}}>
+      <svg width={1920} height={1080} style={{position: 'absolute', inset: 0, display: calm ? 'none' : undefined}}>
         {([-1, 1] as const).map((side) => {
           const col = side === -1 ? C.blueHot : C.greenHot;
           return (
@@ -108,7 +110,7 @@ export const Finale: React.FC = () => {
       </svg>
 
       {/* exhaust while rising */}
-      {rise > 0.02 && (
+      {!calm && rise > 0.02 && (
         <div
           style={{
             position: 'absolute',
@@ -124,8 +126,8 @@ export const Finale: React.FC = () => {
         />
       )}
       <Glow x={LX} y={ly} size={900} color="rgba(255,106,0,0.7)" opacity={0.6 + 0.4 * Math.sin(f / 8) * settle} />
-      <div style={{position: 'absolute', left: LX - LS / 2, top: ly - LS / 2, transform: `scale(${hit ? lerp(1.18, 1, impact) : 0.9})`}}>
-        <Logo size={LS} glow={1.1 + flash} />
+      <div style={{position: 'absolute', left: LX - LS / 2, top: ly - LS / 2, opacity: calm ? prog(f, 0, 34, inOut) : 1, transform: `scale(${calm ? lerp(0.96, 1, prog(f, 0, 60, expoOut)) : hit ? lerp(1.18, 1, impact) : 0.9})`}}>
+        <Logo size={LS} glow={calm ? 0.45 : 1.1 + flash} />
       </div>
       <Shockwave x={LX} y={LY} t={impact} maxR={1500} width={8} />
       <Shockwave x={LX} y={LY} t={prog(f, 120, 40, expoOut)} maxR={1100} width={3} color="#FFB27A" />
@@ -137,7 +139,7 @@ export const Finale: React.FC = () => {
             {text: 'TOP', gradient: 'linear-gradient(180deg, #FFFFFF 0%, #E9E4DC 55%, #A9A39A 100%)'},
             {text: 'BLAST', gradient: `linear-gradient(180deg, #FFB067 0%, ${C.orange} 45%, ${C.red} 100%)`},
           ]}
-          start={IMPACT + 6}
+          start={calm ? 26 : IMPACT + 6}
           size={200}
           stagger={2}
           dur={26}
@@ -151,7 +153,7 @@ export const Finale: React.FC = () => {
             {text: 'LAUNCH ANYWHERE. ', color: C.white},
             {text: 'REWARD THE BLAST ZONE.', color: C.orangeHot},
           ]}
-          start={IMPACT + 32}
+          start={calm ? 50 : IMPACT + 32}
           size={44}
           stagger={0.55}
           stretch={112}
@@ -171,8 +173,8 @@ export const Finale: React.FC = () => {
           fontSize: 23,
           letterSpacing: '0.3em',
           color: 'rgba(247,244,238,0.62)',
-          opacity: prog(f, IMPACT + 56, 18),
-          transform: `translateY(${(1 - prog(f, IMPACT + 56, 18)) * 16}px)`,
+          opacity: prog(f, calm ? 72 : IMPACT + 56, 18),
+          transform: `translateY(${(1 - prog(f, calm ? 72 : IMPACT + 56, 18)) * 16}px)`,
         }}
       >
         <span style={{color: C.blueHot}}>STONKFUN</span> + <span style={{color: C.greenHot}}>PUMP.FUN</span> UNDERNEATH. <span style={{color: C.orangeHot}}>TOPBLAST</span> ON TOP.
@@ -184,7 +186,7 @@ export const Finale: React.FC = () => {
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
-          opacity: prog(f, IMPACT + 74, 18),
+          opacity: prog(f, calm ? 88 : IMPACT + 74, 18),
         }}
       >
         <div

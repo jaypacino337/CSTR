@@ -33,6 +33,11 @@ npm run audio           # regenerate public/topblast-score.wav only
 
 On machines with a pre-installed headless Chromium, set `REMOTION_BROWSER=/path/to/headless_shell`.
 
+### Clean cut
+
+`TopBlastClean` has the same film with the spectacle turned down. There are no flashes, shockwaves, sparks, screen shake or light rays, and fewer particles with softer glow. Scenes change with gentle fades, and the mix is softer.
+Render: `npm run render:clean` → `out/topblast-clean.mp4`
+
 ## Structure
 
 ```

@@ -12,7 +12,7 @@ import tl from './timeline.json';
 
 const S = tl.scenes;
 
-export const TopBlastLaunch: React.FC = () => (
+export const TopBlastLaunch: React.FC<{audio?: string}> = ({audio = 'topblast-score.wav'}) => (
   <AbsoluteFill style={{background: C.bg}}>
     <Sequence from={S.intro.from} durationInFrames={S.intro.dur} name="01 Intro">
       <Intro />
@@ -43,6 +43,6 @@ export const TopBlastLaunch: React.FC = () => (
       </SceneShell>
     </Sequence>
     <FilmFinish />
-    <Audio src={staticFile('topblast-score.wav')} />
+    <Audio src={staticFile(audio)} />
   </AbsoluteFill>
 );

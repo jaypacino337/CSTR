@@ -2,6 +2,7 @@ import {AbsoluteFill, random, useCurrentFrame} from 'remotion';
 import {Arrow} from '../components/Logo';
 import {Flash, Glow, Particles} from '../components/Atmosphere';
 import {KineticLine} from '../components/Type';
+import {useCalm} from '../components/calm';
 import {C, expoOut, inOut, lerp, prog} from '../theme';
 
 // 0–3s: TOKEN LAUNCHING EVOLVED. → compresses to a line → arrow punches through.
@@ -10,7 +11,34 @@ const COMPRESS = 50;
 const LAUNCH = 61;
 const HIT = 72;
 
-export const Intro: React.FC = () => {
+const CalmIntro: React.FC = () => {
+  const f = useCurrentFrame();
+  const line = prog(f, 26, 30, inOut);
+  const out = prog(f, 86, 14, inOut);
+  return (
+    <AbsoluteFill style={{background: C.bg, overflow: 'hidden', opacity: 1 - out}}>
+      <Particles count={110} seed="intro" color="#FFB27A" speed={0.6} opacity={0.8} maxSize={2.2} />
+      <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', transform: `scale(${1 + f * 0.0005})`}}>
+        <KineticLine
+          segments={[
+            {text: 'TOKEN LAUNCHING ', color: C.white},
+            {text: 'EVOLVED.', color: C.orangeHot},
+          ]}
+          start={6}
+          size={82}
+          stagger={1.3}
+          dur={26}
+          tracking={0.04}
+        />
+      </AbsoluteFill>
+      <div style={{position: 'absolute', left: 960 - 320 * line, width: 640 * line, top: 612, height: 3, background: C.orange, opacity: 0.9}} />
+    </AbsoluteFill>
+  );
+};
+
+export const Intro: React.FC = () => (useCalm() ? <CalmIntro /> : <LoudIntro />);
+
+const LoudIntro: React.FC = () => {
   const f = useCurrentFrame();
 
   const compress = prog(f, COMPRESS, 12, inOut);
