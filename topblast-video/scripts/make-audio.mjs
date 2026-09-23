@@ -8,12 +8,14 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 // `node make-audio.mjs` → TopBlast score; `node make-audio.mjs arena` → Stonk Arena score.
 // `arena-clean` → the calmer Stonk Arena mix (same cues, softer hits).
 // `topblast-clean` → the calmer TopBlast mix.
-const CALM = process.argv[2] === 'arena-clean' || process.argv[2] === 'topblast-clean';
+// `topblast-premium` → the premium cut: pulse, ticks, data routing, two impacts.
+const PREMIUM = process.argv[2] === 'topblast-premium';
+const CALM = process.argv[2] === 'arena-clean' || process.argv[2] === 'topblast-clean' || PREMIUM;
 const PROJECT = process.argv[2] === 'arena' || process.argv[2] === 'arena-clean' ? 'arena' : 'topblast';
 const K = CALM
   ? {impact: 0.35, whoosh: 0.4, riser: 0.35, rumble: 0, crowd: 0.35, clank: 0.35, kick: 0.6, sweep: 0.4}
   : {impact: 1, whoosh: 1, riser: 1, rumble: 1, crowd: 1, clank: 1, kick: 1, sweep: 1};
-const tlPath = PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
+const tlPath = PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
 const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
 const FPS = tl.fps;
@@ -166,7 +168,7 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   const fl = svf();
   const fr = svf();
   const phases = chord.map(() => [(rnd() + 1) / 2, (rnd() + 1) / 2]);
-  const impactT = F(S.finale.from + 40);
+  const impactT = F(S.finale.from + (PREMIUM ? 64 : 40));
   for (let i = 0; i < LEN; i++) {
     const t = i / SR;
     const notes = t >= impactT ? finalChord : chord;
@@ -184,12 +186,113 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
     const intro = Math.min(1, t / 2.2);
     const endT = tl.duration / FPS - 1;
     const out = t > endT ? Math.max(0, 1 - (t - endT) / 1.0) : 1;
-    const g = 0.055 * intro * out * duck[i] * (t > impactT ? 1.5 : 1);
+    const g = (PREMIUM ? 0.04 : 0.055) * intro * out * duck[i] * (t > impactT ? 1.5 : 1);
     L[i] += fl(sl, cut, 0.5).lp * g;
     R[i] += fr(sr, cut, 0.5).lp * g;
   }
 }
 
+if (PREMIUM) {
+// ─── Premium arrangement ───────────────────────────────────
+// Soft sub "heartbeat", tiny digital ticks, filtered data-routing texture.
+const sub = (t, g = 0.3, hz = 44) =>
+  add(t, SR * 0.9, (x) => Math.sin(2 * Math.PI * hz * x + 2 * Math.exp(-18 * x)) * Math.min(1, x * 200) * Math.exp(-5 * x), {gain: g, verb: 0.02});
+const tick = (t, g = 0.08, hz = 3400, pan = 0) =>
+  add(t, SR * 0.03, (x) => Math.sin(2 * Math.PI * hz * x) * Math.exp(-160 * x), {gain: g, pan, verb: 0.2});
+const route = (t, dur, g = 0.12, pan = 0, base = 1400) => {
+  // soft data routing: band-limited air + sparse pitched blips moving upward
+  const f1 = svf();
+  add(t, SR * dur, (x) => {
+    const u = x / dur;
+    return f1(rnd(), base + 2600 * u, 2.5).bp * Math.sin(Math.PI * u) * 0.9;
+  }, {gain: g, pan, verb: 0.45});
+  const n = Math.floor(dur * 9);
+  for (let k = 0; k < n; k++) {
+    const hz = base * Math.pow(2, ((k * 5) % 12) / 12) * (k % 3 ? 1 : 2);
+    add(t + (k / n) * dur, SR * 0.09, (x) => Math.sin(2 * Math.PI * hz * x) * Math.exp(-45 * x), {gain: g * 0.35, pan: pan + ((k % 2) - 0.5) * 0.3, verb: 0.5});
+  }
+};
+const swell = (t, dur, g = 0.25) => {
+  const f1 = svf();
+  add(t, SR * dur, (x) => {
+    const u = x / dur;
+    return f1(rnd(), 200 + 1200 * u, 0.9).lp * Math.sin(Math.PI * u) ** 2;
+  }, {gain: g, verb: 0.6});
+};
+const glide = (t, dur, g = 0.08, from = 220, to = 880) => {
+  let ph = 0;
+  add(t, SR * dur, (x) => {
+    const u = x / dur;
+    ph += (2 * Math.PI * from * Math.pow(to / from, u * u)) / SR;
+    return Math.sin(ph) * Math.sin(Math.PI * u) * (0.7 + 0.3 * Math.sin(ph * 0.5));
+  }, {gain: g, verb: 0.6});
+};
+
+// low-end pulse (75 bpm), resting under the final hold
+for (let fr = 12; fr < S.finale.from + 60; fr += 24) sub(F(fr), fr < S.entry.from ? 0.16 : 0.22);
+
+// 01 Opening
+tick(F(8), 0.06, 2600);
+tick(F(22), 0.05, 3000);
+route(F(34), 1.0, 0.07, 0, 2200);          // razor line drawing
+for (let k = 0; k < 8; k++) tick(F(54 + k * 3.2), 0.05, 2400 + k * 180);   // icon boot
+glide(F(56), 0.9, 0.05, 330, 660);
+route(F(78), 0.7, 0.08, 0, 900);           // line extends
+
+// 02 Venues → layer
+const V = S.venue.from;
+[18, 22].forEach((o, i) => tick(F(V + o), 0.08, 2000, i ? 0.5 : -0.5));
+route(F(V + 32), 2.4, 0.12, -0.5, 1100);
+route(F(V + 36), 2.4, 0.12, 0.5, 1300);
+tick(F(V + 24), 0.07, 2800);
+tick(F(V + 74), 0.08, 2800);
+sub(F(V + 58), 0.2, 52);
+
+// 03 Entry line → Blast Zone
+const E = S.entry.from;
+for (let k = 0; k < 5; k++) tick(F(E + k * 4), 0.05, 3000 - k * 150);   // grid drawing
+tick(F(E + 50), 0.12, 1800);               // verified buy
+glide(F(E + 50), 0.4, 0.05, 880, 1320);
+for (let k = 0; k < 6; k++) tick(F(E + 54 + k * 3), 0.05, 3600, 0.3);  // line locking
+[100, 118].forEach((o) => tick(F(E + o), 0.07, 1500));
+impact(F(E + 130), 1.0, 0.7);              // price crosses the entry line (softened by K)
+sub(F(E + 130), 0.35, 38);
+for (let k = 0; k < 17; k++) tick(F(E + 140 + k / 0.9), 0.035, 4200, 0.2); // typing
+swell(F(E + 160), 3.0, 0.3);               // pull-back
+glide(F(E + 188), 1.4, 0.05, 220, 440);
+tick(F(E + 214), 0.06, 2400);
+
+// 04 Reward engine
+const R = S.rewards.from;
+for (let k = 0; k < 7; k++) tick(F(R + 12 + k * 3), 0.05, 2600 + k * 120, (k / 3) - 1);
+route(F(R + 34), 1.4, 0.13, -0.3, 1500);
+route(F(R + 40), 1.4, 0.13, 0.3, 1700);
+for (let k = 0; k < 5; k++) tick(F(R + 60 + k * 5), 0.08, 1760 * Math.pow(1.12, k), (k / 2) - 1);
+for (let k = 0; k < 10; k++) tick(F(R + 98 + k * 3), 0.045, 3000 + k * 60, 0.5);  // slider
+tick(F(R + 96), 0.07, 2800);
+route(F(R + 126), 0.8, 0.08, 0, 700);      // zoom-out
+
+// 05 Architecture
+const A2 = S.stack.from;
+sub(F(A2 + 18), 0.2, 48);
+sub(F(A2 + 26), 0.18, 44);
+[26, 32, 38].forEach((o) => tick(F(A2 + o), 0.05, 2200));
+route(F(A2 + 60), 0.8, 0.07, 0, 1200);
+tick(F(A2 + 70), 0.07, 2600);
+tick(F(A2 + 80), 0.07, 2600);
+
+// 06 Mark
+const M = S.finale.from;
+route(F(M), 1.2, 0.12, -0.7, 1100);
+route(F(M + 2), 1.2, 0.12, 0.7, 1300);
+tick(F(M + 26), 0.08, 1800);
+glide(F(M + 34), 1.0, 0.07, 110, 440);     // illumination rising
+impact(F(M + 64), 1.5, 1.6);               // the one deeper impact
+sub(F(M + 64), 0.4, 34);
+tick(F(M + 82), 0.05, 2400);
+tick(F(M + 90), 0.05, 2400);
+
+} else {
 // ─── Arrangement (all times from the video timeline) ───────
 const beat = 15; // 120bpm at 30fps
 const SC = Object.values(S); // scenes in order
@@ -329,6 +432,8 @@ click(F(S.finale.from + 96), 0.12, 2600);
 ding(F(S.finale.from + 114), 0.1, 1320);
 impact(F(S.finale.from + 120), 0.35, 0.8);
 
+}
+
 // ─── Reverb bus (Schroeder) ────────────────────────────────
 const reverb = (inp, spread) => {
   const out = new Float32Array(LEN);
@@ -386,6 +491,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
+const outPath = path.join(here, PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);

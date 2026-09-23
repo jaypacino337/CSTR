@@ -38,6 +38,16 @@ On machines with a pre-installed headless Chromium, set `REMOTION_BROWSER=/path/
 `TopBlastClean` has the same film with the spectacle turned down. There are no flashes, shockwaves, sparks, screen shake or light rays, and fewer particles with softer glow. Scenes change with gentle fades, and the mix is softer.
 Render: `npm run render:clean` → `out/topblast-clean.mp4`
 
+### Premium cut
+
+`TopBlastPremium` (`src/premium/`, 28s) is the calm version pushed toward a premium product film. It tells one continuous story:
+the opening line becomes the TopBlast layer, the layer becomes the chart, the entry line locks at $100 ($112 → $104 → $96),
+the UI below the line changes state, the camera pulls back to reveal the Blast Zone, the zone becomes the reward network
+(funded pool → eligible wallets, creator split), which pulls back into the three-layer stack, which resolves into the mark,
+lit from the bottom up by StonkFun blue and Pump.fun green. The score is a low pulse, ticks and data-routing texture,
+a small hit when the price crosses the line and one deeper hit on the mark.
+Render: `npm run render:premium` → `out/topblast-premium.mp4`
+
 ## Structure
 
 ```

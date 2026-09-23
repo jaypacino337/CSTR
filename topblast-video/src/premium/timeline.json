@@ -1,0 +1,14 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "duration": 840,
+  "scenes": {
+    "intro":   { "from": 0,   "dur": 100 },
+    "venue":   { "from": 88,  "dur": 134 },
+    "entry":   { "from": 210, "dur": 252 },
+    "rewards": { "from": 450, "dur": 150 },
+    "stack":   { "from": 590, "dur": 108 },
+    "finale":  { "from": 688, "dur": 152 }
+  }
+}
