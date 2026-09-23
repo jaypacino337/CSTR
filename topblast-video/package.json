@@ -8,7 +8,8 @@
     "render": "npm run audio && remotion render TopBlastLaunch out/topblast-launch.mp4",
     "still": "remotion still TopBlastLaunch out/frame.png",
     "audio:arena": "node scripts/make-audio.mjs arena",
-    "render:arena": "npm run audio:arena && remotion render StonkArena out/stonkarena-launch.mp4"
+    "render:arena": "npm run audio:arena && remotion render StonkArena out/stonkarena-launch.mp4",
+    "render:arena-clean": "node scripts/make-audio.mjs arena-clean && remotion render StonkArenaClean out/stonkarena-clean.mp4"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",

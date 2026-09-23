@@ -2,3 +2,4 @@ node_modules/
 out/*
 !out/topblast-launch.mp4
 !out/stonkarena-launch.mp4
+!out/stonkarena-clean.mp4

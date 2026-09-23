@@ -3,6 +3,7 @@ import {Glow, Particles} from '../../components/Atmosphere';
 import {KineticLine} from '../../components/Type';
 import {DISPLAY, MONO, expoOut, inOut, prog} from '../../theme';
 import {A} from '../theme';
+import {useCalm} from '../../components/calm';
 
 // 21.6–26.6s: League economy — the 60 / 20 / 10 / 10 fee plan from stonkarena.xyz.
 const SPLIT = [
@@ -19,6 +20,7 @@ const CIRC = 2 * Math.PI * R;
 
 export const Econ: React.FC = () => {
   const f = useCurrentFrame();
+  const calm = useCalm();
   const inP = prog(f, 0, 18);
   let acc = 0;
 
@@ -43,7 +45,7 @@ export const Econ: React.FC = () => {
       </div>
 
       {/* fees streaming into the donut */}
-      {new Array(40).fill(0).map((_, i) => {
+      {new Array(calm ? 16 : 40).fill(0).map((_, i) => {
         const t = ((f * 0.02 + random(`ef${i}`)) % 1);
         const a = random(`ea${i}`) * Math.PI * 2;
         const d = 700 * (1 - t);

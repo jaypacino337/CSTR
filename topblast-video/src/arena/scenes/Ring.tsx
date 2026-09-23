@@ -4,6 +4,7 @@ import {KineticLine} from '../../components/Type';
 import {DISPLAY, MONO, UI, expoOut, inOut, lerp, prog} from '../../theme';
 import {A, AGENTS} from '../theme';
 import {AgentMark} from './Fight';
+import {useCalm} from '../../components/calm';
 
 // 17–22s: pull back to the full colosseum; tokenized stocks orbit the floor.
 const CX = 960;
@@ -15,6 +16,7 @@ const TAU = Math.PI * 2;
 
 export const Ring: React.FC = () => {
   const f = useCurrentFrame();
+  const calm = useCalm();
   const build = prog(f, 0, 30, expoOut);
   const cam = prog(f, 0, 164, inOut);
   const rot = f * 0.006;
@@ -98,7 +100,7 @@ export const Ring: React.FC = () => {
         </svg>
 
         {/* spotlight + champion in the centre */}
-        <div style={{position: 'absolute', left: CX - 90, top: -100, width: 180, height: CY + H + 100, background: `linear-gradient(to bottom, transparent, rgba(216,255,26,0.35) 70%, rgba(216,255,26,0.6))`, filter: 'blur(24px)', opacity: beam, mixBlendMode: 'screen'}} />
+        <div style={{position: 'absolute', left: CX - 90, top: -100, width: 180, height: CY + H + 100, background: `linear-gradient(to bottom, transparent, rgba(216,255,26,0.35) 70%, rgba(216,255,26,0.6))`, filter: 'blur(24px)', opacity: beam * (calm ? 0.35 : 1), mixBlendMode: 'screen'}} />
         <div style={{position: 'absolute', left: CX - 60, top: CY - 30 + Math.sin(f / 10) * 8, opacity: beam, transform: `scale(${lerp(0.5, 1, beam)})`}}>
           <AgentMark size={120} color={A.lime} glow={2} />
           <div style={{position: 'absolute', left: 0, right: 0, top: 30, textAlign: 'center', fontFamily: DISPLAY, fontWeight: 900, fontSize: 40, color: A.lime, opacity: prog(f, 60, 12)}}>?</div>
@@ -144,7 +146,7 @@ export const Ring: React.FC = () => {
             const y = CY + H + 16 + (r + 16) * Math.sin(th);
             return <line key={k} x1={x} y1={y} x2={x + Math.cos(th) * 16} y2={y + 30} stroke={A.lime} strokeWidth={4} filter="url(#rglow)" opacity={0.8} />;
           })}
-          {flashes.map((p, i) => (p.on ? <circle key={i} cx={p.x} cy={p.y} r={5} fill="#fff" style={{filter: 'drop-shadow(0 0 10px #fff)'}} /> : null))}
+          {!calm && flashes.map((p, i) => (p.on ? <circle key={i} cx={p.x} cy={p.y} r={5} fill="#fff" style={{filter: 'drop-shadow(0 0 10px #fff)'}} /> : null))}
         </svg>
       </AbsoluteFill>
 

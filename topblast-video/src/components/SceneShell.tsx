@@ -1,5 +1,6 @@
 import {AbsoluteFill, useCurrentFrame} from 'remotion';
-import {expoIn, expoOut, lerp, prog} from '../theme';
+import {expoIn, expoOut, inOut, lerp, prog} from '../theme';
+import {useCalm} from './calm';
 
 /**
  * Camera-style scene transitions: a scene arrives from depth (small, blurred)
@@ -26,6 +27,24 @@ export const SceneShell: React.FC<{
   children,
 }) => {
   const frame = useCurrentFrame();
+  const calm = useCalm();
+  if (calm) {
+    // Gentle cross-fade with a slow push: no fly-through, no heavy blur.
+    const ci = prog(frame, 0, 14, inOut);
+    const co = prog(frame, dur - 14, 14, inOut);
+    return (
+      <AbsoluteFill
+        style={{
+          transform: `scale(${lerp(1.03, 1, ci) * lerp(1, 0.985, co)})`,
+          transformOrigin: '50% 50%',
+          filter: co > 0.01 || ci < 0.99 ? `blur(${(1 - ci) * 4 + co * 4}px)` : undefined,
+          opacity: ci * (1 - co),
+        }}
+      >
+        {children}
+      </AbsoluteFill>
+    );
+  }
   const i = prog(frame, 0, inDur, expoOut);
   const o = prog(frame, dur - outDur, outDur, expoIn);
   const scale =

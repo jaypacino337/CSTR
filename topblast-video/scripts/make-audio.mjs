@@ -6,7 +6,12 @@ import {fileURLToPath} from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 // `node make-audio.mjs` → TopBlast score; `node make-audio.mjs arena` → Stonk Arena score.
-const PROJECT = process.argv[2] === 'arena' ? 'arena' : 'topblast';
+// `arena-clean` → the calmer Stonk Arena mix (same cues, softer hits).
+const CALM = process.argv[2] === 'arena-clean';
+const PROJECT = process.argv[2] === 'arena' || CALM ? 'arena' : 'topblast';
+const K = CALM
+  ? {impact: 0.35, whoosh: 0.4, riser: 0.35, rumble: 0, crowd: 0.35, clank: 0.35, kick: 0.6, sweep: 0.4}
+  : {impact: 1, whoosh: 1, riser: 1, rumble: 1, crowd: 1, clank: 1, kick: 1, sweep: 1};
 const tlPath = PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
 const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
@@ -53,6 +58,7 @@ const svf = () => {
 
 // ─── Instruments ───────────────────────────────────────────
 const kick = (t, g = 1) => {
+  g *= K.kick;
   add(t, SR * 0.5, (x) => {
     const ph = 2 * Math.PI * (45 * x + (110 / 28) * (1 - Math.exp(-28 * x)));
     return (Math.sin(ph) * Math.exp(-6.5 * x) + (x < 0.004 ? rnd() * 0.4 : 0)) * 0.9;
@@ -73,6 +79,7 @@ const ding = (t, g = 0.18, base = 1320, pan = 0) =>
   add(t, SR * 1.2, (x) => [1, 1.5, 2.01, 3].reduce((a, m, j) => a + Math.sin(2 * Math.PI * base * m * x) * Math.exp(-(4 + j * 3) * x) / (j + 1), 0), {gain: g, pan, verb: 0.5});
 
 const whoosh = (t, dur, g = 0.5, from = 300, to = 5000, pan = 0) => {
+  g *= K.whoosh;
   const f = svf();
   add(t, SR * dur, (x) => {
     const u = x / dur;
@@ -82,6 +89,7 @@ const whoosh = (t, dur, g = 0.5, from = 300, to = 5000, pan = 0) => {
 };
 
 const riser = (t, dur, g = 0.35) => {
+  g *= K.riser;
   const f = svf();
   let ph = 0;
   add(t, SR * dur, (x) => {
@@ -95,6 +103,7 @@ const riser = (t, dur, g = 0.35) => {
 };
 
 const impact = (t, g = 1, size = 1) => {
+  g *= K.impact;
   // sub drop
   add(t, SR * 2.8 * size, (x) => {
     const ph = 2 * Math.PI * (32 * x + (120 / 12) * (1 - Math.exp(-12 * x)));
@@ -108,6 +117,7 @@ const impact = (t, g = 1, size = 1) => {
 };
 
 const rumble = (t, dur, g = 0.6) => {
+  g *= K.rumble;
   const f = svf();
   const f2 = svf();
   add(t, SR * dur, (x) => {
@@ -120,6 +130,7 @@ const rumble = (t, dur, g = 0.6) => {
 };
 
 const sweepDown = (t, dur, g = 0.4) => {
+  g *= K.sweep;
   const f = svf();
   add(t, SR * dur, (x) => {
     const u = x / dur;
@@ -128,6 +139,7 @@ const sweepDown = (t, dur, g = 0.4) => {
 };
 
 const clank = (t, g = 0.4, pan = 0) => {
+  g *= K.clank;
   const f = svf();
   add(t, SR * 0.5, (x) => {
     const ring = [180, 263, 397, 611].reduce((a, hz, j) => a + Math.sin(2 * Math.PI * hz * x) * Math.exp(-(8 + j * 4) * x), 0) * 0.3;
@@ -136,6 +148,7 @@ const clank = (t, g = 0.4, pan = 0) => {
 };
 
 const crowd = (t, dur, g = 0.4) => {
+  g *= K.crowd;
   const f1 = svf();
   const f2 = svf();
   add(t, SR * dur, (x) => {
@@ -195,6 +208,13 @@ for (let fr = gridFrom, n = 0; fr < gridTo; fr += beat / 2, n++) {
   }
 }
 
+if (CALM) {
+  // 01 Intro (calm): headline + underline, no launch/impact
+  add(0, SR * 3, (x) => Math.sin(2 * Math.PI * 41.2 * x) * Math.min(1, x / 1.5) * 0.3, {gain: 0.5, verb: 0});
+  for (let i = 0; i < 16; i++) click(F(6 + i * 1.4), 0.04, 3000 + (i % 4) * 200, i % 2 ? 0.3 : -0.3);
+  ding(F(26), 0.1, 880);
+  ding(F(30), 0.06, 1320);
+} else {
 // 01 Intro
 riser(0.0, F(50), 0.12);
 add(0, SR * 3, (x) => Math.sin(2 * Math.PI * 41.2 * x) * Math.min(1, x / 1.5) * 0.3, {gain: 0.6, verb: 0}); // drone
@@ -203,6 +223,8 @@ sweepDown(F(48), F(14), 0.35);
 whoosh(F(58), F(16), 0.7, 200, 8000);
 impact(F(72), 1, 1.1);
 whoosh(F(82), F(14), 0.4, 6000, 300);
+
+}
 
 if (PROJECT === 'topblast') {
 // 02 Rails
@@ -363,6 +385,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
+const outPath = path.join(here, CALM ? '../public/stonkarena-clean-score.wav' : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);

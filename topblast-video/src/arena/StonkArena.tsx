@@ -13,7 +13,7 @@ import tl from './timeline.json';
 
 const S = tl.scenes;
 
-export const StonkArena: React.FC = () => (
+export const StonkArena: React.FC<{audio?: string}> = ({audio = 'stonkarena-score.wav'}) => (
   <AbsoluteFill style={{background: A.bg}}>
     <Sequence from={S.intro.from} durationInFrames={S.intro.dur} name="01 Intro">
       <ArenaIntro />
@@ -49,6 +49,6 @@ export const StonkArena: React.FC = () => (
       </SceneShell>
     </Sequence>
     <FilmFinish />
-    <Audio src={staticFile('stonkarena-score.wav')} />
+    <Audio src={staticFile(audio)} />
   </AbsoluteFill>
 );

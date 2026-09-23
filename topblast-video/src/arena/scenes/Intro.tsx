@@ -3,6 +3,7 @@ import {Flash, Glow, Particles} from '../../components/Atmosphere';
 import {KineticLine} from '../../components/Type';
 import {expoOut, inOut, lerp, prog} from '../../theme';
 import {A} from '../theme';
+import {useCalm} from '../../components/calm';
 
 // 0–3s: headline compresses into a blade of light; the helmet crest slashes up through it.
 const LINE_Y = 560;
@@ -17,7 +18,35 @@ export const Crest: React.FC<{h: number}> = ({h}) => (
   </svg>
 );
 
-export const ArenaIntro: React.FC = () => {
+const CalmIntro: React.FC = () => {
+  const f = useCurrentFrame();
+  const line = prog(f, 26, 30, inOut);
+  const out = prog(f, 86, 14, inOut);
+  return (
+    <AbsoluteFill style={{background: A.bg, overflow: 'hidden', opacity: 1 - out}}>
+      <Particles count={110} seed="aintro" color={A.limeHot} speed={0.6} opacity={0.7} maxSize={2.2} />
+      <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', transform: `scale(${1 + f * 0.0005})`}}>
+        <KineticLine
+          segments={[
+            {text: 'THE ARENA IS ', color: A.white},
+            {text: 'OPEN.', color: A.lime},
+          ]}
+          start={6}
+          size={120}
+          stagger={1.4}
+          dur={26}
+          stretch={100}
+          tracking={0.02}
+        />
+      </AbsoluteFill>
+      <div style={{position: 'absolute', left: 960 - 300 * line, width: 600 * line, top: 640, height: 3, background: A.lime, opacity: 0.9}} />
+    </AbsoluteFill>
+  );
+};
+
+export const ArenaIntro: React.FC = () => (useCalm() ? <CalmIntro /> : <LoudIntro />);
+
+const LoudIntro: React.FC = () => {
   const f = useCurrentFrame();
   const compress = prog(f, COMPRESS, 12, inOut);
   const lineOn = prog(f, COMPRESS + 6, 10, expoOut);

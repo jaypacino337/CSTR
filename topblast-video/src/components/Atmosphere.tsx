@@ -1,5 +1,6 @@
 import {AbsoluteFill, random, useCurrentFrame, useVideoConfig} from 'remotion';
 import {C} from '../theme';
+import {useCalm} from './calm';
 
 /** Rising dust / ember particles. Deterministic per seed. */
 export const Particles: React.FC<{
@@ -9,8 +10,12 @@ export const Particles: React.FC<{
   speed?: number;
   opacity?: number;
   maxSize?: number;
-}> = ({count = 140, seed = 'p', color = C.orangeHot, speed = 1, opacity = 1, maxSize = 3.2}) => {
+}> = ({count: rawCount = 140, seed = 'p', color = C.orangeHot, speed: rawSpeed = 1, opacity: rawOpacity = 1, maxSize = 3.2}) => {
   const frame = useCurrentFrame();
+  const calm = useCalm();
+  const count = calm ? Math.round(rawCount * 0.35) : rawCount;
+  const speed = calm ? Math.min(rawSpeed, 1.2) * 0.6 : rawSpeed;
+  const opacity = calm ? rawOpacity * 0.5 : rawOpacity;
   const {width, height} = useVideoConfig();
   return (
     <svg width={width} height={height} style={{position: 'absolute', inset: 0, opacity}}>
@@ -44,8 +49,11 @@ export const GridFloor: React.FC<{
   speed?: number;
   opacity?: number;
   horizon?: number;
-}> = ({color = 'rgba(255,106,0,0.35)', speed = 6, opacity = 1, horizon = 600}) => {
+}> = ({color = 'rgba(255,106,0,0.35)', speed: rawSpeed = 6, opacity: rawOpacity = 1, horizon = 600}) => {
   const frame = useCurrentFrame();
+  const calm = useCalm();
+  const speed = calm ? Math.min(rawSpeed, 4) * 0.5 : rawSpeed;
+  const opacity = calm ? rawOpacity * 0.45 : rawOpacity;
   return (
     <AbsoluteFill style={{perspective: 900, perspectiveOrigin: `50% ${horizon - 250}px`, opacity}}>
       <div
@@ -98,7 +106,9 @@ export const Glow: React.FC<{
   size: number;
   color: string;
   opacity?: number;
-}> = ({x, y, size, color, opacity = 1}) => (
+}> = ({x, y, size, color, opacity: rawOpacity = 1}) => {
+  const opacity = useCalm() ? rawOpacity * 0.55 : rawOpacity;
+  return (
   <div
     style={{
       position: 'absolute',
@@ -112,13 +122,16 @@ export const Glow: React.FC<{
       mixBlendMode: 'screen',
     }}
   />
-);
-
-/** Full-frame additive flash. */
-export const Flash: React.FC<{amount: number; color?: string}> = ({amount, color = '#FFE6C7'}) =>
-  amount <= 0.001 ? null : (
-    <AbsoluteFill style={{background: color, opacity: amount, mixBlendMode: 'screen', pointerEvents: 'none'}} />
   );
+};
+
+/** Full-frame additive flash. In calm mode it becomes a faint dip to black instead. */
+export const Flash: React.FC<{amount: number; color?: string}> = ({amount, color = '#FFE6C7'}) => {
+  const calm = useCalm();
+  if (amount <= 0.001) return null;
+  if (calm) return <AbsoluteFill style={{background: '#000', opacity: amount * 0.35, pointerEvents: 'none'}} />;
+  return <AbsoluteFill style={{background: color, opacity: amount, mixBlendMode: 'screen', pointerEvents: 'none'}} />;
+};
 
 /** Expanding ring shockwave. */
 export const Shockwave: React.FC<{
@@ -129,7 +142,8 @@ export const Shockwave: React.FC<{
   color?: string;
   width?: number;
 }> = ({x, y, t, maxR = 1400, color = C.orangeHot, width = 6}) => {
-  if (t <= 0 || t >= 1) return null;
+  const calm = useCalm();
+  if (calm || t <= 0 || t >= 1) return null;
   const r = maxR * (1 - Math.pow(1 - t, 3));
   return (
     <div
