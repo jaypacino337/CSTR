@@ -292,7 +292,7 @@ const Why: React.FC = () => {
 };
 
 // ── 5. Pumpios ───────────────────────────────────────
-const Pumpios: React.FC = () => {
+export const Pumpios: React.FC = () => {
   const f = useCurrentFrame();
   const n = Math.round(1200 * prog(f, 10, 40, expoOut));
   const cards = [
@@ -362,7 +362,7 @@ const Pumpios: React.FC = () => {
 const LINE: [number, number][] = [
   [0, 0], [0.18, -0.06], [0.34, -0.2], [0.5, -0.28], [0.66, -0.5], [0.8, -0.66], [0.9, -0.86], [1, -1],
 ];
-const Finale: React.FC = () => {
+export const Finale: React.FC = () => {
   const f = useCurrentFrame();
   const draw = prog(f, 4, 50, inOut);
   const X = 880;

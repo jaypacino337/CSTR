@@ -1,0 +1,15 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "duration": 740,
+  "scenes": {
+    "g1":      { "from": 0,   "dur": 108 },
+    "g2":      { "from": 96,  "dur": 108 },
+    "g3":      { "from": 192, "dur": 102 },
+    "g4":      { "from": 282, "dur": 102 },
+    "g5":      { "from": 372, "dur": 102 },
+    "pumpios": { "from": 462, "dur": 130 },
+    "finale":  { "from": 580, "dur": 160 }
+  }
+}

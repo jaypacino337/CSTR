@@ -9,6 +9,8 @@ import {CINE_DUR, OdteCinematic} from './odte/OdteCinematic';
 import {OdteExplainer} from './odte/explainer/OdteExplainer';
 import {IpoExplainer} from './ipo/Ipo';
 import {IpoHype} from './ipo/IpoHype';
+import {IpoSlides} from './ipo/IpoSlides';
+import istl from './ipo/slides-timeline.json';
 import ihtl from './ipo/hype-timeline.json';
 import itl from './ipo/timeline.json';
 import etl from './odte/explainer/timeline.json';
@@ -29,6 +31,14 @@ export const Root: React.FC = () => (
     fps={tl.fps}
     width={tl.width}
     height={tl.height}
+  />
+  <Composition
+    id="IpoSlides"
+    component={IpoSlides}
+    durationInFrames={istl.duration}
+    fps={istl.fps}
+    width={istl.width}
+    height={istl.height}
   />
   <Composition
     id="IpoHype"
