@@ -2,6 +2,7 @@ import {AbsoluteFill, Audio, Img, Sequence, staticFile, useCurrentFrame} from 'r
 import {FadeWords} from '../premium/ui';
 import {DISPLAY, MONO, UI, expoOut, inOut, lerp, prog} from '../theme';
 import tl from './hype-timeline.json';
+import {CoinStack} from './Coin';
 
 // IPO hype — white brand world. Slideshow of designed frames with slow push,
 // light parallax and clean slide/fade changes.
@@ -133,7 +134,7 @@ const Field: React.FC<{label: string; value: string; f: number; at: number}> = (
     </div>
   );
 };
-const How: React.FC = () => {
+export const How: React.FC = () => {
   const f = useCurrentFrame();
   const CW = 400;
   const GAP = 44;
@@ -218,7 +219,9 @@ const How: React.FC = () => {
               )}
               {i === 2 && (
                 <>
-                  <Img src={staticFile('ipo-stack.png')} style={{position: 'absolute', left: 22, top: 120 + (1 - prog(f, 104, 20, expoOut)) * -60, width: 200, height: 262, mixBlendMode: 'multiply', opacity: prog(f, 104, 12)}} />
+                  <div style={{position: 'absolute', left: 26, top: 126, opacity: prog(f, 98, 10)}}>
+                    <CoinStack w={196} p={prog(f, 104, 20, expoOut)} />
+                  </div>
                   <div style={{position: 'absolute', left: 250, top: 130, width: 2, height: 250, background: LIME, transformOrigin: 'top', transform: `scaleY(${prog(f, 110, 20, inOut)})`}} />
                   {alloc.map((a, k) => (
                     <div key={a.k} style={{position: 'absolute', left: 242, top: 124 + k * 88, display: 'flex', gap: 14, opacity: prog(f, 112 + k * 6, 10)}}>

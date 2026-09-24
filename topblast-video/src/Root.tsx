@@ -11,6 +11,8 @@ import {IpoExplainer} from './ipo/Ipo';
 import {IpoHype} from './ipo/IpoHype';
 import {IpoSlides} from './ipo/IpoSlides';
 import {IpoGallery} from './ipo/IpoGallery';
+import {IpoCustom} from './ipo/IpoCustom';
+import ictl from './ipo/custom-timeline.json';
 import igtl from './ipo/gallery-timeline.json';
 import istl from './ipo/slides-timeline.json';
 import ihtl from './ipo/hype-timeline.json';
@@ -33,6 +35,14 @@ export const Root: React.FC = () => (
     fps={tl.fps}
     width={tl.width}
     height={tl.height}
+  />
+  <Composition
+    id="IpoCustom"
+    component={IpoCustom}
+    durationInFrames={ictl.duration}
+    fps={ictl.fps}
+    width={ictl.width}
+    height={ictl.height}
   />
   <Composition
     id="IpoGallery"

@@ -16,13 +16,14 @@ const IPO = process.argv[2] === 'ipo';
 const IPOH = process.argv[2] === 'ipo-hype';
 const IPOS = process.argv[2] === 'ipo-slides';
 const IPOG = process.argv[2] === 'ipo-gallery';
+const IPOC = process.argv[2] === 'ipo-custom';
 const PREMIUM = process.argv[2] === 'topblast-premium' || V2 || ODTEX || IPO;
 const CALM = process.argv[2] === 'arena-clean' || process.argv[2] === 'topblast-clean' || PREMIUM;
 const PROJECT = process.argv[2] === 'arena' || process.argv[2] === 'arena-clean' ? 'arena' : 'topblast';
 const K = CALM
   ? {impact: 0.35, whoosh: 0.4, riser: 0.35, rumble: 0, crowd: 0.35, clank: 0.35, kick: 0.6, sweep: 0.4}
   : {impact: 1, whoosh: 1, riser: 1, rumble: 1, crowd: 1, clank: 1, kick: 1, sweep: 1};
-const tlPath = IPOG ? '../src/ipo/gallery-timeline.json' : IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
+const tlPath = IPOC ? '../src/ipo/custom-timeline.json' : IPOG ? '../src/ipo/gallery-timeline.json' : IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
 const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
 const FPS = tl.fps;
@@ -199,7 +200,45 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   }
 }
 
-if (IPOG) {
+if (IPOC) {
+// ─── IPO custom: sleek bed + cues on the shared-object moves ───
+for (let fr = 6; fr < S.finale.from + 70; fr += 15) {
+  const n = Math.round((fr - 6) / 15);
+  kick(F(fr), n % 4 === 0 ? 0.55 : 0.4);
+  hat(F(fr + 7.5), 0.05, n % 2 ? 0.35 : -0.35);
+}
+whoosh(F(0), 1.3, 0.3, 300, 5000);                 // coin spins in
+impact(F(20), 0.55, 0.9);
+click(F(16), 0.14, 2200);
+click(F(34), 0.1, 2600);
+whoosh(F(88), 0.8, 0.22, 5000, 400);               // coin shrinks onto the flow line
+[112, 144, 178].forEach((o, i) => { click(F(o), 0.14, 1800 + i * 250); ding(F(o + 2), 0.04, 1320 * Math.pow(1.26, i)); });
+[136, 170].forEach((o) => whoosh(F(o), 0.5, 0.14, 800, 4000));   // coin travels node → node
+const H0 = S.how.from;
+whoosh(F(H0 - 6), 0.5, 0.22, 500, 7000);
+for (let k = 0; k < 26; k++) click(F(H0 + 30 + k * 1.3), 0.03, 3600 + (k % 4) * 150, -0.5);
+whoosh(F(H0 + 72), 1.1, 0.12, 400, 3000, -0.1);
+ding(F(H0 + 106), 0.05, 1320);
+[112, 118, 124].forEach((o, k) => click(F(H0 + o), 0.1, 1800 + k * 250, 0.3));
+for (let k = 0; k < 9; k++) click(F(H0 + 132 + k * 3), 0.05, 1500 * Math.pow(1.08, k), 0.5);
+const G0 = S.gate.from;
+whoosh(F(G0 - 6), 0.5, 0.22, 500, 7000);
+for (let k = 0; k < 14; k++) click(F(G0 + 2 + k * 2.3), 0.035, 2600 + ((k * 7) % 5) * 300, ((k % 3) - 1) * 0.5);   // the race
+[6, 22, 40].forEach((o) => click(F(G0 + o), 0.1, 2000));
+whoosh(F(G0 + 36), 1.0, 0.1, 3000, 600, 0.4);       // calms into one gate
+ding(F(G0 + 44), 0.06, 990);
+const P0 = S.pumpios.from;
+whoosh(F(P0 - 6), 0.5, 0.22, 500, 7000);
+for (let k = 0; k < 10; k++) click(F(P0 + 10 + k * 4), 0.05, 3000 + k * 60, 0.4);
+[8, 12, 16].forEach((o, i) => whoosh(F(P0 + o), 0.3, 0.12, 2000, 500, (i - 1) * 0.6));
+const C0 = S.finale.from;
+whoosh(F(C0 - 6), 0.5, 0.22, 500, 7000);
+riser(F(C0 - 40), F(40), 0.18);
+whoosh(F(C0 + 28), 0.9, 0.2, 400, 5000);           // coin drops in
+impact(F(C0 + 50), 0.8, 1.2);                      // lands
+ding(F(C0 + 60), 0.08, 1320);
+ding(F(C0 + 62), 0.05, 1980);
+} else if (IPOG) {
 // ─── IPO gallery: continuous camera — whoosh on each travel, soft land ───
 for (let fr = 6; fr < S.finale.from + 70; fr += 15) {
   const n = Math.round((fr - 6) / 15);
@@ -754,6 +793,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, IPOG ? '../public/ipo-gallery-score.wav' : IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
+const outPath = path.join(here, IPOC ? '../public/ipo-custom-score.wav' : IPOG ? '../public/ipo-gallery-score.wav' : IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);
