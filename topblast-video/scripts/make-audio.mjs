@@ -195,26 +195,17 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
 }
 
 if (ODTE) {
-// ─── 0DTE 5s hype ─────────────────────────────────────────
-// clock racing to zero: ticks accelerate
-let tf = 0;
-for (let k = 0; k < 40 && tf < 30; k++) {
-  click(F(tf), 0.18 + k * 0.006, 2600 + k * 30, k % 2 ? 0.3 : -0.3);
-  tf += Math.max(0.9, 5 * Math.pow(0.9, k));
-}
-riser(0, F(30), 0.55);
-add(0, SR * 1.0, (x) => Math.sin(2 * Math.PI * 41.2 * x) * Math.min(1, x / 0.5) * 0.35, {gain: 0.7, verb: 0});
-whoosh(F(24), F(12), 0.9, 400, 9000);          // the blade
-impact(F(30), 0.7, 0.8);
-impact(F(40), 1.4, 1.6);                        // logo slam
-kick(F(40), 1);
-sweepDown(F(40), 0.6, 0.35);
-for (let fr = 55; fr < 140; fr += 15) kick(F(fr), fr % 30 === 25 ? 0.75 : 0.6);   // pulse under the hold
-for (let fr = 62; fr < 140; fr += 15) hat(F(fr), 0.08);
-whoosh(F(74), F(14), 0.35, 1200, 5000);
-ding(F(92), 0.12, 1320);
-ding(F(94), 0.08, 1980);
-whoosh(F(104), F(22), 0.25, 3000, 9000);
+// ─── 0DTE 5s: clean ───────────────────────────────────────
+add(0, SR * 1.2, (x) => Math.sin(2 * Math.PI * 41.2 * x) * Math.min(1, x / 0.6) * 0.3, {gain: 0.6, verb: 0});
+whoosh(F(1), F(16), 0.55, 600, 9000);           // blade draws
+impact(F(22), 0.9, 1.3);                        // mark lands
+kick(F(22), 0.9);
+for (let fr = 52; fr < 145; fr += 15) kick(F(fr), 0.55);   // steady pulse
+for (let fr = 59; fr < 145; fr += 15) hat(F(fr), 0.06);
+click(F(48), 0.25, 2200);
+ding(F(78), 0.1, 1320);
+ding(F(80), 0.06, 1980);
+whoosh(F(96), F(22), 0.2, 3000, 9000);          // light sweep
 } else if (PREMIUM) {
 // ─── Premium arrangement ───────────────────────────────────
 // Soft sub "heartbeat", tiny digital ticks, filtered data-routing texture.
