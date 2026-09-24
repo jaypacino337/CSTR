@@ -12,13 +12,14 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const V2 = process.argv[2] === 'topblast-v2';
 const ODTE = process.argv[2] === 'odte';
 const ODTEX = process.argv[2] === 'odte-explainer';
-const PREMIUM = process.argv[2] === 'topblast-premium' || V2 || ODTEX;
+const IPO = process.argv[2] === 'ipo';
+const PREMIUM = process.argv[2] === 'topblast-premium' || V2 || ODTEX || IPO;
 const CALM = process.argv[2] === 'arena-clean' || process.argv[2] === 'topblast-clean' || PREMIUM;
 const PROJECT = process.argv[2] === 'arena' || process.argv[2] === 'arena-clean' ? 'arena' : 'topblast';
 const K = CALM
   ? {impact: 0.35, whoosh: 0.4, riser: 0.35, rumble: 0, crowd: 0.35, clank: 0.35, kick: 0.6, sweep: 0.4}
   : {impact: 1, whoosh: 1, riser: 1, rumble: 1, crowd: 1, clank: 1, kick: 1, sweep: 1};
-const tlPath = ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
+const tlPath = IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
 const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
 const FPS = tl.fps;
@@ -171,7 +172,7 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   const fl = svf();
   const fr = svf();
   const phases = chord.map(() => [(rnd() + 1) / 2, (rnd() + 1) / 2]);
-  const impactT = F(S.finale.from + (ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
+  const impactT = F(S.finale.from + (IPO ? 24 : ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
   for (let i = 0; i < LEN; i++) {
     const t = i / SR;
     const notes = t >= impactT ? finalChord : chord;
@@ -244,9 +245,50 @@ const glide = (t, dur, g = 0.08, from = 220, to = 880) => {
 };
 
 // low-end pulse (75 bpm), resting under the final hold
-for (let fr = 12; fr < S.finale.from + (V2 ? 116 : 60); fr += 24) sub(F(fr), fr < (S.entry ? S.entry.from : S.game.from) ? 0.16 : 0.22);
+for (let fr = 12; fr < S.finale.from + (V2 ? 116 : 60); fr += 24) sub(F(fr), fr < (S.entry ? S.entry.from : S.game ? S.game.from : S.ways.from) ? 0.16 : 0.22);
 
-if (ODTEX) {
+if (IPO) {
+// 01 Initial Pump Offering
+route(F(4), 1.3, 0.1, 0, 900);                       // rising line
+glide(F(4), 1.3, 0.05, 220, 660);
+impact(F(20), 1.1, 1.1);                              // IPO wordmark
+sub(F(20), 0.35, 40);
+tick(F(62), 0.06, 2400);
+tick(F(78), 0.07, 2600);
+[84, 94].forEach((o) => tick(F(o), 0.09, 2000));
+tick(F(110), 0.05, 3000);
+
+// 02 Two ways
+const W2 = S.ways.from;
+tick(F(W2 + 8), 0.08, 2200);
+[30, 42].forEach((o, i) => sub(F(W2 + o), 0.18, 48 - i * 4));
+tick(F(W2 + 70), 0.09, 1800, -0.4);
+route(F(W2 + 70), 0.7, 0.08, -0.4, 1600);
+tick(F(W2 + 128), 0.09, 1800, 0.4);
+route(F(W2 + 128), 0.7, 0.08, 0.4, 1600);
+tick(F(W2 + 192), 0.08, 2400);
+
+// 03 Terms
+const T3 = S.terms.from;
+[14, 46, 78].forEach((o, i) => { tick(F(T3 + o), 0.1, 1800 + i * 300); ding(F(T3 + o + 6), 0.04, 1320 * Math.pow(1.26, i)); });
+for (let k = 0; k < 3; k++) tick(F(T3 + 120 + k * 23), 0.08, 2200 + k * 200);
+sub(F(T3 + 190), 0.28, 44);
+tick(F(T3 + 190), 0.1, 1500);
+
+// 04 Pumpios
+const P4 = S.pumpios.from;
+[14, 21, 28].forEach((o, i) => { sub(F(P4 + o), 0.14, 50); tick(F(P4 + o), 0.06, 2000 + i * 250); });
+tick(F(P4 + 70), 0.1, 1600);
+ding(F(P4 + 72), 0.07, 1320);
+
+// 05 End
+const E5 = S.finale.from;
+route(F(E5 + 10), 1.6, 0.1, 0.4, 900);
+glide(F(E5 + 10), 1.6, 0.05, 220, 660);
+impact(F(E5 + 24), 1.4, 1.5);
+sub(F(E5 + 24), 0.4, 34);
+[8, 16, 40, 70].forEach((o) => tick(F(E5 + o), 0.06, 2400));
+} else if (ODTEX) {
 // 01 Promise
 route(F(4), 0.6, 0.08, 0, 2200);
 tick(F(14), 0.07, 2600);
@@ -642,6 +684,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
+const outPath = path.join(here, IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);
