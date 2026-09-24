@@ -6,6 +6,8 @@ import ptl from './premium/timeline.json';
 import {TopBlastV2} from './v2/TopBlastV2';
 import {Odte} from './odte/Odte';
 import {CINE_DUR, OdteCinematic} from './odte/OdteCinematic';
+import {OdteExplainer} from './odte/explainer/OdteExplainer';
+import etl from './odte/explainer/timeline.json';
 import otl from './odte/timeline.json';
 import v2tl from './v2/timeline.json';
 import tl from './timeline.json';
@@ -23,6 +25,22 @@ export const Root: React.FC = () => (
     fps={tl.fps}
     width={tl.width}
     height={tl.height}
+  />
+  <Composition
+    id="OdteExplainer"
+    component={OdteExplainer}
+    durationInFrames={etl.duration}
+    fps={etl.fps}
+    width={etl.width}
+    height={etl.height}
+  />
+  <Composition
+    id="OdteExplainerSilent"
+    component={() => <OdteExplainer withAudio={false} />}
+    durationInFrames={etl.duration}
+    fps={etl.fps}
+    width={etl.width}
+    height={etl.height}
   />
   <Composition
     id="OdteCinematic"

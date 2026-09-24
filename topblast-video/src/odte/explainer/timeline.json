@@ -1,0 +1,24 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "duration": 970,
+  "scenes": {
+    "intro": {
+      "from": 0,
+      "dur": 130
+    },
+    "game": {
+      "from": 120,
+      "dur": 540
+    },
+    "payout": {
+      "from": 650,
+      "dur": 140
+    },
+    "finale": {
+      "from": 780,
+      "dur": 190
+    }
+  }
+}
