@@ -1,0 +1,16 @@
+node_modules/
+out/*
+!out/topblast-launch.mp4
+!out/stonkarena-launch.mp4
+!out/stonkarena-clean.mp4
+!out/topblast-clean.mp4
+!out/topblast-premium.mp4
+!out/topblast-v2.mp4
+!out/odte-hype.mp4
+!out/odte-cinematic.mp4
+!out/odte-explainer.mp4
+!out/odte-explainer-silent.mp4
+!out/ipo-explainer.mp4
+!out/ipo-hype.mp4
+!out/ipo-slides.mp4
+!out/ipo-gallery.mp4

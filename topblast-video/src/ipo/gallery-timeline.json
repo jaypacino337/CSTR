@@ -1,0 +1,14 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "duration": 760,
+  "hold": 56,
+  "move": 26,
+  "panels": 6,
+  "scenes": {
+    "gallery": { "from": 0,   "dur": 500 },
+    "pumpios": { "from": 488, "dur": 124 },
+    "finale":  { "from": 600, "dur": 160 }
+  }
+}

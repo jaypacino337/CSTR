@@ -1,0 +1,36 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "duration": 966,
+  "scenes": {
+    "intro": {
+      "from": 0,
+      "dur": 100
+    },
+    "gates": {
+      "from": 88,
+      "dur": 132
+    },
+    "fight": {
+      "from": 210,
+      "dur": 162
+    },
+    "pit": {
+      "from": 360,
+      "dur": 162
+    },
+    "ring": {
+      "from": 510,
+      "dur": 150
+    },
+    "econ": {
+      "from": 648,
+      "dur": 150
+    },
+    "finale": {
+      "from": 786,
+      "dur": 180
+    }
+  }
+}

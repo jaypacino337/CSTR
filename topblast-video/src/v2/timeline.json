@@ -1,0 +1,36 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "duration": 1094,
+  "scenes": {
+    "hook": {
+      "from": 0,
+      "dur": 150
+    },
+    "entry": {
+      "from": 140,
+      "dur": 300
+    },
+    "rewards": {
+      "from": 430,
+      "dur": 104
+    },
+    "creator": {
+      "from": 524,
+      "dur": 100
+    },
+    "stack": {
+      "from": 614,
+      "dur": 104
+    },
+    "loop": {
+      "from": 708,
+      "dur": 170
+    },
+    "finale": {
+      "from": 868,
+      "dur": 226
+    }
+  }
+}
