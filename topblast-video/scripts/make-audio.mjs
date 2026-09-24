@@ -210,7 +210,11 @@ click(F(16), 0.14, 2200);
 click(F(34), 0.1, 2600);
 Object.values(S).slice(1).forEach((sc) => { whoosh(F(sc.from - 4), 0.45, 0.22, 600, 6000); click(F(sc.from + 6), 0.12, 2400); });
 [6, 20, 34].forEach((o) => click(F(S.what.from + o), 0.1, 2000));
-for (let k = 0; k < 4; k++) { click(F(S.how.from + 26 + k * 17.5), 0.12, 1800 + k * 200); ding(F(S.how.from + 28 + k * 17.5), 0.035, 1320 * Math.pow(1.122, k)); }
+for (let k = 0; k < 26; k++) click(F(S.how.from + 30 + k * 1.3), 0.03, 3600 + (k % 4) * 150, -0.5);   // form typing
+whoosh(F(S.how.from + 72), 1.1, 0.12, 400, 3000, -0.1);                                            // raise filling
+ding(F(S.how.from + 106), 0.05, 1320);
+[112, 118, 124].forEach((o, k) => click(F(S.how.from + o), 0.1, 1800 + k * 250, 0.3));           // 70 / 20 / 10
+for (let k = 0; k < 9; k++) click(F(S.how.from + 132 + k * 3), 0.05, 1500 * Math.pow(1.08, k), 0.5); // candles
 [6, 20, 36].forEach((o) => click(F(S.why.from + o), 0.1, 2000));
 for (let k = 0; k < 10; k++) click(F(S.pumpios.from + 10 + k * 4), 0.05, 3000 + k * 60, 0.4);   // counter
 [8, 12, 16].forEach((o, i) => whoosh(F(S.pumpios.from + o), 0.3, 0.12, 2000, 500, (i - 1) * 0.6));

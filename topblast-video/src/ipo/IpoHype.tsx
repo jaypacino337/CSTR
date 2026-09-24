@@ -115,106 +115,149 @@ const What: React.FC = () => {
         );
       })}
       <div style={{position: 'absolute', left: 198, top: 660, width: lerp(0, 560, prog(f, 40, 30, inOut)), height: 4, background: LIME}} />
-      <div style={{position: 'absolute', left: 198, top: 700}}>
-        <FadeWords segments="A cleaner path from raise to launch." start={48} size={40} font={UI} weight={400} align="left" stagger={2} style={{color: GRAY}} />
-      </div>
+
     </AbsoluteFill>
   );
 };
 
-// ── 3. how it works ───────────────────────────────────
-const Icon: React.FC<{k: number; on: boolean}> = ({k, on}) => {
-  const c = on ? INK : '#9A9A95';
-  const p = {fill: 'none', stroke: c, strokeWidth: 1.9, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const};
+// ── 3. how it works — animated version of "Graphic 6" ──
+const Field: React.FC<{label: string; value: string; f: number; at: number}> = ({label, value, f, at}) => {
+  const n = Math.max(0, Math.min(value.length, Math.floor((f - at) * 0.9)));
   return (
-    <svg width={62} height={62} viewBox="0 0 24 24">
-      {k === 0 && (
-        <>
-          <rect x={5} y={3} width={14} height={18} rx={2} {...p} />
-          <path d="M8.5 8h7M8.5 12h7M8.5 16h4" {...p} />
-        </>
-      )}
-      {k === 1 && (
-        <>
-          <circle cx={9} cy={8} r={3} {...p} />
-          <circle cx={17} cy={9} r={2.4} {...p} />
-          <path d="M3.5 19c.8-3.2 3-5 5.5-5s4.7 1.8 5.5 5M14.5 14.5c2.4-.4 5 .8 6 4" {...p} />
-        </>
-      )}
-      {k === 2 && (
-        <>
-          <circle cx={12} cy={12} r={8.5} {...p} />
-          <path d="M12 3.5V12h8.5" {...p} />
-        </>
-      )}
-      {k === 3 && (
-        <>
-          <path d="M4 17l5-5 4 3 7-8" {...p} />
-          <path d="M15 7h5v5" {...p} />
-        </>
-      )}
-    </svg>
+    <div style={{marginBottom: 14}}>
+      <div style={{fontFamily: UI, fontSize: 19, color: '#55554F', marginBottom: 6}}>{label}</div>
+      <div style={{height: 46, borderRadius: 10, background: '#fff', border: `1px solid ${n > 0 && n < value.length ? LIME_D : 'rgba(0,0,0,0.08)'}`, display: 'flex', alignItems: 'center', padding: '0 14px', fontFamily: UI, fontSize: 20, color: INK}}>
+        {value.slice(0, n)}
+        {n < value.length && f >= at && <span style={{width: 2, height: 22, background: LIME_D, marginLeft: 2, opacity: Math.floor(f / 6) % 2}} />}
+      </div>
+    </div>
   );
 };
 const How: React.FC = () => {
   const f = useCurrentFrame();
-  const steps = ['CREATE AN OFFERING', 'OPEN PARTICIPATION', 'ALLOCATE SUPPLY', 'GO LIVE'];
-  const run = prog(f, 26, 70, inOut) * 4;
-  const CW = 380;
-  const GAP = 40;
+  const CW = 400;
+  const GAP = 44;
   const X0 = (1920 - (4 * CW + 3 * GAP)) / 2;
+  const TOP = 470;
+  const CH = 440;
+  const steps = ['CREATE', 'OPEN', 'ALLOCATE', 'GO LIVE'];
+  const active = [26, 70, 104, 132];
+  const raise = prog(f, 72, 34, inOut);
+  const sol = Math.round(320 * raise);
+  const alloc = [
+    {v: '70%', k: 'Community'},
+    {v: '20%', k: 'Liquidity'},
+    {v: '10%', k: 'Creator'},
+  ];
+  const candles = [
+    [0.18, 0.16], [0.36, 0.22], [0.3, 0.18], [0.48, 0.2], [0.58, 0.16], [0.52, 0.22], [0.7, 0.2], [0.8, 0.18], [0.96, 0.22],
+  ];
   return (
     <AbsoluteFill style={{background: BG}}>
       <Grid f={f + 200} />
       <Header o={1} />
-      <div style={{position: 'absolute', left: X0, top: 180}}>
-        <FadeWords
-          segments={[
-            {text: 'HOW IT ', color: INK},
-            {text: 'WORKS.', color: LIME_D},
-          ]}
-          start={2}
-          size={92}
-          font={UI}
-          weight={800}
-          tracking={-0.03}
-          align="left"
-        />
+      <div style={{position: 'absolute', left: X0, top: 150}}>
+        <FadeWords segments="A CLEANER PATH" start={2} size={112} font={DISPLAY} weight={900} stretch={106} tracking={-0.02} align="left" stagger={4} style={{color: INK}} />
       </div>
-      <div style={{position: 'absolute', left: X0, top: 540, width: 4 * CW + 3 * GAP, height: 4, background: 'rgba(0,0,0,0.08)'}} />
-      <div style={{position: 'absolute', left: X0, top: 540, width: (4 * CW + 3 * GAP) * Math.min(1, run / 4), height: 4, background: LIME, boxShadow: `0 0 12px ${LIME}`}} />
+      <div style={{position: 'absolute', left: X0, top: 276}}>
+        <FadeWords segments="FROM RAISE TO LAUNCH." start={10} size={112} font={DISPLAY} weight={900} stretch={106} tracking={-0.02} align="left" stagger={4} style={{color: LIME}} />
+      </div>
       {steps.map((s, i) => {
-        const p = prog(f, 8 + i * 5, 18, expoOut);
-        const on = run > i + 0.15;
+        const p = prog(f, 14 + i * 5, 18, expoOut);
+        const on = f >= active[i];
         return (
-          <div
-            key={s}
-            style={{
-              position: 'absolute',
-              left: X0 + i * (CW + GAP),
-              top: 340,
-              width: CW,
-              height: 400,
-              borderRadius: 28,
-              background: on ? 'linear-gradient(160deg, rgba(124,242,26,0.20), rgba(255,255,255,0.85))' : 'rgba(255,255,255,0.8)',
-              border: `1.5px solid ${on ? LIME_D : 'rgba(0,0,0,0.1)'}`,
-              boxShadow: on ? '0 24px 60px rgba(77,184,10,0.18)' : '0 20px 50px rgba(0,0,0,0.06)',
-              padding: '40px 36px',
-              boxSizing: 'border-box',
-              opacity: p,
-              transform: `translateY(${(1 - p) * 40 - (on ? 8 : 0)}px)`,
-            }}
-          >
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-              <Icon k={i} on={on} />
-              <div style={{fontFamily: MONO, fontWeight: 700, fontSize: 26, color: on ? LIME_D : '#9A9A95'}}>0{i + 1}</div>
+          <div key={s}>
+            <div
+              style={{
+                position: 'absolute',
+                left: X0 + i * (CW + GAP),
+                top: TOP,
+                width: CW,
+                height: CH,
+                borderRadius: 22,
+                background: 'rgba(255,255,255,0.85)',
+                border: `1.5px solid ${on ? 'rgba(77,184,10,0.55)' : 'rgba(0,0,0,0.08)'}`,
+                boxShadow: on ? '0 24px 60px rgba(124,242,26,0.16)' : '0 18px 44px rgba(0,0,0,0.05)',
+                opacity: p,
+                transform: `translateY(${(1 - p) * 40}px)`,
+                overflow: 'hidden',
+              }}
+            >
+              <div style={{position: 'absolute', left: 30, top: 26, display: 'flex', alignItems: 'baseline', gap: 26}}>
+                <span style={{fontFamily: DISPLAY, fontWeight: 900, fontStretch: '110%', fontSize: 54, color: LIME}}>0{i + 1}</span>
+                <span style={{fontFamily: UI, fontWeight: 800, fontSize: 36, color: INK, letterSpacing: '-0.01em'}}>{s}</span>
+              </div>
+              {i === 0 && (
+                <div style={{position: 'absolute', left: 30, right: 30, top: 116, padding: '16px 18px 4px', borderRadius: 14, background: 'rgba(0,0,0,0.035)'}}>
+                  <Field label="Token Name" value="Your Token" f={f} at={30} />
+                  <Field label="Target Raise" value="500 SOL" f={f} at={44} />
+                  <Field label="Presale Terms" value="Public terms" f={f} at={54} />
+                </div>
+              )}
+              {i === 1 && (
+                <div style={{position: 'absolute', left: 30, right: 30, top: 130, borderRadius: 16, border: '1px solid rgba(0,0,0,0.08)', background: '#fff'}}>
+                  <div style={{padding: '26px 24px 20px'}}>
+                    <div style={{display: 'flex', alignItems: 'center', gap: 12, fontFamily: UI, fontWeight: 700, fontSize: 26, color: INK}}>
+                      <div style={{width: 18, height: 18, borderRadius: 9, background: LIME, boxShadow: `0 0 ${8 + 6 * Math.sin(f / 5)}px ${LIME}`}} />
+                      Presale Live
+                    </div>
+                    <div style={{height: 18, borderRadius: 9, background: 'rgba(0,0,0,0.07)', marginTop: 22, overflow: 'hidden'}}>
+                      <div style={{height: '100%', width: `${64 * raise}%`, borderRadius: 9, background: LIME}} />
+                    </div>
+                    <div style={{fontFamily: UI, fontSize: 22, color: '#55554F', marginTop: 14}}>{sol} SOL / 500 SOL</div>
+                  </div>
+                  <div style={{borderTop: '1px solid rgba(0,0,0,0.08)', padding: '18px 24px', display: 'flex', alignItems: 'center', gap: 16}}>
+                    <div style={{display: 'flex'}}>
+                      {[0, 1, 2, 3, 4].map((k) => (
+                        <div key={k} style={{width: 34, height: 34, borderRadius: 17, background: '#C9C9C4', border: '2px solid #fff', marginLeft: k ? -10 : 0, opacity: prog(f, 80 + k * 4, 8)}} />
+                      ))}
+                    </div>
+                    <div style={{fontFamily: UI, fontSize: 22, color: INK, opacity: prog(f, 100, 10)}}>1.2K+</div>
+                  </div>
+                </div>
+              )}
+              {i === 2 && (
+                <>
+                  <Img src={staticFile('ipo-stack.png')} style={{position: 'absolute', left: 22, top: 120 + (1 - prog(f, 104, 20, expoOut)) * -60, width: 200, height: 262, mixBlendMode: 'multiply', opacity: prog(f, 104, 12)}} />
+                  <div style={{position: 'absolute', left: 250, top: 130, width: 2, height: 250, background: LIME, transformOrigin: 'top', transform: `scaleY(${prog(f, 110, 20, inOut)})`}} />
+                  {alloc.map((a, k) => (
+                    <div key={a.k} style={{position: 'absolute', left: 242, top: 124 + k * 88, display: 'flex', gap: 14, opacity: prog(f, 112 + k * 6, 10)}}>
+                      <div style={{width: 18, height: 18, borderRadius: 9, background: LIME, marginTop: 4}} />
+                      <div>
+                        <div style={{fontFamily: UI, fontWeight: 700, fontSize: 24, color: INK}}>{a.v}</div>
+                        <div style={{fontFamily: UI, fontSize: 20, color: '#55554F'}}>{a.k}</div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+              {i === 3 && (
+                <svg width={CW} height={CH} style={{position: 'absolute', inset: 0}}>
+                  {candles.map(([h, b], k) => {
+                    const g = prog(f, 132 + k * 3, 12, expoOut);
+                    const x = 40 + k * 38;
+                    const yTop = CH - 60 - h * 280;
+                    const bh = b * 280 * g;
+                    return (
+                      <g key={k} opacity={g}>
+                        <line x1={x} x2={x} y1={yTop - 22} y2={yTop + b * 280 + 18} stroke={LIME_D} strokeWidth={3} />
+                        <rect x={x - 12} y={yTop} width={24} height={bh} rx={3} fill={k % 3 === 2 ? 'rgba(124,242,26,0.35)' : LIME} stroke={LIME_D} strokeWidth={1.5} />
+                      </g>
+                    );
+                  })}
+                </svg>
+              )}
             </div>
-            <div style={{fontFamily: UI, fontWeight: 800, fontSize: 40, lineHeight: 1.1, letterSpacing: '-0.01em', color: on ? INK : '#8A8A85', marginTop: 150}}>{s}</div>
+            {i < 3 && (
+              <div style={{position: 'absolute', left: X0 + (i + 1) * (CW + GAP) - GAP / 2 - 12, top: TOP + CH / 2 - 20, fontFamily: UI, fontWeight: 800, fontSize: 40, color: f >= active[i + 1] ? LIME_D : 'rgba(0,0,0,0.2)', opacity: p}}>›</div>
+            )}
           </div>
         );
       })}
-      <div style={{position: 'absolute', left: X0, top: 800}}>
-        <FadeWords segments="Structured presales. Public terms. Cleaner distribution." start={70} size={38} font={UI} weight={400} align="left" stagger={2} style={{color: GRAY}} />
+      <div style={{position: 'absolute', left: X0, right: X0, top: 972, display: 'flex', alignItems: 'center', gap: 36, fontFamily: MONO, fontSize: 20, letterSpacing: '0.18em', color: '#55554F', opacity: prog(f, 120, 16)}}>
+        <span style={{fontWeight: 700, color: INK}}>IPO.SOLANA.XYZ</span>
+        <div style={{flex: 1, height: 1, background: 'rgba(0,0,0,0.25)'}} />
+        <span>PRESALES FOR A STRONGER SOLANA.</span>
       </div>
     </AbsoluteFill>
   );
