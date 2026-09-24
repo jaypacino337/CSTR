@@ -7,6 +7,7 @@
     "audio": "node scripts/make-audio.mjs",
     "render": "npm run audio && remotion render TopBlastLaunch out/topblast-launch.mp4",
     "still": "remotion still TopBlastLaunch out/frame.png",
+    "render:ipo-gallery": "node scripts/make-audio.mjs ipo-gallery && remotion render IpoGallery out/ipo-gallery.mp4",
     "render:ipo-slides": "node scripts/make-audio.mjs ipo-slides && remotion render IpoSlides out/ipo-slides.mp4",
     "render:ipo-hype": "node scripts/make-audio.mjs ipo-hype && remotion render IpoHype out/ipo-hype.mp4",
     "render:ipo": "node scripts/make-audio.mjs ipo && remotion render IpoExplainer out/ipo-explainer.mp4",

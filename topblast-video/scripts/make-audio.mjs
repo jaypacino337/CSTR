@@ -15,13 +15,14 @@ const ODTEX = process.argv[2] === 'odte-explainer';
 const IPO = process.argv[2] === 'ipo';
 const IPOH = process.argv[2] === 'ipo-hype';
 const IPOS = process.argv[2] === 'ipo-slides';
+const IPOG = process.argv[2] === 'ipo-gallery';
 const PREMIUM = process.argv[2] === 'topblast-premium' || V2 || ODTEX || IPO;
 const CALM = process.argv[2] === 'arena-clean' || process.argv[2] === 'topblast-clean' || PREMIUM;
 const PROJECT = process.argv[2] === 'arena' || process.argv[2] === 'arena-clean' ? 'arena' : 'topblast';
 const K = CALM
   ? {impact: 0.35, whoosh: 0.4, riser: 0.35, rumble: 0, crowd: 0.35, clank: 0.35, kick: 0.6, sweep: 0.4}
   : {impact: 1, whoosh: 1, riser: 1, rumble: 1, crowd: 1, clank: 1, kick: 1, sweep: 1};
-const tlPath = IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
+const tlPath = IPOG ? '../src/ipo/gallery-timeline.json' : IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
 const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
 const FPS = tl.fps;
@@ -198,7 +199,33 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   }
 }
 
-if (IPOS) {
+if (IPOG) {
+// ─── IPO gallery: continuous camera — whoosh on each travel, soft land ───
+for (let fr = 6; fr < S.finale.from + 70; fr += 15) {
+  const n = Math.round((fr - 6) / 15);
+  kick(F(fr), n % 4 === 0 ? 0.55 : 0.4);
+  hat(F(fr + 7.5), 0.05, n % 2 ? 0.35 : -0.35);
+}
+impact(F(4), 0.5, 0.9);
+const STEPG = tl.hold + tl.move;
+for (let i = 0; i < tl.panels; i++) {
+  const t0 = i * STEPG;
+  whoosh(F(t0 + 10), 1.2, 0.05, 3000, 9000, 0.2);                 // light sweep
+  if (i < tl.panels - 1) {
+    whoosh(F(t0 + tl.hold - 2), F(tl.move + 6), 0.32, 300, 6000, i % 2 ? 0.4 : -0.4);  // camera travel
+    click(F(t0 + tl.hold + tl.move), 0.12, 2200);                   // land
+    add(F(t0 + tl.hold + tl.move), SR * 0.7, (x) => Math.sin(2 * Math.PI * 52 * x) * Math.min(1, x * 200) * Math.exp(-6 * x), {gain: 0.14, verb: 0.02});
+  }
+}
+whoosh(F(S.pumpios.from - 4), 0.5, 0.24, 500, 7000);
+for (let k = 0; k < 10; k++) click(F(S.pumpios.from + 10 + k * 4), 0.05, 3000 + k * 60, 0.4);
+[8, 12, 16].forEach((o, i) => whoosh(F(S.pumpios.from + o), 0.3, 0.12, 2000, 500, (i - 1) * 0.6));
+whoosh(F(S.finale.from - 4), 0.5, 0.24, 500, 7000);
+riser(F(S.finale.from - 40), F(40), 0.18);
+impact(F(S.finale.from + 8), 0.8, 1.2);
+ding(F(S.finale.from + 58), 0.08, 1320);
+ding(F(S.finale.from + 60), 0.05, 1980);
+} else if (IPOS) {
 // ─── IPO slideshow: same sleek bed, a wipe + tick on every frame change ───
 for (let fr = 6; fr < S.finale.from + 70; fr += 15) {
   const n = Math.round((fr - 6) / 15);
@@ -727,6 +754,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
+const outPath = path.join(here, IPOG ? '../public/ipo-gallery-score.wav' : IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);
