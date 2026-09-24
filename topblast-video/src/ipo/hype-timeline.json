@@ -1,0 +1,14 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "duration": 700,
+  "scenes": {
+    "open":    { "from": 0,   "dur": 100 },
+    "what":    { "from": 90,  "dur": 110 },
+    "how":     { "from": 190, "dur": 130 },
+    "why":     { "from": 310, "dur": 120 },
+    "pumpios": { "from": 420, "dur": 130 },
+    "finale":  { "from": 540, "dur": 160 }
+  }
+}

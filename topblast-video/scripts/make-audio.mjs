@@ -13,13 +13,14 @@ const V2 = process.argv[2] === 'topblast-v2';
 const ODTE = process.argv[2] === 'odte';
 const ODTEX = process.argv[2] === 'odte-explainer';
 const IPO = process.argv[2] === 'ipo';
+const IPOH = process.argv[2] === 'ipo-hype';
 const PREMIUM = process.argv[2] === 'topblast-premium' || V2 || ODTEX || IPO;
 const CALM = process.argv[2] === 'arena-clean' || process.argv[2] === 'topblast-clean' || PREMIUM;
 const PROJECT = process.argv[2] === 'arena' || process.argv[2] === 'arena-clean' ? 'arena' : 'topblast';
 const K = CALM
   ? {impact: 0.35, whoosh: 0.4, riser: 0.35, rumble: 0, crowd: 0.35, clank: 0.35, kick: 0.6, sweep: 0.4}
   : {impact: 1, whoosh: 1, riser: 1, rumble: 1, crowd: 1, clank: 1, kick: 1, sweep: 1};
-const tlPath = IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
+const tlPath = IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
 const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
 const FPS = tl.fps;
@@ -196,7 +197,28 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   }
 }
 
-if (ODTE) {
+if (IPOH) {
+// ─── IPO hype: sleek, confident, not aggressive ───────────
+const beat = 15; // 120 bpm
+for (let fr = 6; fr < S.finale.from + 70; fr += beat) {
+  const n = Math.round((fr - 6) / beat);
+  kick(F(fr), n % 4 === 0 ? 0.55 : 0.4);
+  hat(F(fr + beat / 2), 0.05, n % 2 ? 0.35 : -0.35);
+}
+impact(F(2), 0.55, 0.9);                          // IPO wordmark
+click(F(16), 0.14, 2200);
+click(F(34), 0.1, 2600);
+Object.values(S).slice(1).forEach((sc) => { whoosh(F(sc.from - 4), 0.45, 0.22, 600, 6000); click(F(sc.from + 6), 0.12, 2400); });
+[6, 20, 34].forEach((o) => click(F(S.what.from + o), 0.1, 2000));
+for (let k = 0; k < 4; k++) { click(F(S.how.from + 26 + k * 17.5), 0.12, 1800 + k * 200); ding(F(S.how.from + 28 + k * 17.5), 0.035, 1320 * Math.pow(1.122, k)); }
+[6, 20, 36].forEach((o) => click(F(S.why.from + o), 0.1, 2000));
+for (let k = 0; k < 10; k++) click(F(S.pumpios.from + 10 + k * 4), 0.05, 3000 + k * 60, 0.4);   // counter
+[8, 12, 16].forEach((o, i) => whoosh(F(S.pumpios.from + o), 0.3, 0.12, 2000, 500, (i - 1) * 0.6));
+riser(F(S.finale.from - 40), F(40), 0.18);
+impact(F(S.finale.from + 8), 0.8, 1.2);           // closer
+ding(F(S.finale.from + 58), 0.08, 1320);
+ding(F(S.finale.from + 60), 0.05, 1980);
+} else if (ODTE) {
 // ─── 0DTE 5s: clean ───────────────────────────────────────
 add(0, SR * 1.2, (x) => Math.sin(2 * Math.PI * 41.2 * x) * Math.min(1, x / 0.6) * 0.3, {gain: 0.6, verb: 0});
 whoosh(F(1), F(16), 0.55, 600, 9000);           // blade draws
@@ -684,6 +706,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
+const outPath = path.join(here, IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);
