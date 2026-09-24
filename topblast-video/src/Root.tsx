@@ -4,6 +4,8 @@ import {TopBlastClean} from './TopBlastClean';
 import {TopBlastPremium} from './premium/TopBlastPremium';
 import ptl from './premium/timeline.json';
 import {TopBlastV2} from './v2/TopBlastV2';
+import {Odte} from './odte/Odte';
+import otl from './odte/timeline.json';
 import v2tl from './v2/timeline.json';
 import tl from './timeline.json';
 import {StonkArena} from './arena/StonkArena';
@@ -20,6 +22,14 @@ export const Root: React.FC = () => (
     fps={tl.fps}
     width={tl.width}
     height={tl.height}
+  />
+  <Composition
+    id="OdteHype"
+    component={Odte}
+    durationInFrames={otl.duration}
+    fps={otl.fps}
+    width={otl.width}
+    height={otl.height}
   />
   <Composition
     id="TopBlastV2"

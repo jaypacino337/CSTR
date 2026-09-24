@@ -10,13 +10,14 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 // `topblast-clean` → the calmer TopBlast mix.
 // `topblast-premium` → the premium cut: pulse, ticks, data routing, two impacts.
 const V2 = process.argv[2] === 'topblast-v2';
+const ODTE = process.argv[2] === 'odte';
 const PREMIUM = process.argv[2] === 'topblast-premium' || V2;
 const CALM = process.argv[2] === 'arena-clean' || process.argv[2] === 'topblast-clean' || PREMIUM;
 const PROJECT = process.argv[2] === 'arena' || process.argv[2] === 'arena-clean' ? 'arena' : 'topblast';
 const K = CALM
   ? {impact: 0.35, whoosh: 0.4, riser: 0.35, rumble: 0, crowd: 0.35, clank: 0.35, kick: 0.6, sweep: 0.4}
   : {impact: 1, whoosh: 1, riser: 1, rumble: 1, crowd: 1, clank: 1, kick: 1, sweep: 1};
-const tlPath = V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
+const tlPath = ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
 const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
 const FPS = tl.fps;
@@ -193,7 +194,28 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   }
 }
 
-if (PREMIUM) {
+if (ODTE) {
+// ─── 0DTE 5s hype ─────────────────────────────────────────
+// clock racing to zero: ticks accelerate
+let tf = 0;
+for (let k = 0; k < 40 && tf < 30; k++) {
+  click(F(tf), 0.18 + k * 0.006, 2600 + k * 30, k % 2 ? 0.3 : -0.3);
+  tf += Math.max(0.9, 5 * Math.pow(0.9, k));
+}
+riser(0, F(30), 0.55);
+add(0, SR * 1.0, (x) => Math.sin(2 * Math.PI * 41.2 * x) * Math.min(1, x / 0.5) * 0.35, {gain: 0.7, verb: 0});
+whoosh(F(24), F(12), 0.9, 400, 9000);          // the blade
+impact(F(30), 0.7, 0.8);
+impact(F(40), 1.4, 1.6);                        // logo slam
+kick(F(40), 1);
+sweepDown(F(40), 0.6, 0.35);
+for (let fr = 55; fr < 140; fr += 15) kick(F(fr), fr % 30 === 25 ? 0.75 : 0.6);   // pulse under the hold
+for (let fr = 62; fr < 140; fr += 15) hat(F(fr), 0.08);
+whoosh(F(74), F(14), 0.35, 1200, 5000);
+ding(F(92), 0.12, 1320);
+ding(F(94), 0.08, 1980);
+whoosh(F(104), F(22), 0.25, 3000, 9000);
+} else if (PREMIUM) {
 // ─── Premium arrangement ───────────────────────────────────
 // Soft sub "heartbeat", tiny digital ticks, filtered data-routing texture.
 const sub = (t, g = 0.3, hz = 44) =>
@@ -586,6 +608,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
+const outPath = path.join(here, ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);
