@@ -3,7 +3,7 @@ import {inOut, lerp, prog} from '../theme';
 import {Finale, Pumpios} from './IpoHype';
 import tl from './slides-timeline.json';
 
-// IPO slideshow: the five designed IPO graphics as full frames (slow push /
+// IPO slideshow: the six designed IPO graphics as full frames (slow push /
 // pan + a soft light sweep), clean left→right wipes with a thin lime edge,
 // then the animated Pumpios scene and the branded closer.
 const LIME = '#7CF21A';
@@ -16,6 +16,7 @@ const MOVES: Move[] = [
   {s0: 1.03, s1: 1.05, x0: 10, x1: -10, y0: 0, y1: 0, ox: '50% 50%'}, // slow pan along the conveyor
   {s0: 1.0, s1: 1.05, x0: 0, x1: 0, y0: 0, y1: -6, ox: '55% 45%'}, // push toward the coin
   {s0: 1.0, s1: 1.05, x0: 0, x1: 0, y0: 0, y1: 0, ox: '60% 50%'}, // push toward the presale display
+  {s0: 1.0, s1: 1.04, x0: 0, x1: 0, y0: 0, y1: -4, ox: '55% 52%'}, // push toward the glowing doorway
 ];
 
 /** Wipe in from the left with a thin glowing lime edge. */
@@ -73,7 +74,7 @@ const Frame: React.FC<{n: number; dur: number; first?: boolean}> = ({n, dur, fir
 
 export const IpoSlides: React.FC<{withAudio?: boolean}> = ({withAudio = true}) => (
   <AbsoluteFill style={{background: '#F6F6F4'}}>
-    {(['g1', 'g2', 'g3', 'g4', 'g5'] as const).map((k, i) => (
+    {(['g1', 'g2', 'g3', 'g4', 'g5', 'g6'] as const).map((k, i) => (
       <Sequence key={k} from={S[k].from} durationInFrames={S[k].dur} name={`0${i + 1} Graphic ${i + 1}`}>
         <Frame n={i + 1} dur={S[k].dur} first={i === 0} />
       </Sequence>

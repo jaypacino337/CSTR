@@ -2,14 +2,39 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "duration": 740,
+  "duration": 762,
   "scenes": {
-    "g1":      { "from": 0,   "dur": 108 },
-    "g2":      { "from": 96,  "dur": 108 },
-    "g3":      { "from": 192, "dur": 102 },
-    "g4":      { "from": 282, "dur": 102 },
-    "g5":      { "from": 372, "dur": 102 },
-    "pumpios": { "from": 462, "dur": 130 },
-    "finale":  { "from": 580, "dur": 160 }
+    "g1": {
+      "from": 0,
+      "dur": 96
+    },
+    "g2": {
+      "from": 84,
+      "dur": 96
+    },
+    "g3": {
+      "from": 168,
+      "dur": 96
+    },
+    "g4": {
+      "from": 252,
+      "dur": 96
+    },
+    "g5": {
+      "from": 336,
+      "dur": 96
+    },
+    "g6": {
+      "from": 420,
+      "dur": 96
+    },
+    "pumpios": {
+      "from": 504,
+      "dur": 120
+    },
+    "finale": {
+      "from": 612,
+      "dur": 150
+    }
   }
 }

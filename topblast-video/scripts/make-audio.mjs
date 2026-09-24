@@ -207,7 +207,7 @@ for (let fr = 6; fr < S.finale.from + 70; fr += 15) {
 }
 impact(F(2), 0.55, 0.9);
 Object.values(S).slice(1).forEach((sc) => { whoosh(F(sc.from - 2), 0.5, 0.24, 500, 7000, -0.3); click(F(sc.from + 14), 0.12, 2400, 0.3); });
-Object.values(S).slice(0, 5).forEach((sc) => whoosh(F(sc.from + 26), 1.3, 0.06, 3000, 9000, 0.2));   // light sweeps
+Object.values(S).slice(0, 6).forEach((sc) => whoosh(F(sc.from + 26), 1.3, 0.06, 3000, 9000, 0.2));   // light sweeps
 for (let k = 0; k < 10; k++) click(F(S.pumpios.from + 10 + k * 4), 0.05, 3000 + k * 60, 0.4);
 [8, 12, 16].forEach((o, i) => whoosh(F(S.pumpios.from + o), 0.3, 0.12, 2000, 500, (i - 1) * 0.6));
 riser(F(S.finale.from - 40), F(40), 0.18);
