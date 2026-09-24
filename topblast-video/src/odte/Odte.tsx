@@ -51,6 +51,8 @@ export const Odte: React.FC = () => {
           opacity: mark,
           transform: `scale(${lerp(0.94, 1, mark) + f * 0.0002})`,
           mixBlendMode: 'screen',
+            maskImage: 'radial-gradient(ellipse 50% 50% at 50% 50%, black 62%, transparent 100%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 50% 50% at 50% 50%, black 62%, transparent 100%)',
         }}
       >
         <Img src={staticFile('odte-logo.png')} style={{width: '100%', height: '100%'}} />
