@@ -14,6 +14,8 @@ import {IpoGallery} from './ipo/IpoGallery';
 import {IpoCustom} from './ipo/IpoCustom';
 import {ZsolFilm} from './zsol/Zsol';
 import ztl from './zsol/timeline.json';
+import {ZsolanaFilm} from './zsol/Zsolana';
+import zstl from './zsol/zsolana-timeline.json';
 import ictl from './ipo/custom-timeline.json';
 import igtl from './ipo/gallery-timeline.json';
 import istl from './ipo/slides-timeline.json';
@@ -45,6 +47,14 @@ export const Root: React.FC = () => (
     fps={ztl.fps}
     width={ztl.width}
     height={ztl.height}
+  />
+  <Composition
+    id="ZsolanaFilm"
+    component={ZsolanaFilm}
+    durationInFrames={zstl.duration}
+    fps={zstl.fps}
+    width={zstl.width}
+    height={zstl.height}
   />
   <Composition
     id="IpoCustom"

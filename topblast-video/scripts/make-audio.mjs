@@ -18,13 +18,14 @@ const IPOS = process.argv[2] === 'ipo-slides';
 const IPOG = process.argv[2] === 'ipo-gallery';
 const IPOC = process.argv[2] === 'ipo-custom';
 const ZSOL = process.argv[2] === 'zsol';
+const ZSOLANA = process.argv[2] === 'zsolana';
 const PREMIUM = process.argv[2] === 'topblast-premium' || V2 || ODTEX || IPO;
 const CALM = process.argv[2] === 'arena-clean' || process.argv[2] === 'topblast-clean' || PREMIUM;
 const PROJECT = process.argv[2] === 'arena' || process.argv[2] === 'arena-clean' ? 'arena' : 'topblast';
 const K = CALM
   ? {impact: 0.35, whoosh: 0.4, riser: 0.35, rumble: 0, crowd: 0.35, clank: 0.35, kick: 0.6, sweep: 0.4}
   : {impact: 1, whoosh: 1, riser: 1, rumble: 1, crowd: 1, clank: 1, kick: 1, sweep: 1};
-const tlPath = ZSOL ? '../src/zsol/timeline.json' : IPOC ? '../src/ipo/custom-timeline.json' : IPOG ? '../src/ipo/gallery-timeline.json' : IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
+const tlPath = ZSOLANA ? '../src/zsol/zsolana-timeline.json' : ZSOL ? '../src/zsol/timeline.json' : IPOC ? '../src/ipo/custom-timeline.json' : IPOG ? '../src/ipo/gallery-timeline.json' : IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
 const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
 const FPS = tl.fps;
@@ -177,7 +178,7 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   const fl = svf();
   const fr = svf();
   const phases = chord.map(() => [(rnd() + 1) / 2, (rnd() + 1) / 2]);
-  const impactT = F(S.finale.from + (ZSOL ? 8 : IPO ? 24 : ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
+  const impactT = F(S.finale.from + (ZSOLANA ? 94 : ZSOL ? 8 : IPO ? 24 : ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
   for (let i = 0; i < LEN; i++) {
     const t = i / SR;
     const notes = t >= impactT ? finalChord : chord;
@@ -201,7 +202,49 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   }
 }
 
-if (ZSOL) {
+if (ZSOLANA) {
+// ─── zSOL (zsolana.fun): calm, precise — soft pulse, a tick per step, chime on each verdict ───
+for (let fr = 12; fr < S.finale.from + 150; fr += 20) {
+  const n = Math.round((fr - 12) / 20);
+  kick(F(fr), n % 4 === 0 ? 0.35 : 0.22);
+  hat(F(fr + 10), 0.03, n % 2 ? 0.3 : -0.3);
+}
+impact(F(6), 0.4, 1.1);                            // Private SOL.
+ding(F(24), 0.035, 1320);                          // Verifiable origin.
+whoosh(F(32), 0.9, 0.14, 300, 4000, 0.4);          // proof terminal rises
+[70, 88, 106].forEach((o, i) => click(F(o), 0.09, 1800 + i * 220, 0.4));
+ding(F(124), 0.06, 1320, 0.4);                      // model verdict
+ding(F(126), 0.04, 1980, 0.4);
+const H0 = S.how.from;
+whoosh(F(H0 - 8), 0.6, 0.18, 500, 6000);
+whoosh(F(H0 + 44), F(84), 0.1, 400, 3000, -0.2);   // the rail runs
+[0, 1, 2, 3].forEach((k) => { click(F(H0 + 44 + k * 28), 0.12, 1800 + k * 220, (k - 1.5) * 0.4); ding(F(H0 + 45 + k * 28), 0.03, 990 * Math.pow(1.26, k), (k - 1.5) * 0.4); });
+const P0 = S.proof.from;
+whoosh(F(P0 - 8), 0.6, 0.18, 500, 6000);
+for (let k = 0; k < 20; k++) click(F(P0 + 6 + k * 1.1), 0.018, 3000 + k * 70, (k / 10 - 1) * 0.6);   // grid appears
+click(F(P0 + 58), 0.14, 2200);                     // toggle → proof set
+whoosh(F(P0 + 58), 1.3, 0.1, 4000, 800);
+ding(F(P0 + 80), 0.06, 880);                       // your deposit
+[78, 92, 106].forEach((o, i) => click(F(P0 + o), 0.08, 1900 + i * 180, -0.3));
+ding(F(P0 + 126), 0.06, 1320, -0.3);               // membership proven
+ding(F(P0 + 128), 0.04, 1980, -0.3);
+const E0 = S.econ.from;
+whoosh(F(E0 - 8), 0.6, 0.18, 500, 6000);
+whoosh(F(E0 + 26), F(48), 0.1, 600, 3500);          // bar fills
+[34, 48, 62].forEach((o, i) => click(F(E0 + o), 0.11, 1700 + i * 250));
+const T0 = S.status.from;
+whoosh(F(T0 - 8), 0.6, 0.18, 500, 6000);
+[30, 42, 54].forEach((o, i) => click(F(T0 + o), 0.1, 1800 + i * 200));
+[72, 80, 88].forEach((o) => click(F(T0 + o), 0.05, 2800, 0.3));
+const C0 = S.finale.from;
+whoosh(F(C0 - 8), 0.6, 0.18, 500, 6000);
+ding(F(C0 + 30), 0.035, 990);                      // Not the standard.
+whoosh(F(C0 + 72), 0.6, 0.12, 5000, 500);
+riser(F(C0 + 50), F(40), 0.14);
+impact(F(C0 + 90), 0.65, 1.4);                     // zSOL lockup
+ding(F(C0 + 106), 0.05, 1320);
+ding(F(C0 + 124), 0.05, 1980);
+} else if (ZSOL) {
 // ─── zSOL: slow, private, precise — soft pulse, ticks on commitments, chime on the proof ───
 for (let fr = 12; fr < S.finale.from + 60; fr += 20) {
   const n = Math.round((fr - 12) / 20);
@@ -831,6 +874,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, ZSOL ? '../public/zsol-score.wav' : IPOC ? '../public/ipo-custom-score.wav' : IPOG ? '../public/ipo-gallery-score.wav' : IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
+const outPath = path.join(here, ZSOLANA ? '../public/zsolana-score.wav' : ZSOL ? '../public/zsol-score.wav' : IPOC ? '../public/ipo-custom-score.wav' : IPOG ? '../public/ipo-gallery-score.wav' : IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);

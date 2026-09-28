@@ -20,7 +20,8 @@
     "audio:arena": "node scripts/make-audio.mjs arena",
     "render:arena": "npm run audio:arena && remotion render StonkArena out/stonkarena-launch.mp4",
     "render:arena-clean": "node scripts/make-audio.mjs arena-clean && remotion render StonkArenaClean out/stonkarena-clean.mp4",
-    "render:zsol": "node scripts/make-audio.mjs zsol && remotion render src/index.ts ZsolFilm out/zsol.mp4"
+    "render:zsol": "node scripts/make-audio.mjs zsol && remotion render src/index.ts ZsolFilm out/zsol.mp4",
+    "render:zsolana": "node scripts/make-audio.mjs zsolana && remotion render src/index.ts ZsolanaFilm out/zsolana.mp4"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
