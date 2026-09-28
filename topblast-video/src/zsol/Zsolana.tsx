@@ -180,6 +180,147 @@ const Hero: React.FC = () => {
   );
 };
 
+
+// ── 2. the problem: Solana is a public ledger ────────────────
+const SAT = [
+  {x: 470, y: 400, t: '+42 SOL', d: 'salary', c: NEON},
+  {x: 1450, y: 390, t: '−12 SOL', d: 'rent', c: '#FF8A7A'},
+  {x: 1500, y: 590, t: '−3 SOL', d: 'swap → $BONK', c: '#FF8A7A'},
+  {x: 420, y: 610, t: '+8 SOL', d: 'NFT sale', c: NEON},
+  {x: 560, y: 810, t: '−1 SOL', d: 'to a friend', c: '#FF8A7A'},
+];
+const YX = 960;
+const YY = 590;
+const Problem: React.FC = () => {
+  const f = useCurrentFrame();
+  const you = prog(f, 22, 18, expoOut);
+  const bal = prog(f, 96, 16, expoOut);
+  const nw = prog(f, 128, 18, expoOut);
+  const link = prog(f, 138, 20, inOut);
+  const NX = 1390;
+  const NY = 810;
+  return (
+    <AbsoluteFill>
+      <DarkGround f={f + 170} />
+      <Eyebrow f={f} at={2} x={150} y={118} color="#FF8A7A">The problem</Eyebrow>
+      <div style={{position: 'absolute', left: 150, top: 160}}>
+        <FadeWords segments={[{text: 'On Solana, every transfer is ', color: W_INK}, {text: 'public.', color: '#FF8A7A'}]} start={4} size={76} font={SERIF} weight={600} tracking={-0.02} stagger={3} align="left" />
+      </div>
+      <svg width={1920} height={1080} style={{position: 'absolute', inset: 0}}>
+        {SAT.map((s, k) => {
+          const p = prog(f, 36 + k * 9, 16, inOut);
+          return <line key={k} x1={YX} y1={YY} x2={lerp(YX, s.x, p)} y2={lerp(YY, s.y, p)} stroke="rgba(255,255,255,0.28)" strokeWidth={2} strokeDasharray="3 7" />;
+        })}
+        {link > 0 && <line x1={YX} y1={YY} x2={lerp(YX, NX, link)} y2={lerp(YY, NY, link)} stroke="#FF8A7A" strokeWidth={3} strokeDasharray="10 8" />}
+      </svg>
+      {SAT.map((s, k) => {
+        const p = prog(f, 44 + k * 9, 14, expoOut);
+        return (
+          <div key={k} style={{position: 'absolute', left: s.x - 150, top: s.y - 34, width: 300, height: 68, borderRadius: 16, background: 'rgba(255,255,255,0.06)', border: `1px solid ${W_RULE}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, opacity: p, transform: `scale(${lerp(0.85, 1, p)})`}}>
+            <span style={{fontFamily: MONO, fontWeight: 600, fontSize: 24, color: s.c}}>{s.t}</span>
+            <span style={{fontFamily: SANS, fontSize: 22, color: W_DIM}}>{s.d}</span>
+          </div>
+        );
+      })}
+      {/* you */}
+      <div style={{position: 'absolute', left: YX - 160, top: YY - 70, width: 320, height: 140, borderRadius: 22, background: '#1B1528', border: `1.5px solid ${bal > 0.5 ? '#FF8A7A' : 'rgba(181,123,255,0.6)'}`, boxShadow: bal > 0.5 ? '0 0 50px rgba(255,138,122,0.3)' : '0 0 50px rgba(139,67,255,0.3)', opacity: you, transform: `scale(${lerp(0.9, 1, you)})`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+        <div style={{fontFamily: SERIF, fontWeight: 600, fontSize: 46, color: W_INK}}>You</div>
+        <Mono style={{fontSize: 18, color: W_MUTED, marginTop: 4}}>7xKq…3fA</Mono>
+        {/* scanner sweep */}
+        {f > 84 && f < 112 && <div style={{position: 'absolute', left: 0, right: 0, top: lerp(0, 140, prog(f, 84, 26)), height: 3, background: '#FF8A7A', boxShadow: '0 0 18px #FF8A7A'}} />}
+      </div>
+      <div style={{position: 'absolute', left: YX - 300, top: YY - 150, width: 600, display: 'flex', justifyContent: 'center', opacity: bal, transform: `translateY(${(1 - bal) * 10}px)`}}>
+        <div style={{fontFamily: MONO, fontWeight: 600, fontSize: 19, letterSpacing: '0.08em', color: HERO, background: '#FF8A7A', padding: '9px 16px', borderRadius: 9}}>BALANCE 184.2 SOL · VISIBLE TO ANYONE</div>
+      </div>
+      {/* fresh wallet — still linked */}
+      <div style={{position: 'absolute', left: NX - 150, top: NY - 50, width: 300, height: 100, borderRadius: 18, background: '#1B1528', border: '1.5px solid rgba(255,255,255,0.18)', opacity: nw, transform: `scale(${lerp(0.9, 1, nw)})`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+        <div style={{fontFamily: SANS, fontWeight: 600, fontSize: 26, color: W_INK}}>New wallet</div>
+        <Mono style={{fontSize: 16, color: W_MUTED, marginTop: 2}}>Hn2w…9QeT</Mono>
+      </div>
+      <Mono style={{position: 'absolute', left: lerp(YX, NX, 0.55) + 10, top: lerp(YY, NY, 0.55) - 40, width: 120, textAlign: 'center', fontSize: 17, fontWeight: 600, color: '#FF8A7A', opacity: prog(f, 150, 10)}}>LINKED</Mono>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 940}}>
+        <FadeWords segments={[{text: 'Your balance, your history, everyone you pay. ', color: W_DIM}, {text: 'A new wallet doesn’t fix it.', color: W_INK}]} start={112} size={32} font={SANS} weight={400} stagger={1.5} />
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+// ── 3. the fix: a shared crowd breaks the link ──────────────
+const DEP = ['Wallet A', 'Wallet B', 'You', 'Wallet D', 'Wallet E', 'Wallet F'];
+const PX = 960;
+const PY = 610;
+const Fix: React.FC = () => {
+  const f = useCurrentFrame();
+  const DX = 330;
+  const FX = 1600;
+  const dy = (k: number) => 390 + k * 88;
+  const out = prog(f, 104, 30, inOut);
+  const ask = prog(f, 138, 16, expoOut);
+  const cut = prog(f, 150, 18, expoOut);
+  return (
+    <AbsoluteFill>
+      <LightGround f={f + 360} />
+      <Eyebrow f={f} at={2} x={150} y={118}>How zSOL helps</Eyebrow>
+      <div style={{position: 'absolute', left: 150, top: 160}}>
+        <FadeWords segments={[{text: 'zSOL ', color: INK}, {text: 'breaks the link.', gradient: GRAD}]} start={4} size={76} font={SERIF} weight={600} tracking={-0.02} stagger={4} align="left" style={{paddingRight: 20}} />
+      </div>
+      <svg width={1920} height={1080} style={{position: 'absolute', inset: 0}}>
+        {DEP.map((_, k) => (
+          <line key={k} x1={DX + 130} y1={dy(k)} x2={PX - 200} y2={PY} stroke={k === 2 ? PURPLE : RULE} strokeWidth={k === 2 ? 2.5 : 2} strokeDasharray="4 8" opacity={prog(f, 22 + k * 4, 12)} />
+        ))}
+        <line x1={PX + 200} y1={PY} x2={FX - 150} y2={PY} stroke={RULE} strokeWidth={2} strokeDasharray="4 8" opacity={prog(f, 96, 12)} />
+        {/* the link that used to exist */}
+        <path d={`M ${DX + 130} ${dy(2)} Q ${PX} 160 ${FX - 150} ${PY - 40}`} fill="none" stroke={RED} strokeWidth={2.5} strokeDasharray="8 8" opacity={0.7 * prog(f, 150, 12) * (1 - 0.6 * cut)} />
+      </svg>
+      {/* depositors */}
+      {DEP.map((d, k) => {
+        const p = prog(f, 14 + k * 4, 14, expoOut);
+        const me = k === 2;
+        return (
+          <div key={d} style={{position: 'absolute', left: DX - 130, top: dy(k) - 32, width: 260, height: 64, borderRadius: 14, background: me ? PURPLE_SOFT : SURF, border: `1.5px solid ${me ? PURPLE : RULE}`, boxShadow: SHADOW, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', boxSizing: 'border-box', opacity: p, transform: `translateX(${(1 - p) * -20}px)`}}>
+            <span style={{fontFamily: SANS, fontWeight: 600, fontSize: 22, color: me ? PURPLE_INK : INK}}>{d}</span>
+            <span style={{fontFamily: MONO, fontWeight: 600, fontSize: 20, color: INK2}}>1 SOL</span>
+          </div>
+        );
+      })}
+      {/* coins flowing in */}
+      {DEP.map((_, k) => {
+        const t = prog(f, 34 + k * 7, 26, inOut);
+        if (t <= 0 || t >= 1) return null;
+        return <div key={k} style={{position: 'absolute', left: lerp(DX + 130, PX - 150, t) - 10, top: lerp(dy(k), PY, t) - 10, width: 20, height: 20, borderRadius: 10, background: k === 2 ? PURPLE : '#B9A8E0', boxShadow: k === 2 ? `0 0 16px ${PURPLE}` : undefined}} />;
+      })}
+      {/* shared pool */}
+      <div style={{position: 'absolute', left: PX - 190, top: PY - 190, width: 380, height: 380, borderRadius: 190, background: 'radial-gradient(circle, #FFFFFF, #F1EAFE 70%)', border: `1.5px solid ${PURPLE}55`, boxShadow: '0 30px 80px -30px rgba(139,67,255,0.45)', opacity: prog(f, 18, 16), transform: `scale(${lerp(0.9, 1, prog(f, 18, 20, expoOut))})`}}>
+        {new Array(46).fill(0).map((_, i) => {
+          const a = i * 2.39996 + f * 0.006;
+          const r = 22 * Math.sqrt(i + 0.5);
+          const filled = i < 6 + Math.floor(prog(f, 34, 70) * 40);
+          return <div key={i} style={{position: 'absolute', left: 190 + Math.cos(a) * r - 8, top: 190 + Math.sin(a) * r - 8, width: 16, height: 16, borderRadius: 5, background: filled ? GREEN_SOFT : SURF2, border: `1.5px solid ${filled ? GREEN : RULE}`}} />;
+        })}
+      </div>
+      <Mono style={{position: 'absolute', left: PX - 250, top: PY + 210, width: 500, textAlign: 'center', fontSize: 17, fontWeight: 600, color: PURPLE_INK, opacity: prog(f, 24, 14)}}>ONE SHARED POOL · SAME-SIZE DEPOSITS</Mono>
+      {/* withdrawal */}
+      {out > 0 && out < 1 && <div style={{position: 'absolute', left: lerp(PX + 150, FX - 150, out) - 12, top: PY - 12, width: 24, height: 24, borderRadius: 12, background: GREEN, boxShadow: `0 0 18px ${NEON}`}} />}
+      <div style={{position: 'absolute', left: FX - 150, top: PY - 70, width: 300, height: 140, borderRadius: 20, background: SURF, border: `1.5px solid ${out >= 1 ? GREEN : RULE}`, boxShadow: SHADOW, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', opacity: prog(f, 90, 14)}}>
+        <div style={{fontFamily: SANS, fontWeight: 600, fontSize: 26, color: INK}}>Fresh address</div>
+        <Mono style={{fontSize: 16, marginTop: 4}}>Hn2w…9QeT</Mono>
+        <div style={{fontFamily: MONO, fontWeight: 600, fontSize: 20, color: GREEN, marginTop: 8, opacity: prog(f, 130, 10)}}>+1 SOL · ZK proof ✓</div>
+      </div>
+      <div style={{position: 'absolute', left: FX - 190, top: PY + 96, width: 380, textAlign: 'center', opacity: ask, transform: `translateY(${(1 - ask) * 10}px)`}}>
+        <Mono style={{fontSize: 16, fontWeight: 600, color: INK2}}>WHICH DEPOSIT PAID THIS?</Mono>
+        <div style={{fontFamily: SERIF, fontStyle: 'italic', fontWeight: 600, fontSize: 36, color: PURPLE_INK, marginTop: 6}}>Could be any of them.</div>
+      </div>
+      {/* cut mark on the old link */}
+      <div style={{position: 'absolute', left: PX - 110, top: 336, width: 220, display: 'flex', justifyContent: 'center', opacity: cut, transform: `scale(${lerp(0.7, 1, cut)})`}}>
+        <div style={{fontFamily: MONO, fontWeight: 600, fontSize: 17, letterSpacing: '0.1em', color: '#fff', background: RED, padding: '9px 14px', borderRadius: 9, whiteSpace: 'nowrap'}}>✕ NO ONCHAIN LINK</div>
+      </div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 960}}>
+        <FadeWords segments="Same amount in. One shared crowd. A zero-knowledge proof out." start={150} size={30} font={SANS} weight={400} stagger={1.5} style={{color: INK2}} />
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 // ── 2. how it works: four steps on one rail ─────────────────
 const SX = [330, 750, 1170, 1590];
 const RY = 480;
@@ -256,7 +397,7 @@ const Proof: React.FC = () => {
   return (
     <AbsoluteFill>
       <LightGround f={f + 340} />
-      <Eyebrow f={f} at={2} x={160} y={180}>Interactive proof model</Eyebrow>
+      <Eyebrow f={f} at={2} x={160} y={180}>Private — and provably clean</Eyebrow>
       <div style={{position: 'absolute', left: 160, top: 226, width: 820, fontFamily: SERIF, fontWeight: 600, fontSize: 76, lineHeight: 1.05, letterSpacing: '-0.02em', color: INK}}>
         <FadeWords segments="See what the" start={4} size={76} font={SERIF} weight={600} tracking={-0.02} stagger={3} align="left" />
         <FadeWords segments={[{text: 'verifier', color: INK}, {text: ' would learn.', gradient: GRAD}]} start={14} size={76} font={SERIF} weight={600} tracking={-0.02} stagger={3} align="left" style={{paddingRight: 20}} />
@@ -316,6 +457,41 @@ const Proof: React.FC = () => {
           <div key={i} style={{position: 'absolute', left: cx, top: cy, width: SZ, height: SZ, borderRadius: 9, boxSizing: 'border-box', background: bg, border: `1.5px solid ${bd}`, opacity: inP * op, transform: `scale(${lerp(0.6, 1, inP) * sc})`, boxShadow: mine && d > 0.5 ? `0 0 0 6px ${PURPLE_SOFT}, 0 0 26px rgba(139,67,255,0.5)` : undefined, zIndex: mine ? 2 : 1}} />
         );
       })}
+    </AbsoluteFill>
+  );
+};
+
+
+// ── 5. what it's for ─────────────────────────────────────────
+const USES = [
+  {g: '◎', t: 'Get paid privately', d: 'Receive a salary or invoices without exposing your whole balance and history.'},
+  {g: '⇄', t: 'Trade unwatched', d: 'Wallet trackers can’t copy or front-run a wallet they can’t link to you.'},
+  {g: '↗', t: 'Start fresh', d: 'Move funds to a new wallet with no public trail back to the old one.'},
+  {g: '✓', t: 'Stay provably clean', d: 'Prove your SOL isn’t from flagged deposits — without revealing which deposit is yours.'},
+];
+const Uses: React.FC = () => {
+  const f = useCurrentFrame();
+  return (
+    <AbsoluteFill>
+      <LightGround f={f + 900} />
+      <Eyebrow f={f} at={2} x={160} y={150}>What it’s for</Eyebrow>
+      <div style={{position: 'absolute', left: 160, top: 196}}>
+        <FadeWords segments={[{text: 'Privacy you can ', color: INK}, {text: 'actually use.', gradient: GRAD}]} start={4} size={84} font={SERIF} weight={600} tracking={-0.02} stagger={4} align="left" style={{paddingRight: 20}} />
+      </div>
+      {USES.map((u, k) => {
+        const on = prog(f, 26 + k * 12, 18, expoOut);
+        const last = k === 3;
+        return (
+          <div key={u.t} style={{position: 'absolute', left: 160 + k * 408, top: 400, width: 384, height: 400, padding: '34px 32px', boxSizing: 'border-box', borderRadius: 24, background: SURF, border: `1px solid ${last ? `${GREEN}66` : RULE}`, boxShadow: SHADOW, opacity: on, transform: `translateY(${(1 - on) * 28}px)`}}>
+            <div style={{width: 76, height: 76, borderRadius: 22, background: last ? GRAD : PURPLE_SOFT, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 600, fontSize: 38, color: last ? '#fff' : PURPLE_INK}}>{u.g}</div>
+            <div style={{fontFamily: SERIF, fontWeight: 600, fontSize: 40, lineHeight: 1.1, color: INK, marginTop: 30, letterSpacing: '-0.01em'}}>{u.t}</div>
+            <div style={{fontFamily: SANS, fontSize: 24, lineHeight: 1.5, color: INK2, marginTop: 14}}>{u.d}</div>
+          </div>
+        );
+      })}
+      <Mono style={{position: 'absolute', left: 160, top: 860, fontSize: 17, letterSpacing: '0.08em', color: INK3, opacity: prog(f, 80, 16)}}>
+        WHAT THE SHIELDED VAULT IS DESIGNED FOR · PROTOCOL IN DEVELOPMENT
+      </Mono>
     </AbsoluteFill>
   );
 };
@@ -456,27 +632,42 @@ export const ZsolanaFilm: React.FC<{withAudio?: boolean}> = ({withAudio = true})
         <Hero />
       </Push>
     </Sequence>
-    <Sequence from={S.how.from} durationInFrames={S.how.dur} name="02 How it works">
+    <Sequence from={S.problem.from} durationInFrames={S.problem.dur} name="02 The problem: every transfer is public">
+      <Push dur={S.problem.dur}>
+        <Problem />
+      </Push>
+    </Sequence>
+    <Sequence from={S.fix.from} durationInFrames={S.fix.dur} name="03 zSOL breaks the link">
+      <Push dur={S.fix.dur}>
+        <Fix />
+      </Push>
+    </Sequence>
+    <Sequence from={S.how.from} durationInFrames={S.how.dur} name="04 How it works">
       <Push dur={S.how.dur}>
         <How />
       </Push>
     </Sequence>
-    <Sequence from={S.proof.from} durationInFrames={S.proof.dur} name="03 Proof model">
+    <Sequence from={S.proof.from} durationInFrames={S.proof.dur} name="05 Proof model">
       <Push dur={S.proof.dur} origin="1400px 500px">
         <Proof />
       </Push>
     </Sequence>
-    <Sequence from={S.econ.from} durationInFrames={S.econ.dur} name="04 Proposed economics">
+    <Sequence from={S.uses.from} durationInFrames={S.uses.dur} name="06 What it is for">
+      <Push dur={S.uses.dur}>
+        <Uses />
+      </Push>
+    </Sequence>
+    <Sequence from={S.econ.from} durationInFrames={S.econ.dur} name="07 Proposed economics">
       <Push dur={S.econ.dur}>
         <Econ />
       </Push>
     </Sequence>
-    <Sequence from={S.status.from} durationInFrames={S.status.dur} name="05 Build status">
+    <Sequence from={S.status.from} durationInFrames={S.status.dur} name="08 Build status">
       <Push dur={S.status.dur}>
         <Status />
       </Push>
     </Sequence>
-    <Sequence from={S.finale.from} durationInFrames={S.finale.dur} name="06 zSOL">
+    <Sequence from={S.finale.from} durationInFrames={S.finale.dur} name="09 zSOL">
       <Push dur={S.finale.dur} last>
         <Finale />
       </Push>

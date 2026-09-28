@@ -215,6 +215,22 @@ whoosh(F(32), 0.9, 0.14, 300, 4000, 0.4);          // proof terminal rises
 [70, 88, 106].forEach((o, i) => click(F(o), 0.09, 1800 + i * 220, 0.4));
 ding(F(124), 0.06, 1320, 0.4);                      // model verdict
 ding(F(126), 0.04, 1980, 0.4);
+const Q0 = S.problem.from;
+whoosh(F(Q0 - 8), 0.6, 0.18, 500, 6000);
+click(F(Q0 + 22), 0.12, 1600);
+[0, 1, 2, 3, 4].forEach((k) => click(F(Q0 + 44 + k * 9), 0.07, 2000 + k * 160, k % 2 ? 0.5 : -0.5));   // transactions surface
+whoosh(F(Q0 + 84), 0.9, 0.08, 6000, 1500);          // scanner sweep
+click(F(Q0 + 96), 0.14, 900);                       // balance exposed
+ding(F(Q0 + 98), 0.04, 587);
+whoosh(F(Q0 + 138), 0.7, 0.1, 800, 3000, 0.4);      // new wallet — still linked
+click(F(Q0 + 150), 0.1, 1100, 0.4);
+const X0 = S.fix.from;
+whoosh(F(X0 - 8), 0.6, 0.18, 500, 6000);
+[0, 1, 2, 3, 4, 5].forEach((k) => click(F(X0 + 60 + k * 7), 0.06, 2400 + k * 120, -0.4));   // deposits land in the pool
+whoosh(F(X0 + 104), F(30), 0.12, 400, 3000, 0.4);   // withdrawal to a fresh address
+ding(F(X0 + 132), 0.05, 1320, 0.4);                 // ZK proof ✓
+click(F(X0 + 150), 0.14, 1400);                     // link cut
+ding(F(X0 + 152), 0.05, 880);
 const H0 = S.how.from;
 whoosh(F(H0 - 8), 0.6, 0.18, 500, 6000);
 whoosh(F(H0 + 44), F(84), 0.1, 400, 3000, -0.2);   // the rail runs
@@ -228,6 +244,10 @@ ding(F(P0 + 80), 0.06, 880);                       // your deposit
 [78, 92, 106].forEach((o, i) => click(F(P0 + o), 0.08, 1900 + i * 180, -0.3));
 ding(F(P0 + 126), 0.06, 1320, -0.3);               // membership proven
 ding(F(P0 + 128), 0.04, 1980, -0.3);
+const U0 = S.uses.from;
+whoosh(F(U0 - 8), 0.6, 0.18, 500, 6000);
+[26, 38, 50, 62].forEach((o, n) => click(F(U0 + o), 0.1, 1800 + n * 200, (n - 1.5) * 0.4));
+ding(F(U0 + 64), 0.04, 1320);
 const E0 = S.econ.from;
 whoosh(F(E0 - 8), 0.6, 0.18, 500, 6000);
 whoosh(F(E0 + 26), F(48), 0.1, 600, 3500);          // bar fills
