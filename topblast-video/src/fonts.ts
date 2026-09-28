@@ -4,6 +4,12 @@ import '@fontsource/inter/600.css';
 import '@fontsource/inter/800.css';
 import '@fontsource/jetbrains-mono/500.css';
 import '@fontsource/jetbrains-mono/700.css';
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/fraunces/opsz-italic.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/600.css';
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/600.css';
 import {continueRender, delayRender} from 'remotion';
 
 if (typeof document !== 'undefined') {
@@ -15,6 +21,12 @@ if (typeof document !== 'undefined') {
     '800 20px Inter',
     '500 20px "JetBrains Mono"',
     '700 20px "JetBrains Mono"',
+    '600 40px "Fraunces Variable"',
+    'italic 600 40px "Fraunces Variable"',
+    '400 20px "IBM Plex Mono"',
+    '600 20px "IBM Plex Mono"',
+    '400 20px "IBM Plex Sans"',
+    '600 20px "IBM Plex Sans"',
   ];
   Promise.all(faces.map((f) => document.fonts.load(f)))
     .then(() => document.fonts.ready)

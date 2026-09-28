@@ -17,13 +17,14 @@ const IPOH = process.argv[2] === 'ipo-hype';
 const IPOS = process.argv[2] === 'ipo-slides';
 const IPOG = process.argv[2] === 'ipo-gallery';
 const IPOC = process.argv[2] === 'ipo-custom';
+const ZSOL = process.argv[2] === 'zsol';
 const PREMIUM = process.argv[2] === 'topblast-premium' || V2 || ODTEX || IPO;
 const CALM = process.argv[2] === 'arena-clean' || process.argv[2] === 'topblast-clean' || PREMIUM;
 const PROJECT = process.argv[2] === 'arena' || process.argv[2] === 'arena-clean' ? 'arena' : 'topblast';
 const K = CALM
   ? {impact: 0.35, whoosh: 0.4, riser: 0.35, rumble: 0, crowd: 0.35, clank: 0.35, kick: 0.6, sweep: 0.4}
   : {impact: 1, whoosh: 1, riser: 1, rumble: 1, crowd: 1, clank: 1, kick: 1, sweep: 1};
-const tlPath = IPOC ? '../src/ipo/custom-timeline.json' : IPOG ? '../src/ipo/gallery-timeline.json' : IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
+const tlPath = ZSOL ? '../src/zsol/timeline.json' : IPOC ? '../src/ipo/custom-timeline.json' : IPOG ? '../src/ipo/gallery-timeline.json' : IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
 const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
 const FPS = tl.fps;
@@ -176,7 +177,7 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   const fl = svf();
   const fr = svf();
   const phases = chord.map(() => [(rnd() + 1) / 2, (rnd() + 1) / 2]);
-  const impactT = F(S.finale.from + (IPO ? 24 : ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
+  const impactT = F(S.finale.from + (ZSOL ? 8 : IPO ? 24 : ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
   for (let i = 0; i < LEN; i++) {
     const t = i / SR;
     const notes = t >= impactT ? finalChord : chord;
@@ -200,7 +201,44 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   }
 }
 
-if (IPOC) {
+if (ZSOL) {
+// ─── zSOL: slow, private, precise — soft pulse, ticks on commitments, chime on the proof ───
+for (let fr = 12; fr < S.finale.from + 60; fr += 20) {
+  const n = Math.round((fr - 12) / 20);
+  kick(F(fr), n % 4 === 0 ? 0.35 : 0.22);
+  hat(F(fr + 10), 0.03, n % 2 ? 0.3 : -0.3);
+}
+impact(F(4), 0.4, 1.1);
+click(F(14), 0.08, 2600);
+[40, 56, 70].forEach((o, i) => click(F(o), 0.08, 1800 + i * 200));
+ding(F(56), 0.035, 1320);                          // "didn't"
+const W0 = S.flow.from;
+whoosh(F(W0 - 8), 0.6, 0.18, 500, 6000);
+whoosh(F(W0 + 28), F(30), 0.16, 400, 3000, -0.3);  // SOL → pool
+click(F(W0 + 58), 0.12, 2200);
+ding(F(W0 + 60), 0.04, 990);                       // commitment published
+for (let k = 0; k < 8; k++) click(F(W0 + 62 + k * 2), 0.025, 3400 + k * 90, 0.2);
+whoosh(F(W0 + 94), F(30), 0.16, 400, 3000, 0.3);   // pool → fresh address
+ding(F(W0 + 126), 0.07, 1320, 0.3);               // ZK proof ✓
+ding(F(W0 + 128), 0.045, 1980, 0.3);
+const T0 = S.set.from;
+whoosh(F(T0 - 8), 0.6, 0.18, 500, 6000);
+for (let k = 0; k < 17; k++) click(F(T0 + 2 + k * 0.8), 0.018, 3000 + k * 80, (k / 8 - 1) * 0.6);   // grid appears
+whoosh(F(T0 + 36), 1.4, 0.1, 4000, 800);          // association-set wave
+ding(F(T0 + 84), 0.06, 880);                       // your deposit
+click(F(T0 + 108), 0.1, 2000);
+click(F(T0 + 140), 0.14, 1600);
+ding(F(T0 + 142), 0.05, 660);                      // nullifier
+const M0 = S.mixer.from;
+whoosh(F(M0 - 8), 0.6, 0.18, 500, 6000);
+[20, 34, 48, 62].forEach((o, i) => click(F(M0 + o), 0.1, 1900 + i * 180));
+const C0 = S.finale.from;
+whoosh(F(C0 - 8), 0.6, 0.18, 500, 6000);
+riser(F(C0 - 40), F(40), 0.14);
+impact(F(C0 + 8), 0.65, 1.4);                      // wordmark
+ding(F(C0 + 50), 0.06, 1320);
+ding(F(C0 + 68), 0.05, 1980);
+} else if (IPOC) {
 // ─── IPO custom: sleek bed + cues on the shared-object moves ───
 for (let fr = 6; fr < S.finale.from + 70; fr += 15) {
   const n = Math.round((fr - 6) / 15);
@@ -793,6 +831,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, IPOC ? '../public/ipo-custom-score.wav' : IPOG ? '../public/ipo-gallery-score.wav' : IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
+const outPath = path.join(here, ZSOL ? '../public/zsol-score.wav' : IPOC ? '../public/ipo-custom-score.wav' : IPOG ? '../public/ipo-gallery-score.wav' : IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);

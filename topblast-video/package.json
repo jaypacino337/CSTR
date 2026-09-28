@@ -19,10 +19,14 @@
     "render:clean": "node scripts/make-audio.mjs topblast-clean && remotion render TopBlastClean out/topblast-clean.mp4",
     "audio:arena": "node scripts/make-audio.mjs arena",
     "render:arena": "npm run audio:arena && remotion render StonkArena out/stonkarena-launch.mp4",
-    "render:arena-clean": "node scripts/make-audio.mjs arena-clean && remotion render StonkArenaClean out/stonkarena-clean.mp4"
+    "render:arena-clean": "node scripts/make-audio.mjs arena-clean && remotion render StonkArenaClean out/stonkarena-clean.mp4",
+    "render:zsol": "node scripts/make-audio.mjs zsol && remotion render src/index.ts ZsolFilm out/zsol.mp4"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
     "@fontsource/inter": "^5.3.0",
     "@fontsource/jetbrains-mono": "^5.3.0",
     "@remotion/cli": "^4.0.527",
