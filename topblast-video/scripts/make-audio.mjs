@@ -209,12 +209,16 @@ for (let fr = 12; fr < S.finale.from + 150; fr += 20) {
   kick(F(fr), n % 4 === 0 ? 0.35 : 0.22);
   hat(F(fr + 10), 0.03, n % 2 ? 0.3 : -0.3);
 }
-impact(F(6), 0.4, 1.1);                            // Private SOL.
-ding(F(24), 0.035, 1320);                          // Verifiable origin.
-whoosh(F(32), 0.9, 0.14, 300, 4000, 0.4);          // proof terminal rises
-[70, 88, 106].forEach((o, i) => click(F(o), 0.09, 1800 + i * 220, 0.4));
-ding(F(124), 0.06, 1320, 0.4);                      // model verdict
-ding(F(126), 0.04, 1980, 0.4);
+impact(F(2), 0.5, 1.3);                            // logo reveal
+whoosh(F(8), 0.8, 0.07, 6000, 2000, 0.3);          // sheen
+whoosh(F(30), 0.7, 0.14, 3000, 600, -0.4);          // logo settles into the corner
+const HB = 44;                                       // hero body starts here
+impact(F(HB + 6), 0.35, 1.0);                       // Private SOL.
+ding(F(HB + 24), 0.035, 1320);                          // Verifiable origin.
+whoosh(F(HB + 32), 0.9, 0.14, 300, 4000, 0.4);          // proof terminal rises
+[70, 88, 106].forEach((o, i) => click(F(HB + o), 0.09, 1800 + i * 220, 0.4));
+ding(F(HB + 124), 0.06, 1320, 0.4);                      // model verdict
+ding(F(HB + 126), 0.04, 1980, 0.4);
 const Q0 = S.problem.from;
 whoosh(F(Q0 - 8), 0.6, 0.18, 500, 6000);
 click(F(Q0 + 22), 0.12, 1600);

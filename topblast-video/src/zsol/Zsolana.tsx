@@ -2,6 +2,7 @@ import {AbsoluteFill, Audio, Sequence, staticFile, useCurrentFrame} from 'remoti
 import {FadeWords} from '../premium/ui';
 import {expoIn, expoOut, inOut, lerp, prog} from '../theme';
 import tl from './zsolana-timeline.json';
+import {LOGO_GRAD, ZsolLogo} from './Logo';
 
 // zSOL (zsolana.fun) — "Private SOL. Verifiable origin." Fully custom, built from the
 // site's own system: dark hero + proof terminal, light body, square proof nodes,
@@ -61,15 +62,6 @@ const Eyebrow: React.FC<{children: React.ReactNode; f: number; at: number; x: nu
   <Mono style={{position: 'absolute', left: x, top: y, fontSize: 19, fontWeight: 600, color, textTransform: 'uppercase', opacity: prog(f, at, 12), transform: `translateY(${(1 - prog(f, at, 14, expoOut)) * 8}px)`}}>{children}</Mono>
 );
 
-// the site's brand mark: rounded square + green core
-const Mark: React.FC<{size: number; stroke?: string}> = ({size, stroke = '#fff'}) => (
-  <svg width={size} height={size} viewBox="0 0 36 36">
-    <rect x="9.25" y="9.25" width="17.5" height="17.5" rx="5.6" fill="none" stroke={stroke} strokeWidth="2.4" />
-    <circle cx="18" cy="18" r="4.15" fill={NEON} stroke={stroke} strokeWidth="1.55" />
-    <circle cx="18" cy="18" r="1.15" fill={stroke} />
-  </svg>
-);
-
 const Push: React.FC<{dur: number; last?: boolean; origin?: string; children: React.ReactNode}> = ({dur, last, origin = '50% 50%', children}) => {
   const f = useCurrentFrame();
   const i = prog(f, 0, 16, expoOut);
@@ -91,12 +83,10 @@ const Orbit: React.FC<{f: number; size: number}> = ({f, size}) => {
   ];
   return (
     <div style={{position: 'relative', width: size, height: size}}>
-      <div style={{position: 'absolute', inset: 0, borderRadius: r, border: '1.5px solid rgba(153,69,255,0.4)', boxShadow: 'inset 0 0 70px rgba(153,69,255,0.16), 0 0 70px rgba(20,241,149,0.10)'}} />
+      <div style={{position: 'absolute', inset: 0, borderRadius: r, border: '1.5px solid rgba(77,120,255,0.45)', boxShadow: 'inset 0 0 70px rgba(77,120,255,0.18), 0 0 70px rgba(0,213,255,0.10)'}} />
       <div style={{position: 'absolute', inset: 30, borderRadius: r, border: '1px solid rgba(255,255,255,0.09)'}} />
       <div style={{position: 'absolute', inset: 66, borderRadius: r, border: '1px solid rgba(255,255,255,0.09)'}} />
-      <div style={{position: 'absolute', left: r - 44, top: r - 44, width: 88, height: 88, borderRadius: 28, background: 'linear-gradient(145deg, #8B43FF, #14C987)', border: '1px solid rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SERIF, fontWeight: 600, fontSize: 60, color: '#fff', paddingBottom: 10}}>
-        z
-      </div>
+      <ZsolLogo size={112} glow={0.7} id="orb" style={{position: 'absolute', left: r - 56, top: r - 56}} />
       {dots.map((d, k) => {
         const a = d.a + f * d.sp;
         return <div key={k} style={{position: 'absolute', left: r + Math.cos(a) * d.rr - 8, top: r + Math.sin(a) * d.rr - 8, width: 16, height: 16, borderRadius: 8, background: d.c, border: `2px solid ${HERO}`, boxShadow: `0 0 20px ${d.c}`}} />;
@@ -105,7 +95,7 @@ const Orbit: React.FC<{f: number; size: number}> = ({f, size}) => {
   );
 };
 
-const Hero: React.FC = () => {
+const HeroBody: React.FC = () => {
   const f = useCurrentFrame();
   const card = prog(f, 34, 26, expoOut);
   const step = (k: number) => prog(f, 70 + k * 18, 12);
@@ -118,7 +108,6 @@ const Hero: React.FC = () => {
   const trust = ['No account', 'No custodian', 'Your note stays client-side'];
   return (
     <AbsoluteFill>
-      <DarkGround f={f} />
       {/* heritage pill */}
       <div style={{position: 'absolute', left: 140, top: 190, display: 'flex', alignItems: 'center', gap: 12, padding: '12px 22px', borderRadius: 999, background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.14)', fontFamily: MONO, fontSize: 19, letterSpacing: '0.04em', opacity: prog(f, 2, 12), transform: `translateY(${(1 - prog(f, 2, 16, expoOut)) * 10}px)`}}>
         <b style={{color: GOLD_BRIGHT, fontWeight: 600}}>Zcash</b>
@@ -180,6 +169,37 @@ const Hero: React.FC = () => {
   );
 };
 
+
+// logo reveal → settles as the brand mark, then the hero builds around it
+const INTRO = 30;
+const Hero: React.FC = () => {
+  const f = useCurrentFrame();
+  const inn = prog(f, 0, 20, expoOut);
+  const sheen = prog(f, 8, 22, inOut);
+  const m = prog(f, INTRO, 20, inOut);
+  const BIG = 320;
+  const cx = lerp(960, 140 + 32, m);
+  const cy = lerp(540, 104 + 32, m);
+  const sc = lerp(lerp(0.72, 1, inn), 64 / BIG, m);
+  return (
+    <AbsoluteFill>
+      <DarkGround f={f} />
+      <Sequence from={INTRO + 14} layout="none">
+        <HeroBody />
+      </Sequence>
+      <div style={{position: 'absolute', left: 960 - 700, top: 540 - 450, width: 1400, height: 900, background: 'radial-gradient(closest-side, rgba(45,99,255,0.35), rgba(230,28,255,0.10) 60%, transparent)', opacity: inn * (1 - m)}} />
+      <div style={{position: 'absolute', left: cx - BIG / 2, top: cy - BIG / 2, width: BIG, height: BIG, transform: `scale(${sc})`, opacity: Math.min(1, inn * 1.4), filter: inn < 1 ? `blur(${(1 - inn) * 14}px)` : undefined}}>
+        <ZsolLogo size={BIG} glow={lerp(1.2, 0.5, m)} id="intro" />
+        <div style={{position: 'absolute', left: BIG * 0.02, top: BIG * 0.02, width: BIG * 0.96, height: BIG * 0.96, borderRadius: BIG * 0.17, overflow: 'hidden', pointerEvents: 'none'}}>
+          <div style={{position: 'absolute', top: -BIG * 0.5, left: lerp(-BIG * 0.9, BIG * 1.3, sheen), width: BIG * 0.35, height: BIG * 2, background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent)', transform: 'rotate(25deg)', opacity: sheen > 0 && sheen < 1 ? 1 : 0}} />
+        </div>
+      </div>
+      <div style={{position: 'absolute', left: 140 + 84, top: 104 + 6, fontFamily: SERIF, fontWeight: 600, fontSize: 48, lineHeight: 1, letterSpacing: '-0.02em', color: W_INK, opacity: prog(f, INTRO + 14, 14), transform: `translateX(${(1 - prog(f, INTRO + 14, 16, expoOut)) * -12}px)`}}>
+        zSOL
+      </div>
+    </AbsoluteFill>
+  );
+};
 
 // ── 2. the problem: Solana is a public ledger ────────────────
 const SAT = [
@@ -604,19 +624,18 @@ const Finale: React.FC = () => {
         <FadeWords segments={[{text: 'Not the standard.', gradient: GRAD}]} start={30} size={104} font={SERIF} weight={600} tracking={-0.02} stagger={5} style={{fontStyle: 'italic', paddingRight: 20}} />
       </div>
       {/* lockup */}
-      <div style={{position: 'absolute', left: 960 - 560, top: 150, width: 1120, height: 560, background: 'radial-gradient(closest-side, rgba(139,67,255,0.30), transparent)', opacity: mark}} />
+      <div style={{position: 'absolute', left: 960 - 560, top: 150, width: 1120, height: 560, background: 'radial-gradient(closest-side, rgba(45,99,255,0.32), rgba(230,28,255,0.10) 60%, transparent)', opacity: mark}} />
       <div style={{position: 'absolute', left: 0, right: 0, top: 250, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 34, opacity: mark, transform: `translateY(${(1 - mark) * 30}px) scale(${lerp(0.94, 1, mark)})`, filter: mark < 1 ? `blur(${(1 - mark) * 10}px)` : undefined}}>
-        <Mark size={220} />
+        <ZsolLogo size={230} glow={1.1} id="fin" />
         <div style={{fontFamily: SERIF, fontWeight: 600, fontSize: 220, lineHeight: 1, letterSpacing: '-0.03em', paddingBottom: 20}}>
-          <span style={{backgroundImage: GRAD, WebkitBackgroundClip: 'text', color: 'transparent'}}>z</span>
-          <span style={{color: W_INK}}>SOL</span>
+          <span style={{color: W_INK}}>zSOL</span>
         </div>
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 540}}>
         <FadeWords segments={[{text: 'Private SOL. ', color: W_INK}, {text: 'Verifiable origin.', gradient: GRAD}]} start={104} size={66} font={SERIF} weight={600} tracking={-0.01} stagger={4} style={{paddingRight: 20}} />
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 690, display: 'flex', justifyContent: 'center', opacity: prog(f, 122, 16, expoOut), transform: `translateY(${(1 - prog(f, 122, 16, expoOut)) * 14}px)`}}>
-        <div style={{padding: '22px 46px', borderRadius: 16, backgroundImage: GRAD, fontFamily: MONO, fontWeight: 600, fontSize: 34, letterSpacing: '0.1em', color: '#fff', boxShadow: '0 20px 60px -20px rgba(139,67,255,0.7)'}}>ZSOLANA.FUN</div>
+        <div style={{padding: '22px 46px', borderRadius: 16, backgroundImage: LOGO_GRAD.replace('45deg', '90deg'), fontFamily: MONO, fontWeight: 600, fontSize: 34, letterSpacing: '0.1em', color: '#fff', boxShadow: '0 20px 60px -20px rgba(139,67,255,0.7)'}}>ZSOLANA.FUN</div>
       </div>
       <Mono style={{position: 'absolute', left: 0, right: 0, top: 900, textAlign: 'center', fontSize: 15, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)', opacity: prog(f, 136, 16)}}>
         PRIVACY PROTOCOL NOT DEPLOYED OR AUDITED · INDEPENDENT PROJECT, NOT AFFILIATED WITH ZCASH OR ECC
