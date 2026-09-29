@@ -2,7 +2,7 @@ import {AbsoluteFill, Audio, Sequence, staticFile, useCurrentFrame} from 'remoti
 import {FadeWords} from '../premium/ui';
 import {expoIn, expoOut, inOut, lerp, prog} from '../theme';
 import tl from './zsolana-timeline.json';
-import {LOGO_GRAD, ZsolLogo} from './Logo';
+import {LOGO_GRAD, ZsolMark} from './Logo';
 
 // zSOL (zsolana.fun) — "Private SOL. Verifiable origin." Fully custom, built from the
 // site's own system: dark hero + proof terminal, light body, square proof nodes,
@@ -86,7 +86,7 @@ const Orbit: React.FC<{f: number; size: number}> = ({f, size}) => {
       <div style={{position: 'absolute', inset: 0, borderRadius: r, border: '1.5px solid rgba(77,120,255,0.45)', boxShadow: 'inset 0 0 70px rgba(77,120,255,0.18), 0 0 70px rgba(0,213,255,0.10)'}} />
       <div style={{position: 'absolute', inset: 30, borderRadius: r, border: '1px solid rgba(255,255,255,0.09)'}} />
       <div style={{position: 'absolute', inset: 66, borderRadius: r, border: '1px solid rgba(255,255,255,0.09)'}} />
-      <ZsolLogo size={112} glow={0.7} id="orb" style={{position: 'absolute', left: r - 56, top: r - 56}} />
+      <ZsolMark size={112} glow={0.8} id="orb" style={{position: 'absolute', left: r - 56, top: r - 56}} />
       {dots.map((d, k) => {
         const a = d.a + f * d.sp;
         return <div key={k} style={{position: 'absolute', left: r + Math.cos(a) * d.rr - 8, top: r + Math.sin(a) * d.rr - 8, width: 16, height: 16, borderRadius: 8, background: d.c, border: `2px solid ${HERO}`, boxShadow: `0 0 20px ${d.c}`}} />;
@@ -189,12 +189,9 @@ const Hero: React.FC = () => {
       </Sequence>
       <div style={{position: 'absolute', left: 960 - 700, top: 540 - 450, width: 1400, height: 900, background: 'radial-gradient(closest-side, rgba(45,99,255,0.35), rgba(230,28,255,0.10) 60%, transparent)', opacity: inn * (1 - m)}} />
       <div style={{position: 'absolute', left: cx - BIG / 2, top: cy - BIG / 2, width: BIG, height: BIG, transform: `scale(${sc})`, opacity: Math.min(1, inn * 1.4), filter: inn < 1 ? `blur(${(1 - inn) * 14}px)` : undefined}}>
-        <ZsolLogo size={BIG} glow={lerp(1.2, 0.5, m)} id="intro" />
-        <div style={{position: 'absolute', left: BIG * 0.02, top: BIG * 0.02, width: BIG * 0.96, height: BIG * 0.96, borderRadius: BIG * 0.17, overflow: 'hidden', pointerEvents: 'none'}}>
-          <div style={{position: 'absolute', top: -BIG * 0.5, left: lerp(-BIG * 0.9, BIG * 1.3, sheen), width: BIG * 0.35, height: BIG * 2, background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent)', transform: 'rotate(25deg)', opacity: sheen > 0 && sheen < 1 ? 1 : 0}} />
-        </div>
+        <ZsolMark size={BIG} glow={lerp(1.3, 0.6, m)} sheen={sheen} id="intro" />
       </div>
-      <div style={{position: 'absolute', left: 140 + 84, top: 104 + 6, fontFamily: SERIF, fontWeight: 600, fontSize: 48, lineHeight: 1, letterSpacing: '-0.02em', color: W_INK, opacity: prog(f, INTRO + 14, 14), transform: `translateX(${(1 - prog(f, INTRO + 14, 16, expoOut)) * -12}px)`}}>
+      <div style={{position: 'absolute', left: 140 + 70, top: 104 + 6, fontFamily: SERIF, fontWeight: 600, fontSize: 48, lineHeight: 1, letterSpacing: '-0.02em', color: W_INK, opacity: prog(f, INTRO + 14, 14), transform: `translateX(${(1 - prog(f, INTRO + 14, 16, expoOut)) * -12}px)`}}>
         zSOL
       </div>
     </AbsoluteFill>
@@ -625,8 +622,8 @@ const Finale: React.FC = () => {
       </div>
       {/* lockup */}
       <div style={{position: 'absolute', left: 960 - 560, top: 150, width: 1120, height: 560, background: 'radial-gradient(closest-side, rgba(45,99,255,0.32), rgba(230,28,255,0.10) 60%, transparent)', opacity: mark}} />
-      <div style={{position: 'absolute', left: 0, right: 0, top: 250, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 34, opacity: mark, transform: `translateY(${(1 - mark) * 30}px) scale(${lerp(0.94, 1, mark)})`, filter: mark < 1 ? `blur(${(1 - mark) * 10}px)` : undefined}}>
-        <ZsolLogo size={230} glow={1.1} id="fin" />
+      <div style={{position: 'absolute', left: 0, right: 0, top: 250, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10, opacity: mark, transform: `translateY(${(1 - mark) * 30}px) scale(${lerp(0.94, 1, mark)})`, filter: mark < 1 ? `blur(${(1 - mark) * 10}px)` : undefined}}>
+        <ZsolMark size={250} glow={1.2} id="fin" />
         <div style={{fontFamily: SERIF, fontWeight: 600, fontSize: 220, lineHeight: 1, letterSpacing: '-0.03em', paddingBottom: 20}}>
           <span style={{color: W_INK}}>zSOL</span>
         </div>
