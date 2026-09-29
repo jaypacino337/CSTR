@@ -10,6 +10,8 @@ import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/600.css';
 import '@fontsource/ibm-plex-sans/400.css';
 import '@fontsource/ibm-plex-sans/600.css';
+import '@fontsource-variable/geist/index.css';
+import '@fontsource-variable/geist-mono/index.css';
 import {continueRender, delayRender} from 'remotion';
 
 if (typeof document !== 'undefined') {
@@ -27,6 +29,9 @@ if (typeof document !== 'undefined') {
     '600 20px "IBM Plex Mono"',
     '400 20px "IBM Plex Sans"',
     '600 20px "IBM Plex Sans"',
+    '800 40px "Geist Variable"',
+    '500 20px "Geist Variable"',
+    '500 20px "Geist Mono Variable"',
   ];
   Promise.all(faces.map((f) => document.fonts.load(f)))
     .then(() => document.fonts.ready)
