@@ -252,6 +252,17 @@ const U0 = S.uses.from;
 whoosh(F(U0 - 8), 0.6, 0.18, 500, 6000);
 [26, 38, 50, 62].forEach((o, n) => click(F(U0 + o), 0.1, 1800 + n * 200, (n - 1.5) * 0.4));
 ding(F(U0 + 64), 0.04, 1320);
+const UT0 = S.utility.from;
+whoosh(F(UT0 - 8), 0.6, 0.18, 500, 6000);
+[26, 42].forEach((o, n) => click(F(UT0 + o), 0.11, 1800 + n * 300, n ? 0.4 : -0.4));
+ding(F(UT0 + 54), 0.04, 880);                        // ≠ separate receipts
+[84, 96, 108].forEach((o, n) => click(F(UT0 + o), 0.08, 2000 + n * 200));
+const HO0 = S.holders.from;
+whoosh(F(HO0 - 8), 0.6, 0.18, 500, 6000);
+for (let k = 0; k < 18; k++) click(F(HO0 + 40 + k * 2.2), 0.025, 2600 + k * 60, -0.3);   // balance counts up
+ding(F(HO0 + 80), 0.07, 1320, -0.3);                 // crosses 25,000 — eligible
+ding(F(HO0 + 82), 0.045, 1980, -0.3);
+[40, 52, 64, 76].forEach((o, n) => click(F(HO0 + o), 0.06, 1900 + n * 150, 0.4));
 const E0 = S.econ.from;
 whoosh(F(E0 - 8), 0.6, 0.18, 500, 6000);
 whoosh(F(E0 + 26), F(48), 0.1, 600, 3500);          // bar fills

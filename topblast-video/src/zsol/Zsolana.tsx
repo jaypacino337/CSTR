@@ -105,7 +105,7 @@ const HeroBody: React.FC = () => {
     {n: '02', t: 'Shield', v: 'Private note'},
     {n: '03', t: 'Exit', v: 'Fresh address'},
   ];
-  const trust = ['No account', 'No custodian', 'Your note stays client-side'];
+  const trust = ['Private note ≠ zSOL', '0.1% proposed swap fee', 'APY from real fees only'];
   return (
     <AbsoluteFill>
       {/* heritage pill */}
@@ -513,6 +513,132 @@ const Uses: React.FC = () => {
   );
 };
 
+// ── utility: two layers, separate receipts ───────────────────
+const LAYERS = [
+  {tag: '01 · PRIVATE LAYER', t: 'Shield pool', d: 'Deposit a standard SOL amount. Your device keeps a secret note; only its commitment goes onchain.', kv: [['INPUT', 'Fixed SOL'], ['YOU HOLD', 'Private note'], ['PURPOSE', 'Prove and withdraw'], ['PUBLIC TOKEN', 'Not required']], c: PURPLE_INK, soft: PURPLE_SOFT},
+  {tag: '02 · PUBLIC LAYER', t: 'zSOL / SOL market', d: 'Supply both assets to deepen public trading. LP returns come from real swaps, not the shield vault.', kv: [['INPUT', 'zSOL + SOL'], ['YOU HOLD', 'Public LP position'], ['SWAP FEE', '0.1%'], ['APY', 'Variable · volume ÷ TVL']], c: '#0B8A5B', soft: GREEN_SOFT},
+];
+const LOOP = [
+  ['Trade', 'public zSOL/SOL swaps'],
+  ['Earn', 'LPs share the 0.1% swap fee'],
+  ['Reinforce', '40% of creator fees deepens liquidity'],
+];
+const Utility: React.FC = () => {
+  const f = useCurrentFrame();
+  const sep = prog(f, 54, 16, expoOut);
+  return (
+    <AbsoluteFill>
+      <LightGround f={f + 980} />
+      <Eyebrow f={f} at={2} x={150} y={104}>zSOL utility</Eyebrow>
+      <div style={{position: 'absolute', left: 150, top: 146}}>
+        <FadeWords segments="One ecosystem." start={4} size={72} font={SERIF} weight={600} tracking={-0.02} stagger={4} align="left" style={{color: INK}} />
+      </div>
+      <div style={{position: 'absolute', left: 150, top: 226}}>
+        <FadeWords segments={[{text: 'Two very different pools.', gradient: GRAD}]} start={14} size={72} font={SERIF} weight={600} tracking={-0.02} stagger={4} align="left" style={{fontStyle: 'italic', paddingRight: 20}} />
+      </div>
+      {LAYERS.map((l, k) => {
+        const on = prog(f, 26 + k * 16, 18, expoOut);
+        return (
+          <div key={l.t} style={{position: 'absolute', left: k ? 1070 : 150, top: 360, width: 700, height: 440, padding: '30px 34px', boxSizing: 'border-box', borderRadius: 24, background: SURF, border: `1px solid ${RULE}`, boxShadow: SHADOW, opacity: on, transform: `translateY(${(1 - on) * 26}px)`}}>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+              <Mono style={{fontSize: 17, fontWeight: 600, color: l.c}}>{l.tag}</Mono>
+              <span style={{fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', color: INK3, border: `1px solid ${RULE}`, borderRadius: 8, padding: '5px 10px'}}>PROPOSED</span>
+            </div>
+            <div style={{fontFamily: SERIF, fontWeight: 600, fontSize: 46, color: INK, marginTop: 14, letterSpacing: '-0.01em'}}>{l.t}</div>
+            <div style={{fontFamily: SANS, fontSize: 22, lineHeight: 1.5, color: INK2, marginTop: 8}}>{l.d}</div>
+            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 22}}>
+              {l.kv.map(([a, b], j) => (
+                <div key={a} style={{padding: '12px 16px', borderRadius: 12, background: j === 2 && k === 1 ? l.soft : SURF2, opacity: prog(f, 40 + k * 16 + j * 4, 12)}}>
+                  <Mono style={{fontSize: 13}}>{a}</Mono>
+                  <div style={{fontFamily: SANS, fontWeight: 600, fontSize: 23, color: INK, marginTop: 4}}>{b}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+      <div style={{position: 'absolute', left: 960 - 80, top: 520, width: 160, display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: sep, transform: `scale(${lerp(0.8, 1, sep)})`}}>
+        <div style={{width: 84, height: 84, borderRadius: 42, background: SURF, border: `1.5px solid ${RULE}`, boxShadow: SHADOW, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 600, fontSize: 44, color: INK}}>≠</div>
+        <Mono style={{fontSize: 14, fontWeight: 600, textAlign: 'center', marginTop: 12, lineHeight: 1.5, color: INK2}}>SEPARATE<br />RECEIPTS</Mono>
+      </div>
+      <div style={{position: 'absolute', left: 150, top: 850, width: 1620, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+        {LOOP.map(([a, b], k) => (
+          <div key={a} style={{display: 'contents'}}>
+            <div style={{display: 'flex', alignItems: 'baseline', gap: 12, padding: '16px 24px', borderRadius: 14, background: SURF, border: `1px solid ${RULE}`, opacity: prog(f, 84 + k * 12, 14), transform: `translateY(${(1 - prog(f, 84 + k * 12, 16, expoOut)) * 10}px)`}}>
+              <Mono style={{fontSize: 15, fontWeight: 600, color: PURPLE_INK}}>{`0${k + 1}`}</Mono>
+              <div style={{fontFamily: SANS, fontWeight: 600, fontSize: 24, color: INK}}>{a}</div>
+              <div style={{fontFamily: SANS, fontSize: 21, color: INK2}}>{b}</div>
+            </div>
+            {k < 2 && <span style={{fontFamily: SANS, fontSize: 28, color: INK3, opacity: prog(f, 90 + k * 12, 10)}}>→</span>}
+          </div>
+        ))}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+// ── holders: 25,000+ zSOL minimum for the queue bonus ────────
+const MIN_HOLD = 25000;
+const WAYS = [
+  ['Standard shield', 'Deposit fixed SOL, keep the note, prove a one-time withdrawal.'],
+  ['Time-weighted', 'Hold the note through a minimum window so more commitments can gather.'],
+  ['Liquidity LP', 'Provide zSOL + SOL and earn a share of the 0.1% swap fee.'],
+  ['Hybrid', 'A private note and a public LP position, side by side.'],
+];
+const Holders: React.FC = () => {
+  const f = useCurrentFrame();
+  const MAX = 40000;
+  const v = 31400 * prog(f, 40, 56, inOut);
+  const ok = v >= MIN_HOLD;
+  const okP = prog(f, 40 + 56 * 0.72, 12, expoOut) * (ok ? 1 : 0);
+  const BW = 640;
+  return (
+    <AbsoluteFill>
+      <LightGround f={f + 1160} />
+      <Eyebrow f={f} at={2} x={150} y={104}>Holder bonus</Eyebrow>
+      <div style={{position: 'absolute', left: 150, top: 146}}>
+        <FadeWords segments={[{text: 'Hold ', color: INK}, {text: '25,000+', gradient: GRAD}, {text: ' zSOL.', color: INK}]} start={4} size={80} font={SERIF} weight={600} tracking={-0.02} stagger={4} align="left" style={{paddingRight: 20}} />
+      </div>
+      <div style={{position: 'absolute', left: 150, top: 238}}>
+        <FadeWords segments="Qualify for the bonus in the queue." start={16} size={44} font={SERIF} weight={600} tracking={-0.01} stagger={3} align="left" style={{color: INK2, fontStyle: 'italic'}} />
+      </div>
+      {/* meter */}
+      <div style={{position: 'absolute', left: 150, top: 360, width: 740, height: 460, padding: '34px 40px', boxSizing: 'border-box', borderRadius: 26, background: SURF, border: `1px solid ${ok ? `${GREEN}88` : RULE}`, boxShadow: ok ? `${SHADOW}, 0 0 0 6px ${GREEN_SOFT}` : SHADOW, opacity: prog(f, 22, 16), transform: `translateY(${(1 - prog(f, 22, 18, expoOut)) * 24}px)`}}>
+        <Mono style={{fontSize: 16, fontWeight: 600}}>EXAMPLE WALLET · zSOL BALANCE</Mono>
+        <div style={{display: 'flex', alignItems: 'baseline', gap: 16, marginTop: 14}}>
+          <ZsolMark size={70} glow={0.5} id="hold" style={{alignSelf: 'center'}} />
+          <div style={{fontFamily: SERIF, fontWeight: 600, fontSize: 112, lineHeight: 1, color: INK, letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums'}}>{Math.round(v).toLocaleString('en-US')}</div>
+          <div style={{fontFamily: MONO, fontWeight: 600, fontSize: 28, color: INK3}}>zSOL</div>
+        </div>
+        <div style={{position: 'relative', marginTop: 44, width: BW, height: 20, borderRadius: 999, background: SURF2, boxShadow: `inset 0 0 0 1px ${RULE}`}}>
+          <div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: (v / MAX) * BW, borderRadius: 999, background: ok ? 'linear-gradient(90deg,#14B87A,#14F195)' : 'linear-gradient(90deg,#9945FF,#B66CFF)'}} />
+          <div style={{position: 'absolute', left: (MIN_HOLD / MAX) * BW - 1.5, top: -16, width: 3, height: 52, background: INK, borderRadius: 2}} />
+          <Mono style={{position: 'absolute', left: (MIN_HOLD / MAX) * BW - 100, top: 44, width: 200, textAlign: 'center', fontSize: 15, fontWeight: 600, color: INK}}>MIN 25,000</Mono>
+        </div>
+        <div style={{marginTop: 84, display: 'flex', alignItems: 'center', gap: 14, padding: '18px 22px', borderRadius: 16, background: ok ? GREEN_SOFT : SURF2, border: `1px solid ${ok ? `${GREEN}66` : RULE}`}}>
+          <span style={{width: 34, height: 34, borderRadius: 17, background: ok ? GREEN : RULE, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, fontWeight: 700, transform: `scale(${lerp(1, 1.15, okP * (1 - prog(f, 110, 10)))})`}}>{ok ? '✓' : ''}</span>
+          <div style={{fontFamily: SANS, fontWeight: 600, fontSize: 28, color: ok ? '#0B7A51' : INK3}}>{ok ? 'Eligible · queue bonus unlocked' : 'Below minimum'}</div>
+        </div>
+      </div>
+      {/* four ways */}
+      <Mono style={{position: 'absolute', left: 1000, top: 372, fontSize: 16, fontWeight: 600, color: PURPLE_INK, opacity: prog(f, 30, 14)}}>FOUR WAYS THROUGH THE DESIGN</Mono>
+      {WAYS.map(([a, b], k) => {
+        const on = prog(f, 40 + k * 12, 16, expoOut);
+        return (
+          <div key={a} style={{position: 'absolute', left: 1000, top: 414 + k * 104, width: 770, height: 90, padding: '0 26px', boxSizing: 'border-box', borderRadius: 18, background: SURF, border: `1px solid ${RULE}`, boxShadow: SHADOW, display: 'flex', alignItems: 'center', gap: 22, opacity: on, transform: `translateX(${(1 - on) * 24}px)`}}>
+            <Mono style={{fontSize: 17, fontWeight: 600, color: PURPLE_INK}}>{`0${k + 1}`}</Mono>
+            <div style={{width: 200, fontFamily: SANS, fontWeight: 600, fontSize: 24, color: INK, flexShrink: 0}}>{a}</div>
+            <div style={{fontFamily: SANS, fontSize: 19, lineHeight: 1.4, color: INK2}}>{b}</div>
+          </div>
+        );
+      })}
+      <Mono style={{position: 'absolute', left: 150, top: 880, fontSize: 16, letterSpacing: '0.06em', color: INK3, opacity: prog(f, 100, 14)}}>
+        APY IS NEVER FIXED OR GUARANTEED · IT COMES ONLY FROM LIVE SWAP-FEE REVENUE · CA PENDING
+      </Mono>
+    </AbsoluteFill>
+  );
+};
+
 // ── 4. proposed economics ───────────────────────────────────
 const ALLOC = [
   {p: 30, t: 'Buybacks + burns', d: 'Creator fees would buy zSOL from the market and permanently burn it, under public, rate-limited rules.', g: 'linear-gradient(90deg,#9945FF,#B66CFF)', c: PURPLE_INK},
@@ -671,6 +797,16 @@ export const ZsolanaFilm: React.FC<{withAudio?: boolean}> = ({withAudio = true})
     <Sequence from={S.uses.from} durationInFrames={S.uses.dur} name="06 What it is for">
       <Push dur={S.uses.dur}>
         <Uses />
+      </Push>
+    </Sequence>
+    <Sequence from={S.utility.from} durationInFrames={S.utility.dur} name="06b zSOL utility: two pools">
+      <Push dur={S.utility.dur}>
+        <Utility />
+      </Push>
+    </Sequence>
+    <Sequence from={S.holders.from} durationInFrames={S.holders.dur} name="06c Holder bonus: 25,000+ zSOL">
+      <Push dur={S.holders.dur}>
+        <Holders />
       </Push>
     </Sequence>
     <Sequence from={S.econ.from} durationInFrames={S.econ.dur} name="07 Proposed economics">
