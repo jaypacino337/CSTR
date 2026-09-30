@@ -20,6 +20,8 @@ import {GfmHype} from './gfm/GfmHype';
 import gtl from './gfm/timeline.json';
 import {GfmFrog} from './gfm/GfmFrog';
 import gftl from './gfm/frog-timeline.json';
+import {GfmsFilm} from './gfm/GfmsFilm';
+import gstl from './gfm/gfms-timeline.json';
 import ictl from './ipo/custom-timeline.json';
 import igtl from './ipo/gallery-timeline.json';
 import istl from './ipo/slides-timeline.json';
@@ -75,6 +77,14 @@ export const Root: React.FC = () => (
     fps={gftl.fps}
     width={gftl.width}
     height={gftl.height}
+  />
+  <Composition
+    id="GfmsFilm"
+    component={GfmsFilm}
+    durationInFrames={gstl.duration}
+    fps={gstl.fps}
+    width={gstl.width}
+    height={gstl.height}
   />
   <Composition
     id="IpoCustom"
