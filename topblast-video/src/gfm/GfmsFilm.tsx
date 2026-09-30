@@ -60,10 +60,15 @@ const Heart: React.FC<{size: number; color: string; fill?: boolean; style?: Reac
   </svg>
 );
 
-const Logo: React.FC<{size: number; glow?: number}> = ({size, glow = 1}) => (
+const Logo: React.FC<{size: number; glow?: number; sheen?: number}> = ({size, glow = 1, sheen = 0}) => (
   <div style={{position: 'relative', width: size, height: size}}>
-    <div style={{position: 'absolute', inset: -size * 0.25, borderRadius: '50%', background: 'radial-gradient(closest-side, rgba(0,201,131,0.35), transparent)', opacity: glow}} />
-    <Img src={staticFile('gfms/logo.png')} style={{position: 'absolute', inset: 0, width: size, height: size}} />
+    <div style={{position: 'absolute', inset: -size * 0.3, borderRadius: '50%', background: 'radial-gradient(closest-side, rgba(0,201,131,0.32), transparent)', opacity: glow}} />
+    <div style={{position: 'absolute', inset: 0, borderRadius: size * 0.2, boxShadow: `0 ${size * 0.08}px ${size * 0.18}px -${size * 0.06}px rgba(7,59,43,0.45)`, overflow: 'hidden'}}>
+      <Img src={staticFile('gfms/logo-tile.png')} style={{width: size, height: size, display: 'block'}} />
+      {sheen > 0 && sheen < 1 && (
+        <div style={{position: 'absolute', top: -size * 0.5, left: lerp(-size, size * 1.3, sheen), width: size * 0.3, height: size * 2, background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent)', transform: 'rotate(22deg)'}} />
+      )}
+    </div>
   </div>
 );
 
@@ -90,7 +95,7 @@ const Hook: React.FC = () => {
     <AbsoluteFill>
       <Ground f={f} />
       <div style={{position: 'absolute', left: 960 - size / 2, top: cy - size / 2, opacity: Math.min(1, inn * 1.5), transform: `scale(${lerp(0.6, 1, back(inn))})`, filter: inn < 1 ? `blur(${(1 - inn) * 12}px)` : undefined}}>
-        <Logo size={size} glow={pulse} />
+        <Logo size={size} glow={pulse} sheen={prog(f, 10, 22, inOut)} />
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 380, display: 'flex', justifyContent: 'center'}}>
         <Eyebrow f={f} at={40}>THE COIN IS A MEME. THE CAUSE IS REAL.</Eyebrow>
@@ -434,8 +439,8 @@ const Finale: React.FC = () => {
   return (
     <AbsoluteFill>
       <Ground f={f + 760} />
-      <div style={{position: 'absolute', left: 960 - 170, top: 110, opacity: Math.min(1, logo * 1.4), transform: `scale(${lerp(0.6, 1, back(logo))})`}}>
-        <Logo size={340} glow={0.9 + 0.1 * Math.sin(f / 6)} />
+      <div style={{position: 'absolute', left: 960 - 160, top: 120, opacity: Math.min(1, logo * 1.4), transform: `scale(${lerp(0.6, 1, back(logo))})`}}>
+        <Logo size={320} glow={0.9 + 0.1 * Math.sin(f / 6)} sheen={prog(f, 22, 24, inOut)} />
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 480, display: 'flex', justifyContent: 'center', alignItems: 'baseline', fontFamily: SANS, fontWeight: 800, fontSize: 150, letterSpacing: '-0.055em', lineHeight: 1, color: INK}}>
         {['go', 'fund', 'memes'].map((w, i) => {
