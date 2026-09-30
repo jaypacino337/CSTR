@@ -18,6 +18,8 @@ import {ZsolanaFilm} from './zsol/Zsolana';
 import zstl from './zsol/zsolana-timeline.json';
 import {GfmHype} from './gfm/GfmHype';
 import gtl from './gfm/timeline.json';
+import {GfmFrog} from './gfm/GfmFrog';
+import gftl from './gfm/frog-timeline.json';
 import ictl from './ipo/custom-timeline.json';
 import igtl from './ipo/gallery-timeline.json';
 import istl from './ipo/slides-timeline.json';
@@ -65,6 +67,14 @@ export const Root: React.FC = () => (
     fps={gtl.fps}
     width={gtl.width}
     height={gtl.height}
+  />
+  <Composition
+    id="GfmFrog"
+    component={GfmFrog}
+    durationInFrames={gftl.duration}
+    fps={gftl.fps}
+    width={gftl.width}
+    height={gftl.height}
   />
   <Composition
     id="IpoCustom"

@@ -20,12 +20,12 @@ const MONO = '"Geist Mono Variable", "Geist Mono", monospace';
 const SHADOW = '0 24px 60px -30px rgba(18,60,43,0.35), 0 2px 8px rgba(18,60,43,0.06)';
 const S = tl.scenes;
 
-const back = (t: number) => {
+export const back = (t: number) => {
   const c = 1.9;
   return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2);
 };
 
-const Ground: React.FC<{f: number; dark?: boolean}> = ({f, dark}) => (
+export const Ground: React.FC<{f: number; dark?: boolean}> = ({f, dark}) => (
   <AbsoluteFill style={{background: dark ? DEEP : BG}}>
     <div style={{position: 'absolute', left: -300, top: -500, width: 1600, height: 1100, background: `radial-gradient(closest-side, ${dark ? 'rgba(194,247,138,0.16)' : 'rgba(194,247,138,0.55)'}, transparent)`, transform: `translate(${Math.sin(f / 40) * 40}px, 0)`}} />
     <div style={{position: 'absolute', right: -300, bottom: -500, width: 1400, height: 1000, background: `radial-gradient(closest-side, ${dark ? 'rgba(31,139,89,0.35)' : 'rgba(221,248,232,0.9)'}, transparent)`}} />
@@ -34,7 +34,7 @@ const Ground: React.FC<{f: number; dark?: boolean}> = ({f, dark}) => (
 );
 
 // word slam: each word punches in from 1.35x with a little overshoot
-const Slam: React.FC<{text: string; start: number; size: number; color?: string; stagger?: number; weight?: number}> = ({text, start, size, color = INK, stagger = 4, weight = 800}) => {
+export const Slam: React.FC<{text: string; start: number; size: number; color?: string; stagger?: number; weight?: number}> = ({text, start, size, color = INK, stagger = 4, weight = 800}) => {
   const f = useCurrentFrame();
   return (
     <div style={{display: 'flex', justifyContent: 'center', gap: size * 0.26, fontFamily: SANS, fontWeight: weight, fontSize: size, letterSpacing: '-0.045em', lineHeight: 1, color}}>

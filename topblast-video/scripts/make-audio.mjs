@@ -20,13 +20,14 @@ const IPOC = process.argv[2] === 'ipo-custom';
 const ZSOL = process.argv[2] === 'zsol';
 const ZSOLANA = process.argv[2] === 'zsolana';
 const GFM = process.argv[2] === 'gfm';
+const GFROG = process.argv[2] === 'gfm-frog';
 const PREMIUM = process.argv[2] === 'topblast-premium' || V2 || ODTEX || IPO;
 const CALM = process.argv[2] === 'arena-clean' || process.argv[2] === 'topblast-clean' || PREMIUM;
 const PROJECT = process.argv[2] === 'arena' || process.argv[2] === 'arena-clean' ? 'arena' : 'topblast';
 const K = CALM
   ? {impact: 0.35, whoosh: 0.4, riser: 0.35, rumble: 0, crowd: 0.35, clank: 0.35, kick: 0.6, sweep: 0.4}
   : {impact: 1, whoosh: 1, riser: 1, rumble: 1, crowd: 1, clank: 1, kick: 1, sweep: 1};
-const tlPath = GFM ? '../src/gfm/timeline.json' : ZSOLANA ? '../src/zsol/zsolana-timeline.json' : ZSOL ? '../src/zsol/timeline.json' : IPOC ? '../src/ipo/custom-timeline.json' : IPOG ? '../src/ipo/gallery-timeline.json' : IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
+const tlPath = GFROG ? '../src/gfm/frog-timeline.json' : GFM ? '../src/gfm/timeline.json' : ZSOLANA ? '../src/zsol/zsolana-timeline.json' : ZSOL ? '../src/zsol/timeline.json' : IPOC ? '../src/ipo/custom-timeline.json' : IPOG ? '../src/ipo/gallery-timeline.json' : IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
 const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
 const FPS = tl.fps;
@@ -179,7 +180,7 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   const fl = svf();
   const fr = svf();
   const phases = chord.map(() => [(rnd() + 1) / 2, (rnd() + 1) / 2]);
-  const impactT = F(S.finale.from + (GFM ? 8 : ZSOLANA ? 94 : ZSOL ? 8 : IPO ? 24 : ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
+  const impactT = F((S.finale || S.lockup).from + (GFROG ? 22 : GFM ? 8 : ZSOLANA ? 94 : ZSOL ? 8 : IPO ? 24 : ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
   for (let i = 0; i < LEN; i++) {
     const t = i / SR;
     const notes = t >= impactT ? finalChord : chord;
@@ -203,7 +204,38 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   }
 }
 
-if (GFM) {
+if (GFROG) {
+// ─── Go Fund Meme frog cut: 8s — drop, pitch, heart-wipe lockup ───
+for (let fr = 10; fr < 230; fr += 15) {
+  const n = Math.round((fr - 10) / 15);
+  kick(F(fr), n % 4 === 0 ? 0.7 : 0.5);
+  hat(F(fr + 7.5), 0.07, n % 2 ? 0.35 : -0.35);
+  if (n % 2 === 1) click(F(fr), 0.13, 1400);
+}
+whoosh(F(0), F(10), 0.3, 6000, 400);                                // frog falls
+impact(F(10), 0.9, 1.0);                                            // lands
+[0, 1, 2, 3, 4].forEach((k) => ding(F(11 + k * 1.5), 0.05, [1320, 1568, 1760, 2093, 2637][k], (k - 2) * 0.3));   // heart burst
+[14, 17, 20].forEach((o) => click(F(o), 0.15, 1900 + o * 20));    // "Give your meme"
+impact(F(24), 0.6, 0.8);                                            // "a mission."
+whoosh(F(30), 0.35, 0.16, 2000, 8000, 0.3);                        // highlighter
+const H0 = S.how.from;
+whoosh(F(H0 - 3), 0.35, 0.26, 400, 7000, -0.4);
+[6, 19, 32].forEach((o, i) => { impact(F(H0 + o), 0.35, 0.5); click(F(H0 + o), 0.14, 2000 + i * 300, 0.4); });
+for (let i = 0; i < 12; i++) {                                      // coins hit the meter
+  const t = H0 + 44 + i * 3.2 + 16;
+  ding(F(t), 0.035, i % 2 ? 2637 : 1976, 0.4);
+  click(F(t), 0.05, 3400, 0.4);
+}
+const L0 = S.lockup.from;
+riser(F(L0 - 30), F(30), 0.28);
+whoosh(F(L0), F(16), 0.32, 300, 6000);                              // heart wipe
+whoosh(F(L0 + 12), F(10), 0.2, 6000, 400);                          // frog drops again
+impact(F(L0 + 22), 1.1, 1.6);                                       // lockup lands
+[0, 1, 2, 3, 4, 5].forEach((k) => ding(F(L0 + 23 + k * 1.5), 0.05, [1320, 1568, 1760, 2093, 2637, 3136][k], (k - 2.5) * 0.3));
+click(F(L0 + 26), 0.18, 2400);                                      // wordmark
+ding(F(L0 + 38), 0.09, 1320);                                       // URL pill
+ding(F(L0 + 40), 0.06, 1980);
+} else if (GFM) {
 // ─── Go Fund Meme: 10s hype — 120 bpm, slams on the words, coin cha-chings, big land ───
 for (let fr = 0; fr < S.finale.from + 60; fr += 15) {
   const n = fr / 15;
@@ -947,6 +979,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, GFM ? '../public/gfm-score.wav' : ZSOLANA ? '../public/zsolana-score.wav' : ZSOL ? '../public/zsol-score.wav' : IPOC ? '../public/ipo-custom-score.wav' : IPOG ? '../public/ipo-gallery-score.wav' : IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
+const outPath = path.join(here, GFROG ? '../public/gfm-frog-score.wav' : GFM ? '../public/gfm-score.wav' : ZSOLANA ? '../public/zsolana-score.wav' : ZSOL ? '../public/zsol-score.wav' : IPOC ? '../public/ipo-custom-score.wav' : IPOG ? '../public/ipo-gallery-score.wav' : IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);
