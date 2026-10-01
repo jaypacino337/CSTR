@@ -119,11 +119,10 @@ const Seal: React.FC = () => {
         <Type text="SOLANA / PUBLIC ACCESS" f={f} at={10} cps={1.6} style={{fontSize: 18, color: DIM}} />
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 820, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 40}}>
-        <div style={{width: 240 * prog(f, 40, 20, expoOut), height: 2, background: INK}} />
-        <Type text="SUPER INTELLIGENCE AGENCY" f={f} at={36} cps={1.4} cursor={false} style={{fontFamily: HEAD, fontWeight: 600, fontSize: 64, letterSpacing: '0.32em', color: INK}} />
-        <div style={{width: 240 * prog(f, 40, 20, expoOut), height: 2, background: INK}} />
+        <div style={{width: 240 * prog(f, 28, 20, expoOut), height: 2, background: INK}} />
+        <Type text="SUPER INTELLIGENCE AGENCY" f={f} at={26} cps={1.6} cursor={false} style={{fontFamily: HEAD, fontWeight: 600, fontSize: 64, letterSpacing: '0.32em', color: INK}} />
+        <div style={{width: 240 * prog(f, 28, 20, expoOut), height: 2, background: INK}} />
       </div>
-      <Type text="DECENTRALIZED INTELLIGENCE / SOLANA" f={f} at={64} cps={1.8} style={{position: 'absolute', left: 0, right: 0, top: 930, textAlign: 'center', fontSize: 18, color: MUTED}} />
     </AbsoluteFill>
   );
 };
@@ -171,60 +170,6 @@ const MapScene: React.FC = () => {
       <div style={{position: 'absolute', left: 120, top: 610}}>
         <Head text="the money." start={20} size={150} color="#FFFFFF" style={{textShadow: '0 0 40px rgba(255,255,255,0.45)'}} />
       </div>
-      <div style={{position: 'absolute', left: 120, top: 820, width: 760, fontFamily: BODY, fontSize: 30, lineHeight: 1.45, color: DIM, opacity: prog(f, 40, 16), transform: `translateY(${(1 - prog(f, 40, 18, expoOut)) * 14}px)`}}>
-        AI agents analyze <span style={{color: INK, fontWeight: 600}}>$SIA holders</span>, compare trading performance and rank wallets for rewards.
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-// ── 3. the five agents ─────────────────────────────────────
-const AGENTS = [
-  {k: 'scout', n: 'SCOUT', r: 'Holder eligibility', d: 'Finds the contenders. Checks $SIA balances at both snapshots.'},
-  {k: 'ledger', n: 'LEDGER', r: 'Trade analysis', d: 'Reconstructs buys, sells, fees and P&L. Transfers aren’t profit.'},
-  {k: 'signal', n: 'SIGNAL', r: 'Risk assessment', d: 'Weighs returns, drawdown and consistency against the field.'},
-  {k: 'auditor', n: 'AUDITOR', r: 'Suspicious activity', d: 'Flags manipulation before any wallet can rank.'},
-  {k: 'director', n: 'DIRECTOR', r: 'Final ranking brief', d: 'Delivers the daily briefing behind every rank.'},
-];
-const Agents: React.FC = () => {
-  const f = useCurrentFrame();
-  const CW = 330;
-  const GAP = 24;
-  const X0 = (1920 - (CW * 5 + GAP * 4)) / 2;
-  return (
-    <AbsoluteFill>
-      <Ground f={f + 260} />
-      <div style={{position: 'absolute', left: X0, top: 90}}>
-        <Type text="INSIDE THE SWARM / AGENT ROSTER" f={f} at={2} cps={1.8} style={{fontSize: 18, color: DIM}} />
-      </div>
-      <div style={{position: 'absolute', left: X0, top: 130, display: 'flex', gap: 26}}>
-        <Head text="Five agents." start={4} size={110} />
-        <Head text="Eyes on the field." start={12} size={110} color={DIM} />
-      </div>
-      {AGENTS.map((a, i) => {
-        const at = 20 + i * 9;
-        const p = prog(f, at, 16, expoOut);
-        const scan = prog(f, at + 6, 18, inOut);
-        const x = X0 + i * (CW + GAP);
-        return (
-          <div key={a.k} style={{position: 'absolute', left: x, top: 320, width: CW, height: 620, border: `1px solid ${RULE}`, background: 'linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))', opacity: p, transform: `translateY(${(1 - p) * 60}px)`}}>
-            <div style={{display: 'flex', justifyContent: 'space-between', padding: '14px 16px', borderBottom: `1px solid ${RULE}`}}>
-              <Mono style={{fontSize: 14, color: INK}}>{`AGENT 0${i + 1}`}</Mono>
-              <Mono style={{fontSize: 14, color: DIM}}>ACTIVE ●</Mono>
-            </div>
-            <div style={{position: 'relative', margin: '16px 16px 0', height: 296, overflow: 'hidden', border: `1px solid ${RULE}`}}>
-              <Img src={staticFile(`sia/agent-${a.k}.png`)} style={{width: '100%', height: '100%', objectFit: 'cover', filter: `contrast(1.15) brightness(${lerp(0.4, 1, scan)})`, transform: `scale(${lerp(1.15, 1, p)})`}} />
-              {scan < 1 && <div style={{position: 'absolute', left: 0, right: 0, top: `${scan * 100}%`, height: 3, background: '#fff', boxShadow: '0 0 20px #fff'}} />}
-              <Corners x={8} y={8} w={CW - 32 - 16} h={296 - 16} s={16} o={0.8} />
-            </div>
-            <div style={{padding: '18px 18px 0'}}>
-              <div style={{fontFamily: HEAD, fontWeight: 800, fontSize: 60, lineHeight: 1, letterSpacing: '0.04em', color: INK}}>{a.n}</div>
-              <Mono style={{fontSize: 14, marginTop: 8, color: INK, letterSpacing: '0.12em'}}>{a.r}</Mono>
-              <div style={{fontFamily: BODY, fontSize: 19, lineHeight: 1.45, color: DIM, marginTop: 12}}>{a.d}</div>
-            </div>
-          </div>
-        );
-      })}
     </AbsoluteFill>
   );
 };
@@ -255,14 +200,13 @@ const PvP: React.FC = () => {
         ['01', 'Hold 1M+ $SIA', 'At the opening and closing snapshots.'],
         ['02', 'The swarm follows your moves', 'Every trade, fee and drawdown — on the record.'],
         ['03', 'Top 10. Daily SI airdrops.', 'From the day’s funded pool.'],
-      ].map(([n, t, d], k) => {
+      ].map(([n, t], k) => {
         const p = prog(f, 26 + k * 12, 14, expoOut);
         return (
-          <div key={n} style={{position: 'absolute', left: 120, top: 490 + k * 140, width: 760, display: 'flex', gap: 24, opacity: p, transform: `translateX(${(1 - p) * -30}px)`}}>
+          <div key={n} style={{position: 'absolute', left: 120, top: 520 + k * 110, width: 760, display: 'flex', alignItems: 'center', gap: 24, opacity: p, transform: `translateX(${(1 - p) * -30}px)`}}>
             <div style={{width: 64, height: 64, border: `1.5px solid ${INK}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, fontWeight: 600, fontSize: 22, color: INK, flexShrink: 0, background: k === 2 ? INK : 'transparent', ...(k === 2 ? {color: BG} : {})}}>{n}</div>
             <div>
               <div style={{fontFamily: HEAD, fontWeight: 700, fontSize: 50, lineHeight: 1, textTransform: 'uppercase', color: INK, letterSpacing: '0.02em'}}>{t}</div>
-              <div style={{fontFamily: BODY, fontSize: 24, color: DIM, marginTop: 8}}>{d}</div>
             </div>
           </div>
         );
@@ -347,9 +291,6 @@ const Score: React.FC = () => {
           </div>
         );
       })}
-      <div style={{position: 'absolute', left: 120, top: 860, width: 760, fontFamily: BODY, fontSize: 28, lineHeight: 1.45, color: DIM, opacity: prog(f, 70, 14)}}>
-        Raw profit alone <span style={{color: INK, fontWeight: 600}}>doesn’t decide who wins.</span> A bigger wallet can’t buy a better rank.
-      </div>
       {/* donut */}
       <svg width={1920} height={1080} style={{position: 'absolute', inset: 0}}>
         <circle cx={CX} cy={CY} r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={70} />
@@ -392,7 +333,6 @@ const Finale: React.FC = () => {
       <div style={{position: 'absolute', left: 0, right: 0, top: 920, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 22, opacity: prog(f, 54, 12), transform: `translateY(${(1 - prog(f, 54, 14, expoOut)) * 16}px)`}}>
         <div style={{padding: '14px 26px', background: INK, color: BG, fontFamily: HEAD, fontWeight: 800, fontSize: 44, letterSpacing: '0.06em', lineHeight: 1}}>$SIA</div>
         <div style={{padding: '14px 30px', border: `1.5px solid ${INK}`, color: INK, fontFamily: MONO, fontWeight: 600, fontSize: 30, letterSpacing: '0.1em'}}>SUPERINTELLIGENCEAGENCY.FUN</div>
-        <div style={{padding: '14px 22px', border: `1px solid ${RULE}`, color: DIM, fontFamily: MONO, fontSize: 20, letterSpacing: '0.12em'}}>CA TO BE ANNOUNCED</div>
       </div>
       <Mono style={{position: 'absolute', left: 0, right: 0, top: 1030, textAlign: 'center', fontSize: 13, color: MUTED, letterSpacing: '0.14em', opacity: prog(f, 66, 12)}}>
         REWARDS PLANNED · LIVE SCORING NOT YET ACTIVE · NOT AFFILIATED WITH ANY GOVERNMENT AGENCY · NOT FINANCIAL ADVICE
@@ -413,11 +353,6 @@ export const SiaFilm: React.FC<{withAudio?: boolean}> = ({withAudio = true}) => 
       <Sequence from={S.map.from} durationInFrames={S.map.dur} name="02 Intelligence that follows the money">
         <Cut dur={S.map.dur}>
           <MapScene />
-        </Cut>
-      </Sequence>
-      <Sequence from={S.agents.from} durationInFrames={S.agents.dur} name="03 Five agents">
-        <Cut dur={S.agents.dur}>
-          <Agents />
         </Cut>
       </Sequence>
       <Sequence from={S.pvp.from} durationInFrames={S.pvp.dur} name="04 Holder vs holder">

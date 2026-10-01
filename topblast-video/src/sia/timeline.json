@@ -1,1 +1,1 @@
-{"fps":30,"width":1920,"height":1080,"duration":920,"scenes":{"seal":{"from":0,"dur":120},"map":{"from":108,"dur":160},"agents":{"from":256,"dur":200},"pvp":{"from":444,"dur":190},"score":{"from":622,"dur":160},"finale":{"from":770,"dur":150}}}
+{"fps":30,"width":1920,"height":1080,"duration":562,"scenes":{"seal":{"from":0,"dur":100},"map":{"from":88,"dur":120},"pvp":{"from":196,"dur":150},"score":{"from":334,"dur":120},"finale":{"from":442,"dur":120}}}
