@@ -180,60 +180,47 @@ const Launch: React.FC = () => {
 
 // ── 3. the creator-fee route ───────────────────────────────
 const SRC = {x: 1010, y: 600};
-const SPL = {x: 1240, y: 600};
-const T80 = {x: 1560, y: 430};
-const T20 = {x: 1560, y: 790};
-const bez = (a: {x: number; y: number}, b: {x: number; y: number}, t: number) => {
-  const c1 = {x: a.x + (b.x - a.x) * 0.5, y: a.y};
-  const c2 = {x: a.x + (b.x - a.x) * 0.5, y: b.y};
-  const u = 1 - t;
-  return {x: u * u * u * a.x + 3 * u * u * t * c1.x + 3 * u * t * t * c2.x + t * t * t * b.x, y: u * u * u * a.y + 3 * u * u * t * c1.y + 3 * u * t * t * c2.y + t * t * t * b.y};
-};
-const pathD = (a: {x: number; y: number}, b: {x: number; y: number}) => `M ${a.x} ${a.y} C ${a.x + (b.x - a.x) * 0.5} ${a.y}, ${a.x + (b.x - a.x) * 0.5} ${b.y}, ${b.x} ${b.y}`;
+const TGT = {x: 1560, y: 600};
 const Route: React.FC = () => {
   const f = useCurrentFrame();
   const con = prog(f, 10, 20, expoOut);
-  const n80 = Math.round(80 * prog(f, 30, 26, expoOut));
-  const n20 = Math.round(20 * prog(f, 40, 26, expoOut));
+  const n100 = Math.round(100 * prog(f, 30, 30, expoOut));
   const flow = prog(f, 56, 14);
   const cyc = 50;
   const sweep = f > 56 ? ((f - 56) % cyc) / cyc : 0;
   const claims = f > 56 ? Math.floor((f - 56) / cyc) : 0;
   const flash = f > 56 + cyc ? Math.max(0, 1 - ((f - 56) % cyc) / 10) : 0;
-  const raised = Math.round(640 * claims + 640 * sweep * flow);
+  const raised = Math.round(800 * claims + 800 * sweep * flow);
   return (
     <AbsoluteFill>
       <Ground f={f + 280} />
       <div style={{position: 'absolute', left: 150, top: 104}}>
-        <Eyebrow f={f} at={2}>02 · KNOW THE SPLIT</Eyebrow>
+        <Eyebrow f={f} at={2}>02 · KNOW THE ROUTE</Eyebrow>
       </div>
       <div style={{position: 'absolute', left: 150, top: 150}}>
         <div style={{display: 'flex', gap: 22}}>
-          <Rise text="80% to the cause." start={4} size={84} />
-          <Rise text="20% to $MEMES." start={14} size={84} color={GREEN} />
+          <Rise text="100% to the cause." start={4} size={84} />
+          <Rise text="Every project fee." start={16} size={84} color={GREEN} />
         </div>
       </div>
       {/* console */}
       <div style={{position: 'absolute', left: 150, top: 300, width: 700, height: 620, borderRadius: 28, background: CONSOLE, boxShadow: '0 40px 90px -40px rgba(6,46,34,0.8)', padding: '30px 36px', boxSizing: 'border-box', opacity: con, transform: `translateY(${(1 - con) * 40}px)`, color: '#fff'}}>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
           <Mono style={{display: 'flex', alignItems: 'center', gap: 10, fontSize: 16, color: 'rgba(255,255,255,0.7)'}}>
-            <span style={{width: 10, height: 10, borderRadius: 5, background: EM, boxShadow: `0 0 12px ${EM}`, opacity: 0.5 + 0.5 * Math.sin(f / 4)}} /> CREATOR FEE ROUTE
+            <span style={{width: 10, height: 10, borderRadius: 5, background: EM, boxShadow: `0 0 12px ${EM}`, opacity: 0.5 + 0.5 * Math.sin(f / 4)}} /> PROJECT COIN FEE ROUTE
           </Mono>
           <Mono style={{fontSize: 15, color: EM}}>SOLANA</Mono>
         </div>
-        {[
-          {k: '01 / Fund the cause', n: n80, s: 'Allocated to its GoFundMe', c: EM},
-          {k: '02 / Back the ecosystem', n: n20, s: '$MEMES buyback & burn allocation', c: '#9DF5D2'},
-        ].map((r, i) => (
-          <div key={r.k} style={{marginTop: i ? 20 : 30, padding: '22px 26px', borderRadius: 18, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', opacity: prog(f, 22 + i * 10, 14)}}>
-            <Mono style={{fontSize: 16, color: 'rgba(255,255,255,0.6)'}}>{r.k.toUpperCase()}</Mono>
-            <div style={{display: 'flex', alignItems: 'baseline', gap: 18, marginTop: 6}}>
-              <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 110, lineHeight: 1, letterSpacing: '-0.05em', color: r.c, fontVariantNumeric: 'tabular-nums'}}>{r.n}<span style={{fontSize: 56}}>%</span></div>
-              <div style={{fontFamily: SANS, fontSize: 24, color: 'rgba(255,255,255,0.8)'}}>{r.s}</div>
-            </div>
-          </div>
-        ))}
-        <div style={{marginTop: 24, display: 'flex', alignItems: 'center', gap: 16, opacity: prog(f, 46, 12)}}>
+        <div style={{marginTop: 30, padding: '26px 28px', borderRadius: 18, background: 'rgba(0,201,131,0.10)', border: '1px solid rgba(0,201,131,0.35)', opacity: prog(f, 22, 14)}}>
+          <Mono style={{fontSize: 16, color: 'rgba(255,255,255,0.65)'}}>01 / FUND THE CAUSE</Mono>
+          <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 150, lineHeight: 1, letterSpacing: '-0.05em', color: EM, fontVariantNumeric: 'tabular-nums', marginTop: 8}}>{n100}<span style={{fontSize: 70}}>%</span></div>
+          <div style={{fontFamily: SANS, fontSize: 27, lineHeight: 1.35, color: 'rgba(255,255,255,0.88)', marginTop: 10}}>of each coin’s creator fees go to its GoFundMe</div>
+        </div>
+        <div style={{marginTop: 20, padding: '18px 28px', borderRadius: 18, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', display: 'flex', alignItems: 'center', gap: 20, opacity: prog(f, 36, 14)}}>
+          <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 56, letterSpacing: '-0.04em', color: '#9DF5D2'}}>0%</div>
+          <div style={{fontFamily: SANS, fontSize: 24, color: 'rgba(255,255,255,0.8)'}}>platform cut from project fees</div>
+        </div>
+        <div style={{marginTop: 26, display: 'flex', alignItems: 'center', gap: 16, opacity: prog(f, 46, 12)}}>
           <svg width={44} height={44} viewBox="0 0 44 44">
             <circle cx={22} cy={22} r={18} fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth={4} />
             <circle cx={22} cy={22} r={18} fill="none" stroke={EM} strokeWidth={4} strokeLinecap="round" strokeDasharray={`${sweep * 113} 113`} transform="rotate(-90 22 22)" />
@@ -242,55 +229,37 @@ const Route: React.FC = () => {
           <span style={{marginLeft: 'auto', fontFamily: MONO, fontSize: 15, fontWeight: 600, color: CONSOLE, background: EM, padding: '6px 10px', borderRadius: 8, opacity: flash}}>CLAIMED ✓</span>
         </div>
       </div>
-      {/* flow */}
+      {/* flow: one straight route, all of it to the cause */}
       <svg width={1920} height={1080} style={{position: 'absolute', inset: 0, opacity: flow}}>
-        <line x1={SRC.x} y1={SRC.y} x2={SPL.x} y2={SPL.y} stroke={RULE} strokeWidth={26} strokeLinecap="round" />
-        <path d={pathD(SPL, T80)} fill="none" stroke="rgba(0,201,131,0.25)" strokeWidth={26} strokeLinecap="round" />
-        <path d={pathD(SPL, T20)} fill="none" stroke="rgba(0,134,83,0.18)" strokeWidth={8} strokeLinecap="round" />
+        <line x1={SRC.x} y1={SRC.y} x2={TGT.x - 20} y2={TGT.y} stroke="rgba(0,201,131,0.25)" strokeWidth={30} strokeLinecap="round" />
       </svg>
-      {flow > 0 && new Array(40).fill(0).map((_, i) => {
-        const T = 36;
-        const t0 = ((f - 56 + i * 4.3) % T) / T;
-        if (f < 56 + (i * 4.3) % T) return null;
-        const to80 = i % 5 !== 0;
-        let p;
-        if (t0 < 0.35) p = {x: lerp(SRC.x, SPL.x, t0 / 0.35), y: SRC.y};
-        else p = bez(SPL, to80 ? T80 : T20, (t0 - 0.35) / 0.65);
-        const r = to80 ? 9 : 7;
-        return <div key={i} style={{position: 'absolute', left: p.x - r, top: p.y - r, width: r * 2, height: r * 2, borderRadius: r, background: to80 ? EM : GREEN, boxShadow: to80 ? `0 0 12px ${EM}` : undefined}} />;
+      {flow > 0 && new Array(36).fill(0).map((_, i) => {
+        const T = 30;
+        if (f < 56 + (i * 3.7) % T) return null;
+        const t = ((f - 56 + i * 3.7) % T) / T;
+        const x = lerp(SRC.x + 70, TGT.x - 20, t);
+        const y = SRC.y + Math.sin(t * Math.PI * 2 + i) * 9;
+        return <div key={i} style={{position: 'absolute', left: x - 9, top: y - 9, width: 18, height: 18, borderRadius: 9, background: EM, boxShadow: `0 0 12px ${EM}`}} />;
       })}
       {/* source */}
       <div style={{position: 'absolute', left: SRC.x - 80, top: SRC.y - 80, width: 160, height: 160, borderRadius: 80, background: SURF, border: `1px solid ${RULE}`, boxShadow: SHADOW, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', opacity: flow, transform: `scale(${lerp(0.8, 1, flow)})`}}>
         <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 34, color: INK}}>Fees</div>
-        <Mono style={{fontSize: 13}}>CREATOR</Mono>
+        <Mono style={{fontSize: 13}}>COIN CREATOR</Mono>
       </div>
-      {/* 80% target */}
-      <div style={{position: 'absolute', left: T80.x - 20, top: T80.y - 90, width: 330, height: 180, borderRadius: 24, background: SURF, border: `1.5px solid ${EM}`, boxShadow: `${SHADOW}, 0 0 0 ${6 * flash}px rgba(0,201,131,0.25)`, padding: '22px 24px', boxSizing: 'border-box', opacity: prog(f, 60, 14)}}>
+      {/* target */}
+      <div style={{position: 'absolute', left: TGT.x - 40, top: TGT.y - 110, width: 330, height: 220, borderRadius: 24, background: SURF, border: `1.5px solid ${EM}`, boxShadow: `${SHADOW}, 0 0 0 ${8 * flash}px rgba(0,201,131,0.25)`, padding: '24px 26px', boxSizing: 'border-box', opacity: prog(f, 60, 14)}}>
         <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
-          <Heart size={34} color={EM} />
-          <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 28, color: INK}}>Its GoFundMe</div>
+          <Heart size={36} color={EM} />
+          <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 30, color: INK}}>Its GoFundMe</div>
         </div>
-        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 56, letterSpacing: '-0.03em', color: GREEN, marginTop: 10, fontVariantNumeric: 'tabular-nums'}}>${raised.toLocaleString('en-US')}</div>
-        <Mono style={{fontSize: 13}}>EXAMPLE · 80% OF FEES</Mono>
-      </div>
-      {/* 20% target: buyback & burn */}
-      <div style={{position: 'absolute', left: T20.x - 20, top: T20.y - 80, width: 330, height: 160, borderRadius: 24, background: SURF, border: `1px solid ${RULE}`, boxShadow: SHADOW, padding: '22px 24px', boxSizing: 'border-box', opacity: prog(f, 66, 14), overflow: 'hidden'}}>
-        <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
-          <div style={{width: 40, height: 40, borderRadius: 20, background: INK, color: EM, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 15}}>♥</div>
-          <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 28, color: INK}}>$MEMES</div>
-        </div>
-        <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 30, color: INK, marginTop: 14}}>Buyback <span style={{color: FLAME}}>& burn</span></div>
-        {/* embers */}
-        {new Array(10).fill(0).map((_, i) => {
-          const t = ((f + i * 7) % 30) / 30;
-          return <div key={i} style={{position: 'absolute', left: 230 + ((i * 23) % 80), top: 130 - t * 110, width: 8, height: 8, borderRadius: 4, background: i % 2 ? FLAME : '#FFC24A', opacity: (1 - t) * prog(f, 70, 10), transform: `scale(${1 - t * 0.6})`}} />;
-        })}
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 62, letterSpacing: '-0.03em', color: GREEN, marginTop: 14, fontVariantNumeric: 'tabular-nums'}}>${raised.toLocaleString('en-US')}</div>
+        <Mono style={{fontSize: 13, marginTop: 4}}>EXAMPLE · 100% OF FEES</Mono>
       </div>
     </AbsoluteFill>
   );
 };
 
-// ── 4. $MEMES boost ──────────────────────────────────────────
+// ── 4. $MEMES creator fees: 50% burn / 50% boost ───────────
 const BOARD = [
   {t: '$SHELTER', c: 'Animal shelter rebuild', v: 0.72},
   {t: '$CURE', c: "Kids' hospital fund", v: 0.6},
@@ -300,33 +269,41 @@ const BOARD = [
 const Boost: React.FC = () => {
   const f = useCurrentFrame();
   const pour = prog(f, 56, 40, inOut);
+  const chip = (k: number) => prog(f, 30 + k * 10, 16, expoOut);
   return (
     <AbsoluteFill>
       <Ground f={f + 480} />
       <div style={{position: 'absolute', left: 150, top: 150}}>
-        <div style={{display: 'inline-flex', padding: '10px 18px', borderRadius: 999, background: INK, color: EM, fontFamily: MONO, fontWeight: 600, fontSize: 19, letterSpacing: '0.14em', opacity: prog(f, 2, 12), transform: `scale(${lerp(0.8, 1, back(prog(f, 2, 14)))})`}}>THE $MEMES BOOST</div>
+        <div style={{display: 'inline-flex', padding: '10px 18px', borderRadius: 999, background: INK, color: EM, fontFamily: MONO, fontWeight: 600, fontSize: 19, letterSpacing: '0.14em', opacity: prog(f, 2, 12), transform: `scale(${lerp(0.8, 1, back(prog(f, 2, 14)))})`}}>$MEMES CREATOR FEES</div>
       </div>
       <div style={{position: 'absolute', left: 150, top: 230}}>
-        <Rise text="100% of $MEMES" start={6} size={86} />
+        <Rise text="50% buyback & burn." start={6} size={76} />
       </div>
-      <div style={{position: 'absolute', left: 150, top: 340}}>
-        <Rise text="creator fees." start={14} size={86} color={GREEN} />
+      <div style={{position: 'absolute', left: 150, top: 326}}>
+        <Rise text="50% to top causes." start={16} size={76} color={GREEN} />
       </div>
-      <div style={{position: 'absolute', left: 150, top: 480, width: 640, fontFamily: SANS, fontSize: 36, lineHeight: 1.4, color: MUTED, opacity: prog(f, 26, 16)}}>
-        Extra funding for the <span style={{color: INK, fontWeight: 700}}>top coins’ GoFundMes.</span>
+      <div style={{position: 'absolute', left: 150, top: 450, width: 720, fontFamily: SANS, fontSize: 32, lineHeight: 1.4, color: MUTED, opacity: prog(f, 26, 16)}}>
+        Our own fees back the <span style={{color: INK, fontWeight: 700}}>top coins’ fundraisers.</span>
       </div>
-      {/* $MEMES pool */}
-      <div style={{position: 'absolute', left: 150, top: 660, display: 'flex', alignItems: 'center', gap: 18, opacity: prog(f, 36, 14)}}>
-        <div style={{width: 132, height: 132, borderRadius: 66, background: 'radial-gradient(circle at 35% 30%, #1B6B50, #073B2B 70%)', border: `4px solid ${EM}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 21, letterSpacing: '-0.02em', color: EM, boxShadow: `0 0 ${30 + 20 * Math.sin(f / 5)}px rgba(0,201,131,0.5)`}}>$MEMES</div>
-        <div>
-          <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 30, color: INK}}>100% of $MEMES creator fees</div>
-          <Mono style={{fontSize: 15, marginTop: 4}}>→ BOOST POOL FOR TOP COINS</Mono>
-        </div>
+      {/* split chips */}
+      <div style={{position: 'absolute', left: 150, top: 590, width: 350, height: 230, borderRadius: 24, background: SURF, border: `1px solid ${RULE}`, boxShadow: SHADOW, padding: '24px 26px', boxSizing: 'border-box', overflow: 'hidden', opacity: chip(0), transform: `translateY(${(1 - chip(0)) * 30}px)`}}>
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 84, lineHeight: 1, letterSpacing: '-0.05em', color: INK}}>50%</div>
+        <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 28, color: INK, marginTop: 14}}>Buyback <span style={{color: FLAME}}>& burn</span></div>
+        <Mono style={{fontSize: 14, marginTop: 6}}>$MEMES SUPPLY ↓</Mono>
+        {new Array(12).fill(0).map((_, i) => {
+          const t = ((f + i * 6) % 30) / 30;
+          return <div key={i} style={{position: 'absolute', left: 240 + ((i * 19) % 80), top: 200 - t * 170, width: 9, height: 9, borderRadius: 5, background: i % 2 ? FLAME : '#FFC24A', opacity: (1 - t) * chip(0), transform: `scale(${1 - t * 0.6})`}} />;
+        })}
+      </div>
+      <div style={{position: 'absolute', left: 530, top: 590, width: 350, height: 230, borderRadius: 24, background: CONSOLE, boxShadow: `0 30px 70px -30px rgba(6,46,34,0.8), 0 0 ${24 + 16 * Math.sin(f / 5)}px rgba(0,201,131,${0.35 * pour})`, padding: '24px 26px', boxSizing: 'border-box', opacity: chip(1), transform: `translateY(${(1 - chip(1)) * 30}px)`}}>
+        <div style={{fontFamily: SANS, fontWeight: 800, fontSize: 84, lineHeight: 1, letterSpacing: '-0.05em', color: EM}}>50%</div>
+        <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 28, color: '#fff', marginTop: 14}}>Boost top causes</div>
+        <Mono style={{fontSize: 14, marginTop: 6, color: 'rgba(255,255,255,0.6)'}}>→ TOP COINS’ GOFUNDMES</Mono>
       </div>
       {/* leaderboard */}
       <div style={{position: 'absolute', left: 960, top: 180, width: 810, borderRadius: 28, background: SURF, border: `1px solid ${RULE}`, boxShadow: SHADOW, padding: '28px 32px 20px', boxSizing: 'border-box', opacity: prog(f, 10, 16), transform: `translateY(${(1 - prog(f, 10, 18, expoOut)) * 40}px)`}}>
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
-          <Mono style={{fontSize: 16, fontWeight: 600, color: GREEN}}>TOP COINS · MOST DONATED</Mono>
+          <Mono style={{fontSize: 16, fontWeight: 600, color: GREEN}}>TOP COINS ON GO FUND MEMES</Mono>
           <Mono style={{fontSize: 14}}>EXAMPLE</Mono>
         </div>
         {BOARD.map((b, k) => {
@@ -348,16 +325,16 @@ const Boost: React.FC = () => {
           );
         })}
       </div>
-      {/* pour particles from $MEMES into the top 3 */}
+      {/* pour from the 50% boost chip into the top 3 */}
       {pour > 0 && pour < 1 && new Array(18).fill(0).map((_, i) => {
         const t = ((f - 56 + i * 2.2) % 20) / 20;
         const k = i % 3;
-        const x0 = 210;
-        const y0 = 720;
+        const x0 = 840;
+        const y0 = 640;
         const x1 = 1500;
         const y1 = 300 + k * 108;
         const x = lerp(x0, x1, t);
-        const y = lerp(y0, y1, t) - Math.sin(t * Math.PI) * 180;
+        const y = lerp(y0, y1, t) - Math.sin(t * Math.PI) * 120;
         return <div key={i} style={{position: 'absolute', left: x - 7, top: y - 7, width: 14, height: 14, borderRadius: 7, background: EM, boxShadow: `0 0 12px ${EM}`, opacity: 0.9}} />;
       })}
     </AbsoluteFill>
@@ -477,12 +454,12 @@ export const GfmsFilm: React.FC<{withAudio?: boolean}> = ({withAudio = true}) =>
         <Launch />
       </Push>
     </Sequence>
-    <Sequence from={S.route.from} durationInFrames={S.route.dur} name="03 80/20 creator-fee route">
+    <Sequence from={S.route.from} durationInFrames={S.route.dur} name="03 100% of project fees to the cause">
       <Push dur={S.route.dur}>
         <Route />
       </Push>
     </Sequence>
-    <Sequence from={S.boost.from} durationInFrames={S.boost.dur} name="04 $MEMES boost">
+    <Sequence from={S.boost.from} durationInFrames={S.boost.dur} name="04 $MEMES fees: 50% burn / 50% boost">
       <Push dur={S.boost.dur}>
         <Boost />
       </Push>
