@@ -16,14 +16,8 @@ const S = tl.scenes;
 
 // ── atmosphere ─────────────────────────────────────────────
 const Grain: React.FC<{f: number}> = ({f}) => (
-  <AbsoluteFill style={{pointerEvents: 'none', mixBlendMode: 'screen', opacity: 0.08}}>
-    <svg width={1920} height={1080}>
-      <filter id={`g${f % 6}`}>
-        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed={f % 6} />
-        <feColorMatrix type="saturate" values="0" />
-      </filter>
-      <rect width="1920" height="1080" filter={`url(#g${f % 6})`} />
-    </svg>
+  <AbsoluteFill style={{pointerEvents: 'none', mixBlendMode: 'screen', opacity: 0.07}}>
+    <Img src={staticFile(`sia/grain${f % 6}.png`)} style={{width: 1920, height: 1080, imageRendering: 'pixelated'}} />
   </AbsoluteFill>
 );
 const Scan: React.FC = () => (
