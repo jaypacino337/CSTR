@@ -24,13 +24,16 @@
     "render:zsolana": "node scripts/make-audio.mjs zsolana && remotion render src/index.ts ZsolanaFilm out/zsolana.mp4",
     "render:gfm": "node scripts/make-audio.mjs gfm && remotion render src/index.ts GfmHype out/gfm-hype.mp4",
     "render:gfm-frog": "node scripts/make-audio.mjs gfm-frog && remotion render src/index.ts GfmFrog out/gfm-frog.mp4",
-    "render:gfms": "node scripts/make-audio.mjs gfms && remotion render src/index.ts GfmsFilm out/gofundmemes.mp4"
+    "render:gfms": "node scripts/make-audio.mjs gfms && remotion render src/index.ts GfmsFilm out/gofundmemes.mp4",
+    "render:sia": "node scripts/make-audio.mjs sia && remotion render src/index.ts SiaFilm out/sia.mp4"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
     "@fontsource-variable/fraunces": "^5.3.0",
     "@fontsource-variable/geist": "^5.3.0",
     "@fontsource-variable/geist-mono": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "@fontsource/dm-sans": "^5.3.0",
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/ibm-plex-sans": "^5.3.0",
     "@fontsource/inter": "^5.3.0",

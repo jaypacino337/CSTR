@@ -12,6 +12,11 @@ import '@fontsource/ibm-plex-sans/400.css';
 import '@fontsource/ibm-plex-sans/600.css';
 import '@fontsource-variable/geist/index.css';
 import '@fontsource-variable/geist-mono/index.css';
+import '@fontsource/barlow-condensed/600.css';
+import '@fontsource/barlow-condensed/700.css';
+import '@fontsource/barlow-condensed/800.css';
+import '@fontsource/dm-sans/400.css';
+import '@fontsource/dm-sans/600.css';
 import {continueRender, delayRender} from 'remotion';
 
 if (typeof document !== 'undefined') {
@@ -32,6 +37,11 @@ if (typeof document !== 'undefined') {
     '800 40px "Geist Variable"',
     '500 20px "Geist Variable"',
     '500 20px "Geist Mono Variable"',
+    '700 40px "Barlow Condensed"',
+    '800 40px "Barlow Condensed"',
+    '600 40px "Barlow Condensed"',
+    '400 20px "DM Sans"',
+    '600 20px "DM Sans"',
   ];
   Promise.all(faces.map((f) => document.fonts.load(f)))
     .then(() => document.fonts.ready)

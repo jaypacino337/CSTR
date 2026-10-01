@@ -22,6 +22,8 @@ import {GfmFrog} from './gfm/GfmFrog';
 import gftl from './gfm/frog-timeline.json';
 import {GfmsFilm} from './gfm/GfmsFilm';
 import gstl from './gfm/gfms-timeline.json';
+import {SiaFilm} from './sia/SiaFilm';
+import stl from './sia/timeline.json';
 import ictl from './ipo/custom-timeline.json';
 import igtl from './ipo/gallery-timeline.json';
 import istl from './ipo/slides-timeline.json';
@@ -85,6 +87,14 @@ export const Root: React.FC = () => (
     fps={gstl.fps}
     width={gstl.width}
     height={gstl.height}
+  />
+  <Composition
+    id="SiaFilm"
+    component={SiaFilm}
+    durationInFrames={stl.duration}
+    fps={stl.fps}
+    width={stl.width}
+    height={stl.height}
   />
   <Composition
     id="IpoCustom"

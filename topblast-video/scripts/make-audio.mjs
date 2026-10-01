@@ -22,13 +22,14 @@ const ZSOLANA = process.argv[2] === 'zsolana';
 const GFM = process.argv[2] === 'gfm';
 const GFROG = process.argv[2] === 'gfm-frog';
 const GFMS = process.argv[2] === 'gfms';
+const SIA = process.argv[2] === 'sia';
 const PREMIUM = process.argv[2] === 'topblast-premium' || V2 || ODTEX || IPO;
 const CALM = process.argv[2] === 'arena-clean' || process.argv[2] === 'topblast-clean' || PREMIUM;
 const PROJECT = process.argv[2] === 'arena' || process.argv[2] === 'arena-clean' ? 'arena' : 'topblast';
 const K = CALM
   ? {impact: 0.35, whoosh: 0.4, riser: 0.35, rumble: 0, crowd: 0.35, clank: 0.35, kick: 0.6, sweep: 0.4}
   : {impact: 1, whoosh: 1, riser: 1, rumble: 1, crowd: 1, clank: 1, kick: 1, sweep: 1};
-const tlPath = GFMS ? '../src/gfm/gfms-timeline.json' : GFROG ? '../src/gfm/frog-timeline.json' : GFM ? '../src/gfm/timeline.json' : ZSOLANA ? '../src/zsol/zsolana-timeline.json' : ZSOL ? '../src/zsol/timeline.json' : IPOC ? '../src/ipo/custom-timeline.json' : IPOG ? '../src/ipo/gallery-timeline.json' : IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
+const tlPath = SIA ? '../src/sia/timeline.json' : GFMS ? '../src/gfm/gfms-timeline.json' : GFROG ? '../src/gfm/frog-timeline.json' : GFM ? '../src/gfm/timeline.json' : ZSOLANA ? '../src/zsol/zsolana-timeline.json' : ZSOL ? '../src/zsol/timeline.json' : IPOC ? '../src/ipo/custom-timeline.json' : IPOG ? '../src/ipo/gallery-timeline.json' : IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
 const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
 const FPS = tl.fps;
@@ -181,7 +182,7 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   const fl = svf();
   const fr = svf();
   const phases = chord.map(() => [(rnd() + 1) / 2, (rnd() + 1) / 2]);
-  const impactT = F((S.finale || S.lockup).from + (GFMS ? 4 : GFROG ? 22 : GFM ? 8 : ZSOLANA ? 94 : ZSOL ? 8 : IPO ? 24 : ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
+  const impactT = F((S.finale || S.lockup).from + (SIA ? 4 : GFMS ? 4 : GFROG ? 22 : GFM ? 8 : ZSOLANA ? 94 : ZSOL ? 8 : IPO ? 24 : ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
   for (let i = 0; i < LEN; i++) {
     const t = i / SR;
     const notes = t >= impactT ? finalChord : chord;
@@ -205,7 +206,52 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   }
 }
 
-if (GFMS) {
+if (SIA) {
+// ─── SIA: dark, cinematic agency — slow pulse, typing, reticle locks, heavy hits ───
+for (let fr = 8; fr < S.finale.from + 120; fr += 21) {
+  const n = Math.round((fr - 8) / 21);
+  kick(F(fr), n % 4 === 0 ? 0.55 : 0.3);
+  if (n % 2) hat(F(fr + 10.5), 0.03, n % 4 === 1 ? 0.3 : -0.3);
+}
+const typing = (t0, n, pan = 0, g = 0.022) => { for (let k = 0; k < n; k++) click(F(t0 + k * 0.75), g, 3200 + ((k * 37) % 5) * 260, pan); };
+typing(2, 26, -0.6); typing(10, 22, 0.6);
+impact(F(8), 0.75, 1.8);                                             // seal blooms
+ding(F(10), 0.04, 660); ding(F(12), 0.03, 990);
+typing(36, 28, 0, 0.03);                                             // SUPER INTELLIGENCE AGENCY
+typing(64, 20, 0, 0.015);
+const M0 = S.map.from;
+whoosh(F(M0 - 8), 0.6, 0.22, 400, 6000);
+typing(M0 + 4, 22, -0.5);
+[8, 14, 20].forEach((o) => impact(F(M0 + o), 0.3, 0.5));            // headline words
+[30, 44, 58, 72].forEach((o, i) => { click(F(M0 + o), 0.14, 1800, (i % 2 ? 0.5 : -0.2)); ding(F(M0 + o + 4), 0.04, 1760, (i % 2 ? 0.5 : -0.2)); });   // reticle locks
+const A0 = S.agents.from;
+whoosh(F(A0 - 8), 0.6, 0.22, 400, 6000);
+typing(A0 + 2, 32, -0.4);
+[4, 12].forEach((o) => impact(F(A0 + o), 0.3, 0.5));
+for (let i = 0; i < 5; i++) { impact(F(A0 + 20 + i * 9), 0.22, 0.4); whoosh(F(A0 + 26 + i * 9), 0.6, 0.05, 6000, 1500, (i - 2) * 0.35); click(F(A0 + 24 + i * 9), 0.08, 1300, (i - 2) * 0.35); }
+const P0 = S.pvp.from;
+whoosh(F(P0 - 8), 0.6, 0.22, 400, 6000);
+typing(P0 + 2, 28, -0.4);
+[4, 10].forEach((o) => impact(F(P0 + o), 0.3, 0.5));
+[26, 38, 50].forEach((o, i) => click(F(P0 + o), 0.12, 1600 + i * 200, -0.4));
+for (let k = 0; k < 24; k++) click(F(P0 + 70 + k * 1.25), 0.03, 2400 + (k % 6) * 150, 0.4);   // ranks shuffle
+whoosh(F(P0 + 70), 1.0, 0.08, 600, 3000, 0.4);
+click(F(P0 + 96), 0.12, 1200, 0.4);                                  // TOP 10 cutoff
+for (let r = 0; r < 10; r++) ding(F(P0 + 104 + r * 2), 0.025, 880 * Math.pow(1.122, r), 0.4);   // SI airdrops
+const C0 = S.score.from;
+whoosh(F(C0 - 8), 0.6, 0.22, 400, 6000);
+typing(C0 + 2, 30, -0.4);
+[4, 10].forEach((o) => impact(F(C0 + o), 0.3, 0.5));
+[24, 34, 44, 54].forEach((o, i) => { click(F(C0 + o), 0.1, 1500 + i * 220, 0.3); ding(F(C0 + o + 2), 0.03, 990 * Math.pow(1.26, i), 0.3); });
+impact(F(C0 + 60), 0.4, 0.7);                                       // 100
+click(F(C0 + 84), 0.14, 1000);                                      // fee stamp
+const Z0 = S.finale.from;
+riser(F(Z0 - 40), F(40), 0.22);
+impact(F(Z0 + 4), 1.1, 2.4);                                        // banner reveal
+whoosh(F(Z0 + 40), 1.0, 0.08, 6000, 1200);                          // light sweep
+ding(F(Z0 + 56), 0.06, 660);
+ding(F(Z0 + 58), 0.04, 990);
+} else if (GFMS) {
 // ─── Go Fund Memes HQ: warm, confident 112 bpm pulse; chimes on every "good" moment ───
 for (let fr = 8; fr < S.finale.from + 90; fr += 16) {
   const n = Math.round((fr - 8) / 16);
@@ -1026,6 +1072,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, GFMS ? '../public/gfms-score.wav' : GFROG ? '../public/gfm-frog-score.wav' : GFM ? '../public/gfm-score.wav' : ZSOLANA ? '../public/zsolana-score.wav' : ZSOL ? '../public/zsol-score.wav' : IPOC ? '../public/ipo-custom-score.wav' : IPOG ? '../public/ipo-gallery-score.wav' : IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
+const outPath = path.join(here, SIA ? '../public/sia-score.wav' : GFMS ? '../public/gfms-score.wav' : GFROG ? '../public/gfm-frog-score.wav' : GFM ? '../public/gfm-score.wav' : ZSOLANA ? '../public/zsolana-score.wav' : ZSOL ? '../public/zsol-score.wav' : IPOC ? '../public/ipo-custom-score.wav' : IPOG ? '../public/ipo-gallery-score.wav' : IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);
