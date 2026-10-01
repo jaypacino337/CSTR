@@ -235,7 +235,7 @@ const ORDER_A = [3, 0, 7, 1, 10, 4, 2, 11, 5, 8, 6, 9];
 const ORDER_B = [0, 1, 3, 2, 4, 7, 5, 6, 10, 8, 11, 9];
 const PvP: React.FC = () => {
   const f = useCurrentFrame();
-  const shuffle = prog(f, 70, 30, inOut);
+  const shuffle = prog(f, 76, 14, inOut);
   const ROW = 50;
   const TY = 250;
   const rankOf = (order: number[], w: number) => order.indexOf(w);
@@ -288,7 +288,7 @@ const PvP: React.FC = () => {
           const score = Math.round(lerp(96 - ra * 4.3, 97 - rb * 4.1, shuffle) * prog(f, 20, 30, expoOut));
           const appear = prog(f, 18 + i * 2, 10);
           return (
-            <div key={w} style={{position: 'absolute', left: 24, right: 24, top: TY - 150 + r * ROW + (rank >= 10 ? 44 : 0), height: ROW - 6, display: 'flex', alignItems: 'center', fontFamily: MONO, fontSize: 20, color: top ? INK : MUTED, borderBottom: `1px solid rgba(255,255,255,0.06)`, opacity: appear, background: rank === 0 && shuffle > 0.9 ? 'rgba(255,255,255,0.08)' : undefined}}>
+            <div key={w} style={{position: 'absolute', left: 24, right: 24, top: TY - 150 + r * ROW + (rank >= 10 ? 44 : 0), height: ROW - 6, display: 'flex', alignItems: 'center', fontFamily: MONO, fontSize: 20, color: top ? INK : MUTED, borderBottom: `1px solid rgba(255,255,255,0.06)`, opacity: appear * (ra !== rb ? 1 - 0.75 * Math.sin(Math.PI * shuffle) : 1 - 0.3 * Math.sin(Math.PI * shuffle)), filter: ra !== rb && shuffle > 0 && shuffle < 1 ? `blur(${2.5 * Math.sin(Math.PI * shuffle)}px)` : undefined, background: rank === 0 && shuffle > 0.9 ? 'rgba(255,255,255,0.08)' : undefined}}>
               <span style={{width: 70, fontWeight: 600}}>{String(rank + 1).padStart(2, '0')}</span>
               <span style={{width: 300}}>{w}</span>
               <span style={{width: 200, position: 'relative'}}>

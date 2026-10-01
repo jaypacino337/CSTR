@@ -234,8 +234,8 @@ whoosh(F(P0 - 8), 0.6, 0.22, 400, 6000);
 typing(P0 + 2, 28, -0.4);
 [4, 10].forEach((o) => impact(F(P0 + o), 0.3, 0.5));
 [26, 38, 50].forEach((o, i) => click(F(P0 + o), 0.12, 1600 + i * 200, -0.4));
-for (let k = 0; k < 24; k++) click(F(P0 + 70 + k * 1.25), 0.03, 2400 + (k % 6) * 150, 0.4);   // ranks shuffle
-whoosh(F(P0 + 70), 1.0, 0.08, 600, 3000, 0.4);
+for (let k = 0; k < 14; k++) click(F(P0 + 76 + k * 1), 0.03, 2400 + (k % 6) * 150, 0.4);   // ranks shuffle
+whoosh(F(P0 + 74), 0.6, 0.1, 600, 3000, 0.4);
 click(F(P0 + 96), 0.12, 1200, 0.4);                                  // TOP 10 cutoff
 for (let r = 0; r < 10; r++) ding(F(P0 + 104 + r * 2), 0.025, 880 * Math.pow(1.122, r), 0.4);   // SI airdrops
 const C0 = S.score.from;
