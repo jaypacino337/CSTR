@@ -101,10 +101,10 @@ const Hook: React.FC = () => {
         <Eyebrow f={f} at={40}>THE COIN IS A MEME. THE CAUSE IS REAL.</Eyebrow>
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 440}}>
-        <Rise text="Launch it." start={44} size={150} align="center" />
+        <Rise text="Make memes" start={44} size={150} align="center" />
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 600}}>
-        <Rise text="Make it matter." start={56} size={150} color={GREEN} align="center" />
+        <Rise text="that matter." start={54} size={150} color={GREEN} align="center" />
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 820, textAlign: 'center', fontFamily: SANS, fontSize: 36, color: MUTED, opacity: prog(f, 74, 16), transform: `translateY(${(1 - prog(f, 74, 18, expoOut)) * 14}px)`}}>
         A launchpad for internet coins that <span style={{color: INK, fontWeight: 600}}>give back.</span>
@@ -210,7 +210,7 @@ const Route: React.FC = () => {
       <div style={{position: 'absolute', left: 150, top: 150}}>
         <div style={{display: 'flex', gap: 22}}>
           <Rise text="80% to the cause." start={4} size={84} />
-          <Rise text="20% to $GFM." start={14} size={84} color={GREEN} />
+          <Rise text="20% to $MEMES." start={14} size={84} color={GREEN} />
         </div>
       </div>
       {/* console */}
@@ -223,7 +223,7 @@ const Route: React.FC = () => {
         </div>
         {[
           {k: '01 / Fund the cause', n: n80, s: 'Allocated to its GoFundMe', c: EM},
-          {k: '02 / Back the ecosystem', n: n20, s: '$GFM buyback & burn allocation', c: '#9DF5D2'},
+          {k: '02 / Back the ecosystem', n: n20, s: '$MEMES buyback & burn allocation', c: '#9DF5D2'},
         ].map((r, i) => (
           <div key={r.k} style={{marginTop: i ? 20 : 30, padding: '22px 26px', borderRadius: 18, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', opacity: prog(f, 22 + i * 10, 14)}}>
             <Mono style={{fontSize: 16, color: 'rgba(255,255,255,0.6)'}}>{r.k.toUpperCase()}</Mono>
@@ -276,8 +276,8 @@ const Route: React.FC = () => {
       {/* 20% target: buyback & burn */}
       <div style={{position: 'absolute', left: T20.x - 20, top: T20.y - 80, width: 330, height: 160, borderRadius: 24, background: SURF, border: `1px solid ${RULE}`, boxShadow: SHADOW, padding: '22px 24px', boxSizing: 'border-box', opacity: prog(f, 66, 14), overflow: 'hidden'}}>
         <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
-          <div style={{width: 40, height: 40, borderRadius: 20, background: INK, color: EM, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 15}}>GFM</div>
-          <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 28, color: INK}}>$GFM</div>
+          <div style={{width: 40, height: 40, borderRadius: 20, background: INK, color: EM, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 15}}>♥</div>
+          <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 28, color: INK}}>$MEMES</div>
         </div>
         <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 30, color: INK, marginTop: 14}}>Buyback <span style={{color: FLAME}}>& burn</span></div>
         {/* embers */}
@@ -290,7 +290,7 @@ const Route: React.FC = () => {
   );
 };
 
-// ── 4. $GFM boost ──────────────────────────────────────────
+// ── 4. $MEMES boost ──────────────────────────────────────────
 const BOARD = [
   {t: '$SHELTER', c: 'Animal shelter rebuild', v: 0.72},
   {t: '$CURE', c: "Kids' hospital fund", v: 0.6},
@@ -304,22 +304,22 @@ const Boost: React.FC = () => {
     <AbsoluteFill>
       <Ground f={f + 480} />
       <div style={{position: 'absolute', left: 150, top: 150}}>
-        <div style={{display: 'inline-flex', padding: '10px 18px', borderRadius: 999, background: INK, color: EM, fontFamily: MONO, fontWeight: 600, fontSize: 19, letterSpacing: '0.14em', opacity: prog(f, 2, 12), transform: `scale(${lerp(0.8, 1, back(prog(f, 2, 14)))})`}}>THE $GFM BOOST</div>
+        <div style={{display: 'inline-flex', padding: '10px 18px', borderRadius: 999, background: INK, color: EM, fontFamily: MONO, fontWeight: 600, fontSize: 19, letterSpacing: '0.14em', opacity: prog(f, 2, 12), transform: `scale(${lerp(0.8, 1, back(prog(f, 2, 14)))})`}}>THE $MEMES BOOST</div>
       </div>
       <div style={{position: 'absolute', left: 150, top: 230}}>
-        <Rise text="100% of $GFM" start={6} size={100} />
+        <Rise text="100% of $MEMES" start={6} size={86} />
       </div>
       <div style={{position: 'absolute', left: 150, top: 340}}>
-        <Rise text="creator fees." start={14} size={100} color={GREEN} />
+        <Rise text="creator fees." start={14} size={86} color={GREEN} />
       </div>
       <div style={{position: 'absolute', left: 150, top: 480, width: 640, fontFamily: SANS, fontSize: 36, lineHeight: 1.4, color: MUTED, opacity: prog(f, 26, 16)}}>
         Extra funding for the <span style={{color: INK, fontWeight: 700}}>top coins’ GoFundMes.</span>
       </div>
-      {/* $GFM pool */}
+      {/* $MEMES pool */}
       <div style={{position: 'absolute', left: 150, top: 660, display: 'flex', alignItems: 'center', gap: 18, opacity: prog(f, 36, 14)}}>
-        <div style={{width: 120, height: 120, borderRadius: 60, background: 'radial-gradient(circle at 35% 30%, #1B6B50, #073B2B 70%)', border: `4px solid ${EM}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 34, color: EM, boxShadow: `0 0 ${30 + 20 * Math.sin(f / 5)}px rgba(0,201,131,0.5)`}}>$GFM</div>
+        <div style={{width: 132, height: 132, borderRadius: 66, background: 'radial-gradient(circle at 35% 30%, #1B6B50, #073B2B 70%)', border: `4px solid ${EM}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 800, fontSize: 21, letterSpacing: '-0.02em', color: EM, boxShadow: `0 0 ${30 + 20 * Math.sin(f / 5)}px rgba(0,201,131,0.5)`}}>$MEMES</div>
         <div>
-          <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 30, color: INK}}>100% of $GFM creator fees</div>
+          <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 30, color: INK}}>100% of $MEMES creator fees</div>
           <Mono style={{fontSize: 15, marginTop: 4}}>→ BOOST POOL FOR TOP COINS</Mono>
         </div>
       </div>
@@ -348,7 +348,7 @@ const Boost: React.FC = () => {
           );
         })}
       </div>
-      {/* pour particles from $GFM into the top 3 */}
+      {/* pour particles from $MEMES into the top 3 */}
       {pour > 0 && pour < 1 && new Array(18).fill(0).map((_, i) => {
         const t = ((f - 56 + i * 2.2) % 20) / 20;
         const k = i % 3;
@@ -455,7 +455,7 @@ const Finale: React.FC = () => {
       <div style={{position: 'absolute', left: 0, right: 0, top: 770, display: 'flex', justifyContent: 'center', gap: 20, opacity: prog(f, 56, 12), transform: `translateY(${(1 - prog(f, 56, 14, expoOut)) * 16}px)`}}>
         <div style={{padding: '22px 44px', borderRadius: 999, background: INK, color: EM, fontFamily: MONO, fontWeight: 600, fontSize: 36, letterSpacing: '0.08em', boxShadow: '0 24px 60px -24px rgba(7,59,43,0.7)'}}>GOFUNDMEMES.FUN</div>
         <div style={{padding: '22px 30px', borderRadius: 999, background: SURF, border: `1.5px solid ${RULE}`, color: INK, fontFamily: MONO, fontWeight: 600, fontSize: 28, letterSpacing: '0.06em', display: 'flex', alignItems: 'center', gap: 12}}>
-          <span style={{color: GREEN}}>$GFM</span> <span style={{color: MUTED, fontSize: 22}}>CA FGrn…pump</span>
+          <span style={{color: GREEN}}>$MEMES</span> <span style={{color: MUTED, fontSize: 22}}>CA FGrn…pump</span>
         </div>
       </div>
       <Mono style={{position: 'absolute', left: 0, right: 0, top: 990, textAlign: 'center', fontSize: 15, letterSpacing: '0.1em', opacity: prog(f, 70, 12)}}>
@@ -467,7 +467,7 @@ const Finale: React.FC = () => {
 
 export const GfmsFilm: React.FC<{withAudio?: boolean}> = ({withAudio = true}) => (
   <AbsoluteFill style={{background: BG}}>
-    <Sequence from={S.hook.from} durationInFrames={S.hook.dur} name="01 Launch it. Make it matter.">
+    <Sequence from={S.hook.from} durationInFrames={S.hook.dur} name="01 Make memes that matter.">
       <Push dur={S.hook.dur}>
         <Hook />
       </Push>
@@ -482,7 +482,7 @@ export const GfmsFilm: React.FC<{withAudio?: boolean}> = ({withAudio = true}) =>
         <Route />
       </Push>
     </Sequence>
-    <Sequence from={S.boost.from} durationInFrames={S.boost.dur} name="04 $GFM boost">
+    <Sequence from={S.boost.from} durationInFrames={S.boost.dur} name="04 $MEMES boost">
       <Push dur={S.boost.dur}>
         <Boost />
       </Push>
