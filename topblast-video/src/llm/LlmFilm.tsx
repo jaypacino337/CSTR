@@ -4,14 +4,15 @@ import tl from './timeline.json';
 
 // Local Language Model ($LLM) — HQ film. Site system: near-black ground, graphite
 // panels, lime signal green, Space Grotesk caps + mono data. The "L" tile mark.
-const BG = '#0E1013';
-const PANEL = '#15181D';
-const LINE = '#292D33';
-const INK = '#F0EFE9';
-const MUTED = '#9A9FA8';
-const DIM = '#5C6168';
-const LIME = '#C6F75D';
-const MINT = '#BCE9CF';
+const BG = '#05070C';
+const PANEL = '#0B1222';
+const LINE = '#1C2A44';
+const INK = '#FFFFFF';
+const MUTED = '#9AA6BF';
+const DIM = '#55627D';
+const LIME = '#8FA8E8'; // accent: light navy for type + lines
+const NAVY = '#1E3A8A';
+const MINT = '#D4DEF5';
 const HEAD = '"Space Grotesk", sans-serif';
 const MONO = '"JetBrains Mono", monospace';
 const S = tl.scenes;
@@ -19,7 +20,7 @@ const S = tl.scenes;
 const Ground: React.FC<{f: number}> = ({f}) => (
   <AbsoluteFill style={{background: BG}}>
     <AbsoluteFill style={{backgroundImage: `linear-gradient(${LINE}55 1px, transparent 1px), linear-gradient(90deg, ${LINE}55 1px, transparent 1px)`, backgroundSize: '80px 80px', backgroundPosition: `0px ${f * 0.4}px`, WebkitMaskImage: 'radial-gradient(ellipse at 50% 40%, #000 30%, transparent 80%)'}} />
-    <div style={{position: 'absolute', left: 960 - 800, top: -500, width: 1600, height: 1000, background: 'radial-gradient(closest-side, rgba(198,247,93,0.10), transparent)'}} />
+    <div style={{position: 'absolute', left: 960 - 800, top: -500, width: 1600, height: 1000, background: 'radial-gradient(closest-side, rgba(40,72,170,0.28), transparent)'}} />
   </AbsoluteFill>
 );
 
@@ -50,7 +51,7 @@ const Head: React.FC<{text: string; start: number; size: number; color?: string;
 // the server-cube logo
 const Cube: React.FC<{size: number; glow?: number}> = ({size, glow = 0}) => (
   <div style={{position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-    {glow > 0 && <div style={{position: 'absolute', inset: -size * 0.35, borderRadius: '50%', background: `radial-gradient(closest-side, rgba(170,205,255,${0.28 * glow}), rgba(198,247,93,${0.08 * glow}) 55%, transparent)`}} />}
+    {glow > 0 && <div style={{position: 'absolute', inset: -size * 0.35, borderRadius: '50%', background: `radial-gradient(closest-side, rgba(170,205,255,${0.28 * glow}), rgba(30,58,138,${0.25 * glow}) 55%, transparent)`}} />}
     <Img src={staticFile('llm/cube.png')} style={{position: 'relative', height: size, width: (size * 1070) / 1207, filter: glow ? `drop-shadow(0 0 ${size * 0.06}px rgba(160,200,255,${0.6 * glow}))` : undefined}} />
   </div>
 );
@@ -136,7 +137,7 @@ const Hardware: React.FC = () => {
                 <span style={{color: LIME}}>{Math.round(32 * vram)}GB</span>
               </div>
               <div style={{marginTop: 14, height: 14, background: '#0A0B0D', border: `1px solid ${LINE}`}}>
-                <div style={{width: `${vram * 100}%`, height: '100%', background: `repeating-linear-gradient(90deg, ${LIME} 0 10px, ${LIME}AA 10px 12px)`}} />
+                <div style={{width: `${vram * 100}%`, height: '100%', background: `repeating-linear-gradient(90deg, ${NAVY} 0 10px, #2C4FB0 10px 12px)`}} />
               </div>
             </div>
             <div style={{width: 12, height: 12, borderRadius: 6, background: LIME, boxShadow: `0 0 12px ${LIME}`, opacity: 0.4 + 0.6 * (Math.sin(f / 3 + k) > 0 ? 1 : 0.3)}} />
@@ -191,7 +192,7 @@ const Credits: React.FC = () => {
         const on = f >= at(k);
         const p = prog(f, at(k) - 2, 12, expoOut);
         return (
-          <div key={s} style={{position: 'absolute', left: X0 + k * (SW + 40), top: 640, width: SW, height: 190, padding: '26px 26px', boxSizing: 'border-box', background: on ? '#1A1F16' : PANEL, border: `1px solid ${on ? LIME : LINE}`, opacity: 0.35 + 0.65 * prog(f, 20 + k * 4, 12), transform: `translateY(${(1 - p) * 10}px)`}}>
+          <div key={s} style={{position: 'absolute', left: X0 + k * (SW + 40), top: 640, width: SW, height: 190, padding: '26px 26px', boxSizing: 'border-box', background: on ? '#0F1E40' : PANEL, border: `1px solid ${on ? LIME : LINE}`, opacity: 0.35 + 0.65 * prog(f, 20 + k * 4, 12), transform: `translateY(${(1 - p) * 10}px)`}}>
             <div style={{fontFamily: MONO, fontSize: 18, color: on ? LIME : DIM, letterSpacing: '0.12em'}}>{`0${k + 1}`}</div>
             <div style={{fontFamily: HEAD, fontWeight: 700, fontSize: 40, lineHeight: 1.05, color: on ? INK : MUTED, marginTop: 14, letterSpacing: '-0.01em'}}>{s}</div>
           </div>
@@ -302,7 +303,7 @@ const Finale: React.FC = () => {
         </div>
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 740, display: 'flex', justifyContent: 'center', gap: 20, opacity: prog(f, 56, 12), transform: `translateY(${(1 - prog(f, 56, 14, expoOut)) * 16}px)`}}>
-        <div style={{padding: '18px 30px', background: LIME, color: '#0E1013', fontFamily: HEAD, fontWeight: 700, fontSize: 44, letterSpacing: '0.02em', lineHeight: 1}}>$LLM</div>
+        <div style={{padding: '18px 30px', background: NAVY, color: '#FFFFFF', border: `1.5px solid ${LIME}`, fontFamily: HEAD, fontWeight: 700, fontSize: 44, letterSpacing: '0.02em', lineHeight: 1}}>$LLM</div>
         <div style={{padding: '18px 34px', border: `1.5px solid ${INK}`, color: INK, fontFamily: MONO, fontWeight: 500, fontSize: 38, letterSpacing: '0.08em', lineHeight: 1.15}}>LOCALLM.FUN</div>
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 880, textAlign: 'center', fontFamily: HEAD, fontWeight: 500, fontSize: 30, color: MUTED, opacity: prog(f, 66, 12)}}>
