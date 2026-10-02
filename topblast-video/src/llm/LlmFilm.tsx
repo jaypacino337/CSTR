@@ -1,4 +1,4 @@
-import {AbsoluteFill, Audio, Sequence, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Audio, Img, Sequence, staticFile, useCurrentFrame} from 'remotion';
 import {expoIn, expoOut, inOut, lerp, prog} from '../theme';
 import tl from './timeline.json';
 
@@ -12,7 +12,6 @@ const MUTED = '#9A9FA8';
 const DIM = '#5C6168';
 const LIME = '#C6F75D';
 const MINT = '#BCE9CF';
-const TILE = '#E7EBDF';
 const HEAD = '"Space Grotesk", sans-serif';
 const MONO = '"JetBrains Mono", monospace';
 const S = tl.scenes;
@@ -48,12 +47,11 @@ const Head: React.FC<{text: string; start: number; size: number; color?: string;
   );
 };
 
-// the "L" tile mark (from the site favicon)
-const Mark: React.FC<{size: number; glow?: number}> = ({size, glow = 0}) => (
-  <div style={{width: size, height: size, borderRadius: size * 0.234, background: TILE, boxShadow: glow ? `0 0 ${size * 0.6}px rgba(198,247,93,${0.35 * glow}), 0 ${size * 0.1}px ${size * 0.3}px rgba(0,0,0,0.5)` : undefined, position: 'relative', overflow: 'hidden'}}>
-    <svg width={size} height={size} viewBox="0 0 64 64" style={{position: 'absolute', inset: 0}}>
-      <path d="M22 13h8v31h17v7H22z" fill="#15181D" />
-    </svg>
+// the server-cube logo
+const Cube: React.FC<{size: number; glow?: number}> = ({size, glow = 0}) => (
+  <div style={{position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+    {glow > 0 && <div style={{position: 'absolute', inset: -size * 0.35, borderRadius: '50%', background: `radial-gradient(closest-side, rgba(170,205,255,${0.28 * glow}), rgba(198,247,93,${0.08 * glow}) 55%, transparent)`}} />}
+    <Img src={staticFile('llm/cube.png')} style={{position: 'relative', height: size, width: (size * 1070) / 1207, filter: glow ? `drop-shadow(0 0 ${size * 0.06}px rgba(160,200,255,${0.6 * glow}))` : undefined}} />
   </div>
 );
 
@@ -78,8 +76,8 @@ const Hook: React.FC = () => {
   return (
     <AbsoluteFill>
       <Ground f={f} />
-      <div style={{position: 'absolute', left: 960 - 90, top: lerp(450, 150, lift) - 90 * 0, transform: `scale(${lerp(0.5, 1, m) * lerp(1, 0.8, lift)})`, opacity: m}}>
-        <Mark size={180} glow={1} />
+      <div style={{position: 'absolute', left: 960 - 160, top: lerp(380, 60, lift), transform: `scale(${lerp(0.5, 1, m) * lerp(1, 0.62, lift)})`, opacity: m}}>
+        <Cube size={320} glow={1} />
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 400}}>
         <Head text="Your AI" start={26} size={170} align="center" />
@@ -239,7 +237,7 @@ const Workspace: React.FC = () => {
       <div style={{position: 'absolute', left: 910, top: 140, width: 870, height: 800, background: PANEL, border: `1px solid ${LINE}`, boxShadow: '0 50px 120px -40px rgba(0,0,0,0.8)', opacity: prog(f, 6, 14), transform: `translateY(${(1 - prog(f, 6, 18, expoOut)) * 40}px)`}}>
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64, padding: '0 22px', borderBottom: `1px solid ${LINE}`}}>
           <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
-            <Mark size={34} />
+            <Cube size={39} />
             <div style={{fontFamily: MONO, fontSize: 16, letterSpacing: '0.12em', color: INK}}>LOCAL LANGUAGE MODEL</div>
           </div>
           <div style={{fontFamily: MONO, fontSize: 16, color: MUTED}}>
@@ -255,7 +253,7 @@ const Workspace: React.FC = () => {
           </div>
           {f > 52 && (
             <div style={{marginTop: 30, display: 'flex', gap: 18}}>
-              <Mark size={44} />
+              <Cube size={50} />
               <div style={{flex: 1, fontFamily: HEAD, fontSize: 27, lineHeight: 1.5, color: INK}}>
                 {r1 === 0 ? <span style={{color: MUTED}}>thinking…</span> : words.slice(0, r1).join(' ')}
                 {r1 > 0 && r1 < words.length && <span style={{display: 'inline-block', width: 12, height: 26, background: LIME, marginLeft: 6, verticalAlign: 'middle'}} />}
@@ -296,7 +294,7 @@ const Finale: React.FC = () => {
         <Head text="with the token." start={10} size={120} color={LIME} align="center" />
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 500, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 34, opacity: m, transform: `translateY(${(1 - m) * 30}px)`}}>
-        <Mark size={150} glow={1} />
+        <Cube size={202} glow={1} />
         <div style={{fontFamily: HEAD, fontWeight: 700, fontSize: 78, lineHeight: 0.95, letterSpacing: '-0.02em', color: INK}}>
           LOCAL LANGUAGE
           <br />
