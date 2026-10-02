@@ -208,21 +208,19 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
 }
 
 if (LLM) {
-// ─── $LLM cinematic explainer: airy, confident 100 bpm; swells on the banner, clean UI ticks ───
-for (let fr = S.manifesto.from; fr < S.finale.from + 20; fr += 18) {
-  const n = Math.round((fr - S.manifesto.from) / 18);
+// ─── $LLM explainer: confident 100 bpm, clean UI ticks, chimes on every chapter beat ───
+for (let fr = 6; fr < S.finale.from + 20; fr += 18) {
+  const n = Math.round((fr - 6) / 18);
   kick(F(fr), n % 4 === 0 ? 0.42 : 0.26);
   if (n % 2) hat(F(fr + 9), 0.035, n % 4 === 1 ? 0.3 : -0.3);
 }
 const keys = (t0, n, pan = 0, g = 0.025, rate = 1) => { for (let k = 0; k < n; k++) click(F(t0 + k * rate), g, 2800 + ((k * 53) % 7) * 180, pan); };
-impact(F(1), 0.5, 2.2);                                              // white flash → cube
-whoosh(F(0), F(150), 0.12, 300, 3000);                              // slow pull-back
-riser(F(110), F(58), 0.16);
-const M0 = S.manifesto.from;
-impact(F(M0 + 2), 0.55, 1.4);
-[0, 1, 2, 3, 4].forEach((k) => { click(F(M0 + 6 + k * 20), 0.12, 1500 + k * 150); ding(F(M0 + 7 + k * 20), 0.035, 660 * Math.pow(1.122, k * 2)); });
-whoosh(F(M0 + 102), 0.8, 0.12, 4000, 800);                          // stacks like the banner
-ding(F(M0 + 108), 0.05, 1320);
+impact(F(2), 0.55, 1.4);                                             // cube
+ding(F(4), 0.05, 1320);
+whoosh(F(24), 0.6, 0.12, 3000, 700);                                 // cube lifts
+[28, 31, 34, 37, 40].forEach((o) => click(F(o), 0.11, 1900));
+impact(F(34), 0.4, 0.7);
+keys(62, 15, 0.3, 0.035, 1.1);                                       // $ llm --run local
 const I0 = S.infra.from;
 whoosh(F(I0 - 6), 0.6, 0.16, 500, 6000);
 [22, 28, 34, 40].forEach((o, k) => { click(F(I0 + o), 0.1, 1500 + k * 150, -0.4); whoosh(F(I0 + o), 1.0, 0.04, 200, 1400, -0.4); });
@@ -256,9 +254,9 @@ whoosh(F(B0 - 6), 0.6, 0.16, 500, 6000);
 click(F(B0 + 90), 0.1, 1800);
 const Z0 = S.finale.from;
 riser(F(Z0 - 40), F(40), 0.22);
-impact(F(Z0 + 2), 0.9, 2.4);                                         // banner returns
-whoosh(F(Z0 + 30), 1.2, 0.08, 6000, 1200);                          // light sweep
-ding(F(Z0 + 50), 0.07, 1320); ding(F(Z0 + 52), 0.05, 1980);
+impact(F(Z0 + 4), 0.4, 0.6);
+impact(F(Z0 + 40), 0.9, 1.8);                                        // lockup
+ding(F(Z0 + 42), 0.07, 1320); ding(F(Z0 + 60), 0.05, 1980);
 } else if (SIA) {
 // ─── SIA: dark, cinematic agency — slow pulse, typing, reticle locks, heavy hits ───
 for (let fr = 8; fr < S.finale.from + 120; fr += 21) {

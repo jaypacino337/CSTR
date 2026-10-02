@@ -2,32 +2,32 @@ import {AbsoluteFill, Audio, Img, Sequence, staticFile, useCurrentFrame} from 'r
 import {expoOut, inOut, lerp, prog} from '../theme';
 import tl from './timeline.json';
 
-// Local Language Model ($LLM) — cinematic explainer. Opens and closes on the
-// project banner (icy city, moon, server cube); chapters sit on a frosted, dimmed
-// version of it. Navy / black / white / ice. Michroma labels, Space Grotesk heads.
+// Local Language Model ($LLM) — explainer. Navy / black / white, the server-cube
+// logo, five chapters: infrastructure, access, workspace, revenue loop, burns.
 const BG = '#05080F';
 const PANEL = 'rgba(9,16,32,0.82)';
 const LINE = 'rgba(165,195,245,0.18)';
 const INK = '#FFFFFF';
 const MUTED = '#A3B0C8';
 const DIM = '#5D6A85';
-const ICE = '#B9CDF2';
+const ICE = '#8FA8E8';
 const NAVY = '#1E3A8A';
 const NAVY2 = '#2C4FB0';
 const HEAD = '"Space Grotesk", sans-serif';
-const WIDE = '"Michroma", sans-serif';
+const WIDE = '"JetBrains Mono", monospace';
 const MONO = '"JetBrains Mono", monospace';
-const BW = 2172;
-const BH = 724;
 const S = tl.scenes;
 
 // ── shared ─────────────────────────────────────────────────
-const Frost: React.FC = () => (
-  <AbsoluteFill style={{background: BG}}>
-    <Img src={staticFile('llm/frost.jpg')} style={{width: 1920, height: 1080}} />
-    <AbsoluteFill style={{background: 'radial-gradient(ellipse at 50% 0%, rgba(150,185,240,0.10), transparent 60%)'}} />
-  </AbsoluteFill>
-);
+const Frost: React.FC = () => {
+  const f = useCurrentFrame();
+  return (
+    <AbsoluteFill style={{background: BG}}>
+      <AbsoluteFill style={{backgroundImage: 'linear-gradient(rgba(60,90,160,0.13) 1px, transparent 1px), linear-gradient(90deg, rgba(60,90,160,0.13) 1px, transparent 1px)', backgroundSize: '80px 80px', backgroundPosition: `0px ${f * 0.4}px`, WebkitMaskImage: 'radial-gradient(ellipse at 50% 40%, #000 30%, transparent 80%)'}} />
+      <div style={{position: 'absolute', left: 960 - 800, top: -500, width: 1600, height: 1000, background: 'radial-gradient(closest-side, rgba(40,72,170,0.28), transparent)'}} />
+    </AbsoluteFill>
+  );
+};
 
 const CHAPTERS = ['Infrastructure', 'Access', 'Workspace', 'Revenue loop', 'Burns'];
 const Chapter: React.FC<{f: number; n: number}> = ({f, n}) => (
@@ -79,62 +79,31 @@ const Cut: React.FC<{dur: number; last?: boolean; children: React.ReactNode}> = 
   return <AbsoluteFill style={{opacity: i * (1 - o), transform: `scale(${lerp(1.015, 1, i) * lerp(1, 0.99, o)})`}}>{children}</AbsoluteFill>;
 };
 
-// banner placed so that banner point (fx, fy) lands on screen point (sx, sy) at height H
-const Banner: React.FC<{H: number; fx: number; fy: number; sx: number; sy: number; style?: React.CSSProperties}> = ({H, fx, fy, sx, sy, style}) => {
-  const k = H / BH;
-  return <Img src={staticFile('llm/banner.jpg')} style={{position: 'absolute', left: sx - fx * k, top: sy - fy * k, width: BW * k, height: H, ...style}} />;
-};
-
-// ── 1. opening: pull back from the cube to the city ────────
+// ── 1. opening ─────────────────────────────────────────────
 const Open: React.FC = () => {
   const f = useCurrentFrame();
-  const z = prog(f, 0, 150, inOut);
-  const H = lerp(1080 * 2.5, 1080, z);
-  const sy = lerp(470, 373, z);
-  const flare = prog(f, 0, 30) * (1 - prog(f, 40, 50));
-  return (
-    <AbsoluteFill style={{background: '#DDE6F3'}}>
-      <Banner H={H} fx={1086} fy={250} sx={960} sy={sy} />
-      <AbsoluteFill style={{background: `radial-gradient(circle at 50% 42%, rgba(255,255,255,${0.55 * flare}), transparent 45%)`}} />
-      <AbsoluteFill style={{background: 'linear-gradient(180deg, transparent 72%, rgba(5,8,15,0.55) 100%)', opacity: z}} />
-      <AbsoluteFill style={{background: '#FFFFFF', opacity: 1 - prog(f, 0, 14)}} />
-    </AbsoluteFill>
-  );
-};
-
-// ── 2. manifesto ───────────────────────────────────────────
-const WORDS = ['Faster', 'Cheaper', 'Open source', 'On Solana', 'For everyone'];
-const Manifesto: React.FC = () => {
-  const f = useCurrentFrame();
-  const STEP = 20;
-  const stack = prog(f, 104, 24, inOut);
+  const m = prog(f, 0, 20, expoOut);
+  const lift = prog(f, 24, 18, inOut);
+  const cmd = 'llm --run local';
+  const typed = cmd.slice(0, Math.max(0, Math.floor((f - 62) * 0.9)));
   return (
     <AbsoluteFill>
       <Frost />
-      {WORDS.map((w, i) => {
-        const a = 6 + i * STEP;
-        const p = prog(f, a, 10, expoOut);
-        const out = i < WORDS.length ? prog(f, a + STEP - 4, 8) : 0;
-        const solo = (1 - out) * p * (1 - stack);
-        return (
-          <div key={w} style={{position: 'absolute', left: 0, right: 0, top: 470, textAlign: 'center', fontFamily: WIDE, fontSize: 92, letterSpacing: `${lerp(0.5, 0.18, p)}em`, color: INK, textTransform: 'uppercase', opacity: solo, filter: solo < 1 ? `blur(${(1 - solo) * 6}px)` : undefined}}>
-            {w}
-          </div>
-        );
-      })}
-      {/* stacked like the banner */}
-      <div style={{position: 'absolute', left: 260, top: 330, opacity: stack, transform: `translateX(${(1 - stack) * -30}px)`}}>
-        {WORDS.map((w, i) => (
-          <div key={w} style={{fontFamily: WIDE, fontSize: 34, letterSpacing: '0.2em', color: i === 4 ? ICE : INK, textTransform: 'uppercase', lineHeight: 2, opacity: prog(f, 104 + i * 3, 10)}}>{w}</div>
-        ))}
-      </div>
-      <div style={{position: 'absolute', left: 960 - 160, top: 380, opacity: stack, transform: `scale(${lerp(0.9, 1, stack)})`}}>
+      <div style={{position: 'absolute', left: 960 - 160, top: lerp(380, 60, lift), transform: `scale(${lerp(0.5, 1, m) * lerp(1, 0.62, lift)})`, opacity: m}}>
         <Cube size={320} glow={1} />
       </div>
-      <div style={{position: 'absolute', right: 260, top: 330, textAlign: 'right', opacity: stack, transform: `translateX(${(1 - stack) * 30}px)`}}>
-        {['Chat', 'Code', 'Build', 'Run', 'Inference'].map((w, i) => (
-          <div key={w} style={{fontFamily: WIDE, fontSize: 34, letterSpacing: '0.2em', color: i === 4 ? ICE : INK, textTransform: 'uppercase', lineHeight: 2, opacity: prog(f, 108 + i * 3, 10)}}>{w}</div>
-        ))}
+      <div style={{position: 'absolute', left: 0, right: 0, top: 400}}>
+        <Head text="Your AI" start={28} size={160} align="center" />
+      </div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 570}}>
+        <Head text="should be local." start={34} size={160} color={ICE} align="center" />
+      </div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 830, display: 'flex', justifyContent: 'center', opacity: prog(f, 58, 10)}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 14, padding: '16px 26px', border: `1px solid ${LINE}`, background: PANEL, fontFamily: MONO, fontSize: 28, color: INK}}>
+          <span style={{color: ICE}}>$</span>
+          {typed}
+          <span style={{width: 14, height: 30, background: ICE, opacity: Math.floor(f / 6) % 2 ? 1 : 0.2}} />
+        </div>
       </div>
     </AbsoluteFill>
   );
@@ -395,7 +364,7 @@ const Loop: React.FC = () => {
         const p = prog(f, ta, 8, expoOut) * (1 - prog(f, ta + 40, 10));
         if (p <= 0) return null;
         return (
-          <div key={j} style={{position: 'absolute', left: CX - R + 40, top: CY + 64, padding: '12px 16px', background: '#060A13', border: `1px solid ${ICE}`, fontFamily: MONO, fontSize: 15, color: INK, letterSpacing: '0.06em', opacity: p, transform: `translateY(${(1 - p) * 10}px)`, whiteSpace: 'nowrap'}}>
+          <div key={j} style={{position: 'absolute', left: CX - R + 40, top: CY + 112, padding: '12px 16px', background: '#060A13', border: `1px solid ${ICE}`, fontFamily: MONO, fontSize: 15, color: INK, letterSpacing: '0.06em', opacity: p, transform: `translateY(${(1 - p) * 10}px)`, whiteSpace: 'nowrap'}}>
             BURN · FINALIZED ✓ · EXPLORER ↗
           </div>
         );
@@ -459,22 +428,35 @@ const Burns: React.FC = () => {
   );
 };
 
-// ── 8. finale on the banner ────────────────────────────────
+// ── 8. finale ──────────────────────────────────────────────
 const Finale: React.FC = () => {
   const f = useCurrentFrame();
-  const z = prog(f, 0, 120, inOut);
-  const H = lerp(1080 * 1.12, 1080, z);
-  const sweep = prog(f, 30, 40, inOut);
+  const m = prog(f, 40, 22, expoOut);
   return (
-    <AbsoluteFill style={{background: '#DDE6F3'}}>
-      <Banner H={H} fx={1086} fy={300} sx={960} sy={lerp(450, 447, z)} />
-      {sweep > 0 && sweep < 1 && <div style={{position: 'absolute', top: -300, left: lerp(-400, 2200, sweep), width: 260, height: 1700, background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)', transform: 'rotate(18deg)'}} />}
-      <AbsoluteFill style={{background: 'linear-gradient(180deg, transparent 66%, rgba(5,8,15,0.88) 92%)'}} />
-      <div style={{position: 'absolute', left: 0, right: 0, top: 900, display: 'flex', justifyContent: 'center', gap: 18, opacity: prog(f, 50, 16), transform: `translateY(${(1 - prog(f, 50, 18, expoOut)) * 14}px)`}}>
-        <div style={{padding: '16px 28px', background: NAVY, border: `1px solid ${ICE}`, fontFamily: WIDE, fontSize: 30, letterSpacing: '0.12em', color: INK}}>$LLM</div>
-        <div style={{padding: '16px 32px', border: `1px solid ${INK}`, background: 'rgba(5,8,15,0.5)', fontFamily: WIDE, fontSize: 30, letterSpacing: '0.16em', color: INK}}>LOCALLM.FUN</div>
+    <AbsoluteFill>
+      <Frost />
+      <div style={{position: 'absolute', left: 0, right: 0, top: 140}}>
+        <Head text="Compute should come" start={4} size={112} align="center" />
       </div>
-      <Label style={{position: 'absolute', left: 0, right: 0, top: 1028, textAlign: 'center', fontSize: 11, color: MUTED, opacity: prog(f, 66, 14)}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 268}}>
+        <Head text="with the token." start={12} size={112} color={ICE} align="center" />
+      </div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 470, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 34, opacity: m, transform: `translateY(${(1 - m) * 24}px)`}}>
+        <Cube size={190} glow={1} />
+        <div style={{fontFamily: HEAD, fontWeight: 600, fontSize: 74, lineHeight: 0.98, letterSpacing: '-0.02em', color: INK}}>
+          Local Language
+          <br />
+          Model
+        </div>
+      </div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 750, display: 'flex', justifyContent: 'center', gap: 18, opacity: prog(f, 60, 14), transform: `translateY(${(1 - prog(f, 60, 16, expoOut)) * 14}px)`}}>
+        <div style={{padding: '16px 28px', background: NAVY, border: `1px solid ${ICE}`, fontFamily: HEAD, fontWeight: 600, fontSize: 40, color: INK}}>$LLM</div>
+        <div style={{padding: '16px 32px', border: `1px solid ${INK}`, fontFamily: MONO, fontSize: 36, letterSpacing: '0.08em', color: INK}}>LOCALLM.FUN</div>
+      </div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 880, textAlign: 'center', fontFamily: HEAD, fontSize: 30, color: MUTED, opacity: prog(f, 72, 14)}}>
+        Hold $LLM. Get credits. Run Local Language Model.
+      </div>
+      <Label style={{position: 'absolute', left: 0, right: 0, top: 1020, textAlign: 'center', fontSize: 12, color: DIM, opacity: prog(f, 84, 14)}}>
         Model in development · buyback policy planned · credits are service usage, not returns · not financial advice
       </Label>
     </AbsoluteFill>
@@ -483,14 +465,9 @@ const Finale: React.FC = () => {
 
 export const LlmFilm: React.FC<{withAudio?: boolean}> = ({withAudio = true}) => (
   <AbsoluteFill style={{background: BG}}>
-    <Sequence from={S.open.from} durationInFrames={S.open.dur} name="01 Banner pull-back">
+    <Sequence from={S.open.from} durationInFrames={S.open.dur} name="01 Your AI should be local">
       <Cut dur={S.open.dur}>
         <Open />
-      </Cut>
-    </Sequence>
-    <Sequence from={S.manifesto.from} durationInFrames={S.manifesto.dur} name="02 Manifesto">
-      <Cut dur={S.manifesto.dur}>
-        <Manifesto />
       </Cut>
     </Sequence>
     <Sequence from={S.infra.from} durationInFrames={S.infra.dur} name="03 Infrastructure">
@@ -518,7 +495,7 @@ export const LlmFilm: React.FC<{withAudio?: boolean}> = ({withAudio = true}) => 
         <Burns />
       </Cut>
     </Sequence>
-    <Sequence from={S.finale.from} durationInFrames={S.finale.dur} name="08 Banner finale">
+    <Sequence from={S.finale.from} durationInFrames={S.finale.dur} name="08 Compute should come with the token">
       <Cut dur={S.finale.dur} last>
         <Finale />
       </Cut>
