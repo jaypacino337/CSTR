@@ -1,0 +1,58 @@
+import '@fontsource-variable/archivo/standard.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/800.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '@fontsource/jetbrains-mono/700.css';
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/fraunces/opsz-italic.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/600.css';
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '@fontsource-variable/geist/index.css';
+import '@fontsource-variable/geist-mono/index.css';
+import '@fontsource/barlow-condensed/600.css';
+import '@fontsource/barlow-condensed/700.css';
+import '@fontsource/barlow-condensed/800.css';
+import '@fontsource/dm-sans/400.css';
+import '@fontsource/dm-sans/600.css';
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/600.css';
+import '@fontsource/space-grotesk/700.css';
+import '@fontsource/michroma/400.css';
+import {continueRender, delayRender} from 'remotion';
+
+if (typeof document !== 'undefined') {
+  const handle = delayRender('Loading fonts');
+  const faces = [
+    '900 100px "Archivo Variable"',
+    '400 20px Inter',
+    '600 20px Inter',
+    '800 20px Inter',
+    '500 20px "JetBrains Mono"',
+    '700 20px "JetBrains Mono"',
+    '600 40px "Fraunces Variable"',
+    'italic 600 40px "Fraunces Variable"',
+    '400 20px "IBM Plex Mono"',
+    '600 20px "IBM Plex Mono"',
+    '400 20px "IBM Plex Sans"',
+    '600 20px "IBM Plex Sans"',
+    '800 40px "Geist Variable"',
+    '500 20px "Geist Variable"',
+    '500 20px "Geist Mono Variable"',
+    '700 40px "Barlow Condensed"',
+    '800 40px "Barlow Condensed"',
+    '600 40px "Barlow Condensed"',
+    '400 20px "DM Sans"',
+    '600 20px "DM Sans"',
+    '700 40px "Space Grotesk"',
+    '500 20px "Space Grotesk"',
+    '400 40px "Michroma"',
+    '600 40px "Space Grotesk"',
+  ];
+  Promise.all(faces.map((f) => document.fonts.load(f)))
+    .then(() => document.fonts.ready)
+    .then(() => continueRender(handle))
+    .catch(() => continueRender(handle));
+}

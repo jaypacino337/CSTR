@@ -1,0 +1,13 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "duration": 780,
+  "scenes": {
+    "hook":   { "from": 0,   "dur": 156 },
+    "flow":   { "from": 144, "dur": 166 },
+    "set":    { "from": 298, "dur": 186 },
+    "mixer":  { "from": 472, "dur": 146 },
+    "finale": { "from": 606, "dur": 174 }
+  }
+}

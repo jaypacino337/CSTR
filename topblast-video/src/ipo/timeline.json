@@ -1,0 +1,13 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "duration": 930,
+  "scenes": {
+    "hook":    { "from": 0,   "dur": 160 },
+    "ways":    { "from": 150, "dur": 270 },
+    "terms":   { "from": 410, "dur": 230 },
+    "pumpios": { "from": 630, "dur": 140 },
+    "finale":  { "from": 760, "dur": 170 }
+  }
+}
