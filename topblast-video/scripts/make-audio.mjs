@@ -183,7 +183,7 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   const fl = svf();
   const fr = svf();
   const phases = chord.map(() => [(rnd() + 1) / 2, (rnd() + 1) / 2]);
-  const impactT = F((S.finale || S.lockup).from + (LLM ? 40 : SIA ? 4 : GFMS ? 4 : GFROG ? 22 : GFM ? 8 : ZSOLANA ? 94 : ZSOL ? 8 : IPO ? 24 : ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
+  const impactT = F((S.finale || S.lockup).from + (LLM ? 2 : SIA ? 4 : GFMS ? 4 : GFROG ? 22 : GFM ? 8 : ZSOLANA ? 94 : ZSOL ? 8 : IPO ? 24 : ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
   for (let i = 0; i < LEN; i++) {
     const t = i / SR;
     const notes = t >= impactT ? finalChord : chord;
@@ -208,43 +208,57 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
 }
 
 if (LLM) {
-// ─── $LLM: crisp, techy 120 bpm — keystrokes, fan spin-up, VRAM fill, credit ticks ───
-for (let fr = 6; fr < S.finale.from + 120; fr += 15) {
-  const n = Math.round((fr - 6) / 15);
-  kick(F(fr), n % 4 === 0 ? 0.55 : 0.38);
-  hat(F(fr + 7.5), 0.05, n % 2 ? 0.3 : -0.3);
+// ─── $LLM cinematic explainer: airy, confident 100 bpm; swells on the banner, clean UI ticks ───
+for (let fr = S.manifesto.from; fr < S.finale.from + 20; fr += 18) {
+  const n = Math.round((fr - S.manifesto.from) / 18);
+  kick(F(fr), n % 4 === 0 ? 0.42 : 0.26);
+  if (n % 2) hat(F(fr + 9), 0.035, n % 4 === 1 ? 0.3 : -0.3);
 }
-const keys = (t0, n, pan = 0, g = 0.03, rate = 1) => { for (let k = 0; k < n; k++) click(F(t0 + k * rate), g, 2800 + ((k * 53) % 7) * 180, pan); };
-impact(F(2), 0.55, 1.0);                                             // L tile
-ding(F(4), 0.05, 1320);
-whoosh(F(22), 0.6, 0.12, 3000, 700);                                 // tile lifts
-[26, 29, 32, 35, 38].forEach((o) => click(F(o), 0.12, 1900));       // YOUR AI SHOULD BE LOCAL
-impact(F(32), 0.45, 0.7);
-keys(58, 15, 0.3, 0.04, 1.1);                                        // $ llm --run local
-const H0 = S.hw.from;
-whoosh(F(H0 - 6), 0.5, 0.2, 500, 6000);
-[16, 22, 28, 34].forEach((o, k) => { click(F(H0 + o), 0.12, 1500 + k * 150, -0.4); whoosh(F(H0 + o), 1.2, 0.05, 200, 1400, -0.4); });   // GPUs slot in, fans spin up
-riser(F(H0 + 36), F(50), 0.12);                                      // VRAM fills
-ding(F(H0 + 88), 0.07, 1320, 0.4); ding(F(H0 + 90), 0.05, 1980, 0.4);   // 128GB
-click(F(H0 + 70), 0.12, 2200, 0.4);                                  // host card
-const C0 = S.credits.from;
-whoosh(F(C0 - 6), 0.5, 0.2, 500, 6000);
-[4, 12].forEach((o) => impact(F(C0 + o), 0.35, 0.6));
-[0, 1, 2, 3].forEach((k) => { click(F(C0 + 40 + k * 23), 0.14, 1800 + k * 200, (k - 1.5) * 0.4); ding(F(C0 + 41 + k * 23), 0.045, 880 * Math.pow(1.26, k), (k - 1.5) * 0.4); });
-keys(C0 + 63, 16, 0.5, 0.02, 1);                                     // credits arrive
+const keys = (t0, n, pan = 0, g = 0.025, rate = 1) => { for (let k = 0; k < n; k++) click(F(t0 + k * rate), g, 2800 + ((k * 53) % 7) * 180, pan); };
+impact(F(1), 0.5, 2.2);                                              // white flash → cube
+whoosh(F(0), F(150), 0.12, 300, 3000);                              // slow pull-back
+riser(F(110), F(58), 0.16);
+const M0 = S.manifesto.from;
+impact(F(M0 + 2), 0.55, 1.4);
+[0, 1, 2, 3, 4].forEach((k) => { click(F(M0 + 6 + k * 20), 0.12, 1500 + k * 150); ding(F(M0 + 7 + k * 20), 0.035, 660 * Math.pow(1.122, k * 2)); });
+whoosh(F(M0 + 102), 0.8, 0.12, 4000, 800);                          // stacks like the banner
+ding(F(M0 + 108), 0.05, 1320);
+const I0 = S.infra.from;
+whoosh(F(I0 - 6), 0.6, 0.16, 500, 6000);
+[22, 28, 34, 40].forEach((o, k) => { click(F(I0 + o), 0.1, 1500 + k * 150, -0.4); whoosh(F(I0 + o), 1.0, 0.04, 200, 1400, -0.4); });
+riser(F(I0 + 44), F(50), 0.1);
+ding(F(I0 + 94), 0.06, 1320, 0.4); ding(F(I0 + 96), 0.04, 1980, 0.4);
+const A0 = S.access.from;
+whoosh(F(A0 - 6), 0.6, 0.16, 500, 6000);
+[6, 14].forEach((o) => impact(F(A0 + o), 0.3, 0.6));
+[0, 1, 2, 3].forEach((k) => { click(F(A0 + 50 + k * 24), 0.12, 1700 + k * 200, (k - 1.5) * 0.4); ding(F(A0 + 51 + k * 24), 0.04, 880 * Math.pow(1.26, k), (k - 1.5) * 0.4); });
 const W0 = S.work.from;
-whoosh(F(W0 - 6), 0.5, 0.2, 500, 6000);
-[4, 10].forEach((o) => impact(F(W0 + o), 0.35, 0.6));
-keys(W0 + 24, 28, 0.3, 0.035, 1);                                    // prompt typed
-click(F(W0 + 52), 0.14, 1400, 0.3);                                  // send
-keys(W0 + 64, 60, 0.4, 0.014, 1.3);                                  // tokens stream
+whoosh(F(W0 - 6), 0.6, 0.16, 500, 6000);
+keys(W0 + 26, 28, 0.3, 0.03, 1);
+click(F(W0 + 54), 0.12, 1400, 0.3);
+keys(W0 + 66, 60, 0.4, 0.012, 1.3);
+const L0 = S.loop.from;
+whoosh(F(L0 - 6), 0.6, 0.16, 500, 6000);
+[6, 12].forEach((o) => impact(F(L0 + o), 0.3, 0.6));
+for (let q = 0; q < 10; q++) {                                        // loop nodes light as the pulse passes
+  const t = L0 + 40 + q * 22.5;
+  if (t > L0 + 250) break;
+  const node = q % 4;
+  click(F(t), 0.1, 1600 + node * 200, (node === 1 ? 0.5 : node === 3 ? -0.5 : 0));
+  if (node === 3) { impact(F(t), 0.35, 0.6); ding(F(t + 1), 0.06, 660); } else ding(F(t + 1), 0.035, 990 * Math.pow(1.26, node));
+}
+[120, 132, 144, 156].forEach((o, i) => click(F(L0 + o), 0.08, 2000 + i * 150, -0.4));   // priority list
+ding(F(L0 + 172), 0.05, 1320, -0.4);
+const B0 = S.burns.from;
+whoosh(F(B0 - 6), 0.6, 0.16, 500, 6000);
+[6, 12].forEach((o) => impact(F(B0 + o), 0.3, 0.6));
+[56, 76].forEach((o) => { whoosh(F(B0 + o), 1.3, 0.08, 6000, 1200, 0.2); ding(F(B0 + o + 2), 0.04, 660); });   // tokens burn
+click(F(B0 + 90), 0.1, 1800);
 const Z0 = S.finale.from;
-whoosh(F(Z0 - 6), 0.5, 0.2, 500, 6000);
-[2, 10].forEach((o) => impact(F(Z0 + o), 0.4, 0.6));
-riser(F(Z0 + 10), F(30), 0.16);
-impact(F(Z0 + 40), 0.9, 1.6);                                        // lockup
-ding(F(Z0 + 42), 0.07, 1320);
-ding(F(Z0 + 56), 0.07, 1980);
+riser(F(Z0 - 40), F(40), 0.22);
+impact(F(Z0 + 2), 0.9, 2.4);                                         // banner returns
+whoosh(F(Z0 + 30), 1.2, 0.08, 6000, 1200);                          // light sweep
+ding(F(Z0 + 50), 0.07, 1320); ding(F(Z0 + 52), 0.05, 1980);
 } else if (SIA) {
 // ─── SIA: dark, cinematic agency — slow pulse, typing, reticle locks, heavy hits ───
 for (let fr = 8; fr < S.finale.from + 120; fr += 21) {
