@@ -25,7 +25,8 @@
     "render:gfm": "node scripts/make-audio.mjs gfm && remotion render src/index.ts GfmHype out/gfm-hype.mp4",
     "render:gfm-frog": "node scripts/make-audio.mjs gfm-frog && remotion render src/index.ts GfmFrog out/gfm-frog.mp4",
     "render:gfms": "node scripts/make-audio.mjs gfms && remotion render src/index.ts GfmsFilm out/gofundmemes.mp4",
-    "render:sia": "node scripts/make-audio.mjs sia && remotion render src/index.ts SiaFilm out/sia.mp4"
+    "render:sia": "node scripts/make-audio.mjs sia && remotion render src/index.ts SiaFilm out/sia.mp4",
+    "render:llm": "node scripts/make-audio.mjs llm && remotion render src/index.ts LlmFilm out/llm.mp4"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
@@ -38,6 +39,7 @@
     "@fontsource/ibm-plex-sans": "^5.3.0",
     "@fontsource/inter": "^5.3.0",
     "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/space-grotesk": "^5.3.0",
     "@remotion/cli": "^4.0.527",
     "@remotion/google-fonts": "^4.0.527",
     "@types/react": "^18.3.31",

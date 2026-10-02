@@ -24,6 +24,8 @@ import {GfmsFilm} from './gfm/GfmsFilm';
 import gstl from './gfm/gfms-timeline.json';
 import {SiaFilm} from './sia/SiaFilm';
 import stl from './sia/timeline.json';
+import {LlmFilm} from './llm/LlmFilm';
+import ltl from './llm/timeline.json';
 import ictl from './ipo/custom-timeline.json';
 import igtl from './ipo/gallery-timeline.json';
 import istl from './ipo/slides-timeline.json';
@@ -95,6 +97,14 @@ export const Root: React.FC = () => (
     fps={stl.fps}
     width={stl.width}
     height={stl.height}
+  />
+  <Composition
+    id="LlmFilm"
+    component={LlmFilm}
+    durationInFrames={ltl.duration}
+    fps={ltl.fps}
+    width={ltl.width}
+    height={ltl.height}
   />
   <Composition
     id="IpoCustom"

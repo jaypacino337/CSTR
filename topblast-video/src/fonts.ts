@@ -17,6 +17,8 @@ import '@fontsource/barlow-condensed/700.css';
 import '@fontsource/barlow-condensed/800.css';
 import '@fontsource/dm-sans/400.css';
 import '@fontsource/dm-sans/600.css';
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/700.css';
 import {continueRender, delayRender} from 'remotion';
 
 if (typeof document !== 'undefined') {
@@ -42,6 +44,8 @@ if (typeof document !== 'undefined') {
     '600 40px "Barlow Condensed"',
     '400 20px "DM Sans"',
     '600 20px "DM Sans"',
+    '700 40px "Space Grotesk"',
+    '500 20px "Space Grotesk"',
   ];
   Promise.all(faces.map((f) => document.fonts.load(f)))
     .then(() => document.fonts.ready)
