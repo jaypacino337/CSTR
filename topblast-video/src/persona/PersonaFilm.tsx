@@ -268,7 +268,7 @@ const Fees: React.FC = () => {
         <Kicker f={f} at={2}>Fee split</Kicker>
       </div>
       <div style={{position: 'absolute', left: BX, top: 180}}>
-        <Head text="Of every $100 in fees…" start={4} size={92} />
+        <Head text="Every creator fee, split." start={4} size={92} />
       </div>
       <div style={{position: 'absolute', left: BX, top: 360, width: BWID, height: 84, borderRadius: 22, overflow: 'hidden', display: 'flex', background: INK3, border: `1px solid ${LINE}`}}>
         {SPLIT.map((s, k) => (
@@ -283,7 +283,7 @@ const Fees: React.FC = () => {
         const left = k === 2 ? BX + BWID - w : k === 1 ? BX + 560 : x;
         return (
           <div key={k} style={{position: 'absolute', left, top: 480, width: w, opacity: p, transform: `translateY(${(1 - p) * 20}px)`}}>
-            <div style={{fontFamily: DISPLAY, fontWeight: 800, fontSize: 110, lineHeight: 1, color: s.tc, letterSpacing: '-0.03em', textAlign: k === 2 ? 'right' : 'left'}}>${Math.round(s.v * prog(f, 36 + k * 14, 26, expoOut))}</div>
+            <div style={{fontFamily: DISPLAY, fontWeight: 800, fontSize: 110, lineHeight: 1, color: s.tc, letterSpacing: '-0.03em', textAlign: k === 2 ? 'right' : 'left'}}>{Math.round(s.v * prog(f, 36 + k * 14, 26, expoOut))}%</div>
             <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 32, color: CREAM, marginTop: 12, textAlign: k === 2 ? 'right' : 'left'}}>{s.t}</div>
             <div style={{fontFamily: SANS, fontSize: 24, color: DIM, marginTop: 6, textAlign: k === 2 ? 'right' : 'left'}}>{s.n}</div>
           </div>
