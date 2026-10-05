@@ -206,39 +206,6 @@ const Hook: React.FC = () => {
   );
 };
 
-// ── 2. meet Sona ───────────────────────────────────────────
-const LINES = ['Hi. I’m Sona.', 'I live in every coin launched here.', 'I lock your fee split on-chain,', 'then give your coin a face and a voice.'];
-const MeetSona: React.FC = () => {
-  const f = useCurrentFrame();
-  const starts = [14, 44, 90, 128];
-  const typed = (k: number) => LINES[k].slice(0, Math.max(0, Math.floor((f - starts[k]) * 1.4)));
-  const talking = LINES.some((l, k) => f >= starts[k] && f < starts[k] + l.length / 1.4);
-  return (
-    <AbsoluteFill>
-      <Ground f={f + 150} />
-      <div style={{position: 'absolute', left: 150, top: 200, opacity: prog(f, 0, 14), transform: `translateY(${(1 - prog(f, 0, 18, expoOut)) * 30}px)`}}>
-        <Sona size={560} f={f} id="am" talk={talking} />
-      </div>
-      <div style={{position: 'absolute', left: 820, top: 120}}>
-        <Kicker f={f} at={4}>Meet Sona</Kicker>
-      </div>
-      <Card style={{position: 'absolute', left: 820, top: 220, width: 960, padding: '44px 52px', boxSizing: 'border-box', borderRadius: '32px 32px 32px 8px', opacity: prog(f, 8, 14)}}>
-        {LINES.map((l, k) => (
-          <div key={k} style={{fontFamily: k === 0 ? DISPLAY : SANS, fontWeight: k === 0 ? 800 : 500, fontSize: k === 0 ? 64 : 42, lineHeight: 1.35, color: k === 0 ? CREAM : MUTE, marginTop: k === 0 ? 0 : k === 2 ? 26 : 6, minHeight: k === 0 ? 86 : 56}}>
-            {k === 0 ? <span style={{backgroundImage: GRAD, WebkitBackgroundClip: 'text', color: 'transparent'}}>{typed(k)}</span> : typed(k)}
-            {f >= starts[k] && typed(k).length < l.length && <span style={{display: 'inline-block', width: 4, height: k === 0 ? 56 : 38, marginLeft: 4, background: FLARE, verticalAlign: 'middle'}} />}
-          </div>
-        ))}
-      </Card>
-      <div style={{position: 'absolute', left: 820, top: 760, display: 'flex', gap: 14}}>
-        {['🔒 Fee split locked on-chain', '📐 Spending policy', '⏰ Auto-posts 2× a day'].map((t, k) => (
-          <div key={t} style={{padding: '14px 22px', borderRadius: 999, background: INK3, border: `1px solid ${LINE}`, fontFamily: SANS, fontWeight: 600, fontSize: 24, color: CREAM, opacity: prog(f, 150 + k * 6, 12), transform: `translateY(${(1 - prog(f, 150 + k * 6, 14, expoOut)) * 12}px)`}}>{t}</div>
-        ))}
-      </div>
-    </AbsoluteFill>
-  );
-};
-
 // ── 3. five steps ──────────────────────────────────────────
 const STEPS = [
   {t: 'Draft', d: 'Name the coin, pick platforms, choose the split.', s: 'Draft'},
@@ -527,11 +494,6 @@ export const PersonaFilm: React.FC<{withAudio?: boolean}> = ({withAudio = true})
     <Sequence from={S.hook.from} durationInFrames={S.hook.dur} name="01 Every token gets a persona">
       <Cut dur={S.hook.dur}>
         <Hook />
-      </Cut>
-    </Sequence>
-    <Sequence from={S.sona.from} durationInFrames={S.sona.dur} name="02 Meet Sona">
-      <Cut dur={S.sona.dur}>
-        <MeetSona />
       </Cut>
     </Sequence>
     <Sequence from={S.steps.from} durationInFrames={S.steps.dur} name="03 Five steps">

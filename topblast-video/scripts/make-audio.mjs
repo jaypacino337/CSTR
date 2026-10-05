@@ -222,10 +222,6 @@ riser(F(0), F(24), 0.12);
 impact(F(22), 0.55, 0.9);                                             // Every token
 [20, 23, 26, 28, 31, 34].forEach((o) => click(F(o), 0.1, 1900));
 ding(F(30), 0.05, 1320);                                             // persona
-const A0 = S.sona.from;
-whoosh(F(A0 - 6), 0.5, 0.18, 500, 6000);
-[[14, 6], [44, 12], [90, 13], [128, 15]].forEach(([o, n]) => blips(A0 + o, n, -0.3));   // Aura talks
-[150, 156, 162].forEach((o) => click(F(A0 + o), 0.12, 2000, 0.4));
 const T0 = S.steps.from;
 whoosh(F(T0 - 6), 0.5, 0.18, 500, 6000);
 [0, 1, 2, 3, 4].forEach((k) => { click(F(T0 + 30 + k * 30), 0.12, 1600 + k * 180, -0.3); ding(F(T0 + 31 + k * 30), 0.045, 880 * Math.pow(1.122, k * 2), -0.3); });
