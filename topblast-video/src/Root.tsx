@@ -26,6 +26,8 @@ import {SiaFilm} from './sia/SiaFilm';
 import stl from './sia/timeline.json';
 import {LlmFilm} from './llm/LlmFilm';
 import ltl from './llm/timeline.json';
+import {PersonaFilm} from './persona/PersonaFilm';
+import perstl from './persona/timeline.json';
 import ictl from './ipo/custom-timeline.json';
 import igtl from './ipo/gallery-timeline.json';
 import istl from './ipo/slides-timeline.json';
@@ -105,6 +107,14 @@ export const Root: React.FC = () => (
     fps={ltl.fps}
     width={ltl.width}
     height={ltl.height}
+  />
+  <Composition
+    id="PersonaFilm"
+    component={PersonaFilm}
+    durationInFrames={perstl.duration}
+    fps={perstl.fps}
+    width={perstl.width}
+    height={perstl.height}
   />
   <Composition
     id="IpoCustom"

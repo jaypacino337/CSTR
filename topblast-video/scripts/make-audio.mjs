@@ -24,13 +24,14 @@ const GFROG = process.argv[2] === 'gfm-frog';
 const GFMS = process.argv[2] === 'gfms';
 const SIA = process.argv[2] === 'sia';
 const LLM = process.argv[2] === 'llm';
+const PERSONA = process.argv[2] === 'persona';
 const PREMIUM = process.argv[2] === 'topblast-premium' || V2 || ODTEX || IPO;
 const CALM = process.argv[2] === 'arena-clean' || process.argv[2] === 'topblast-clean' || PREMIUM;
 const PROJECT = process.argv[2] === 'arena' || process.argv[2] === 'arena-clean' ? 'arena' : 'topblast';
 const K = CALM
   ? {impact: 0.35, whoosh: 0.4, riser: 0.35, rumble: 0, crowd: 0.35, clank: 0.35, kick: 0.6, sweep: 0.4}
   : {impact: 1, whoosh: 1, riser: 1, rumble: 1, crowd: 1, clank: 1, kick: 1, sweep: 1};
-const tlPath = LLM ? '../src/llm/timeline.json' : SIA ? '../src/sia/timeline.json' : GFMS ? '../src/gfm/gfms-timeline.json' : GFROG ? '../src/gfm/frog-timeline.json' : GFM ? '../src/gfm/timeline.json' : ZSOLANA ? '../src/zsol/zsolana-timeline.json' : ZSOL ? '../src/zsol/timeline.json' : IPOC ? '../src/ipo/custom-timeline.json' : IPOG ? '../src/ipo/gallery-timeline.json' : IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
+const tlPath = PERSONA ? '../src/persona/timeline.json' : LLM ? '../src/llm/timeline.json' : SIA ? '../src/sia/timeline.json' : GFMS ? '../src/gfm/gfms-timeline.json' : GFROG ? '../src/gfm/frog-timeline.json' : GFM ? '../src/gfm/timeline.json' : ZSOLANA ? '../src/zsol/zsolana-timeline.json' : ZSOL ? '../src/zsol/timeline.json' : IPOC ? '../src/ipo/custom-timeline.json' : IPOG ? '../src/ipo/gallery-timeline.json' : IPOS ? '../src/ipo/slides-timeline.json' : IPOH ? '../src/ipo/hype-timeline.json' : IPO ? '../src/ipo/timeline.json' : ODTEX ? '../src/odte/explainer/timeline.json' : ODTE ? '../src/odte/timeline.json' : V2 ? '../src/v2/timeline.json' : PREMIUM ? '../src/premium/timeline.json' : PROJECT === 'arena' ? '../src/arena/timeline.json' : '../src/timeline.json';
 const tl = JSON.parse(fs.readFileSync(path.join(here, tlPath), 'utf8'));
 const SR = 44100;
 const FPS = tl.fps;
@@ -183,7 +184,7 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   const fl = svf();
   const fr = svf();
   const phases = chord.map(() => [(rnd() + 1) / 2, (rnd() + 1) / 2]);
-  const impactT = F((S.finale || S.lockup).from + (LLM ? 2 : SIA ? 4 : GFMS ? 4 : GFROG ? 22 : GFM ? 8 : ZSOLANA ? 94 : ZSOL ? 8 : IPO ? 24 : ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
+  const impactT = F((S.finale || S.lockup).from + (PERSONA ? 4 : LLM ? 2 : SIA ? 4 : GFMS ? 4 : GFROG ? 22 : GFM ? 8 : ZSOLANA ? 94 : ZSOL ? 8 : IPO ? 24 : ODTEX ? 10 : V2 ? 120 : PREMIUM ? 64 : 40));
   for (let i = 0; i < LEN; i++) {
     const t = i / SR;
     const notes = t >= impactT ? finalChord : chord;
@@ -207,7 +208,51 @@ const finalChord = [55, 82.41, 110, 138.59, 164.81, 220, 329.63]; // lifts to A 
   }
 }
 
-if (LLM) {
+if (PERSONA) {
+// ─── Persona: playful, glossy 120 bpm — Aura's voice blips, chimes per step, a heavy lock ───
+for (let fr = 8; fr < S.finale.from + 140; fr += 15) {
+  const n = Math.round((fr - 8) / 15);
+  kick(F(fr), n % 4 === 0 ? 0.5 : 0.32);
+  hat(F(fr + 7.5), 0.045, n % 2 ? 0.3 : -0.3);
+  if (n % 2 === 1) click(F(fr), 0.07, 1500);
+}
+const blips = (t0, n, pan = 0) => { for (let k = 0; k < n; k++) ding(F(t0 + k * 2.2), 0.018, [784, 880, 988, 1175, 1047][k % 5], pan); };
+ding(F(2), 0.05, 1568); ding(F(5), 0.04, 2093);                       // spark
+riser(F(0), F(24), 0.12);
+impact(F(22), 0.55, 0.9);                                             // Every token
+[20, 23, 26, 28, 31, 34].forEach((o) => click(F(o), 0.1, 1900));
+ding(F(30), 0.05, 1320);                                             // persona
+const A0 = S.aura.from;
+whoosh(F(A0 - 6), 0.5, 0.18, 500, 6000);
+[[14, 6], [44, 12], [90, 13], [128, 15]].forEach(([o, n]) => blips(A0 + o, n, -0.3));   // Aura talks
+[150, 156, 162].forEach((o) => click(F(A0 + o), 0.12, 2000, 0.4));
+const T0 = S.steps.from;
+whoosh(F(T0 - 6), 0.5, 0.18, 500, 6000);
+[0, 1, 2, 3, 4].forEach((k) => { click(F(T0 + 30 + k * 30), 0.12, 1600 + k * 180, -0.3); ding(F(T0 + 31 + k * 30), 0.045, 880 * Math.pow(1.122, k * 2), -0.3); });
+impact(F(T0 + 90), 0.3, 0.5); [0, 1, 2].forEach((k) => ding(F(T0 + 92 + k * 2), 0.03, 1568 + k * 400, 0.4));   // face appears
+click(F(T0 + 158), 0.16, 2400, 0.4); ding(F(T0 + 160), 0.06, 1760, 0.4);   // posting on
+const E0 = S.fees.from;
+whoosh(F(E0 - 6), 0.5, 0.18, 500, 6000);
+[24, 38, 52].forEach((o, k) => { whoosh(F(E0 + o), 0.7, 0.07, 600, 3000, (k - 1) * 0.5); click(F(E0 + o + 10), 0.1, 1700 + k * 250, (k - 1) * 0.5); });
+impact(F(E0 + 120), 0.55, 0.8); clank(F(E0 + 121), 0.2);            // locked
+ding(F(E0 + 140), 0.06, 1320); ding(F(E0 + 142), 0.04, 1980);
+const G0 = S.guard.from;
+whoosh(F(G0 - 6), 0.5, 0.18, 500, 6000);
+[0, 1, 2, 3, 4].forEach((k) => click(F(G0 + 20 + k * 14), 0.07, 2100 + k * 120, 0.4));   // agent log
+ding(F(G0 + 70), 0.04, 988, 0.4);                                    // approval request
+click(F(G0 + 112), 0.16, 2400, 0.4); ding(F(G0 + 113), 0.06, 1568, 0.4);   // signed
+click(F(G0 + 150), 0.2, 700, 0.4); whoosh(F(G0 + 150), 0.6, 0.06, 4000, 600, 0.4);   // freeze
+const C0 = S.scenes.from;
+whoosh(F(C0 - 6), 0.5, 0.18, 500, 6000);
+whoosh(F(C0 + 20), 2.0, 0.05, 2000, 5000, -0.5);                    // chips marquee
+[36, 48, 60].forEach((o, k) => { click(F(C0 + o), 0.12, 1800 + k * 200, (k - 1) * 0.5); ding(F(C0 + o + 1), 0.04, 1320 * Math.pow(1.122, k * 2), (k - 1) * 0.5); });
+const Z0 = S.finale.from;
+riser(F(Z0 - 30), F(30), 0.2);
+impact(F(Z0 + 4), 0.9, 1.6);                                         // Aura
+ding(F(Z0 + 8), 0.05, 1568);
+click(F(Z0 + 20), 0.14, 2200);                                       // persona
+ding(F(Z0 + 36), 0.06, 1320); ding(F(Z0 + 50), 0.07, 1760); ding(F(Z0 + 52), 0.05, 2637);
+} else if (LLM) {
 // ─── $LLM explainer: confident 100 bpm, clean UI ticks, chimes on every chapter beat ───
 for (let fr = 6; fr < S.finale.from + 20; fr += 18) {
   const n = Math.round((fr - 6) / 18);
@@ -1117,6 +1162,6 @@ for (let i = 0; i < LEN; i++) {
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, L[i] * norm)) * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, R[i] * norm)) * 32767), 46 + i * 4);
 }
-const outPath = path.join(here, LLM ? '../public/llm-score.wav' : SIA ? '../public/sia-score.wav' : GFMS ? '../public/gfms-score.wav' : GFROG ? '../public/gfm-frog-score.wav' : GFM ? '../public/gfm-score.wav' : ZSOLANA ? '../public/zsolana-score.wav' : ZSOL ? '../public/zsol-score.wav' : IPOC ? '../public/ipo-custom-score.wav' : IPOG ? '../public/ipo-gallery-score.wav' : IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
+const outPath = path.join(here, PERSONA ? '../public/persona-score.wav' : LLM ? '../public/llm-score.wav' : SIA ? '../public/sia-score.wav' : GFMS ? '../public/gfms-score.wav' : GFROG ? '../public/gfm-frog-score.wav' : GFM ? '../public/gfm-score.wav' : ZSOLANA ? '../public/zsolana-score.wav' : ZSOL ? '../public/zsol-score.wav' : IPOC ? '../public/ipo-custom-score.wav' : IPOG ? '../public/ipo-gallery-score.wav' : IPOS ? '../public/ipo-slides-score.wav' : IPOH ? '../public/ipo-hype-score.wav' : IPO ? '../public/ipo-score.wav' : ODTEX ? '../public/odte-explainer-score.wav' : ODTE ? '../public/odte-score.wav' : V2 ? '../public/topblast-v2-score.wav' : PREMIUM ? '../public/topblast-premium-score.wav' : CALM ? `../public/${PROJECT === 'arena' ? 'stonkarena' : 'topblast'}-clean-score.wav` : PROJECT === 'arena' ? '../public/stonkarena-score.wav' : '../public/topblast-score.wav');
 fs.writeFileSync(outPath, buf);
 console.log(`wrote ${outPath} (${(LEN / SR).toFixed(2)}s, peak ${peak.toFixed(3)})`);
