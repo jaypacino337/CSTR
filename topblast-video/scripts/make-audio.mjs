@@ -216,12 +216,21 @@ for (let fr = 8; fr < S.finale.from + 140; fr += 15) {
   hat(F(fr + 7.5), 0.045, n % 2 ? 0.3 : -0.3);
   if (n % 2 === 1) click(F(fr), 0.07, 1500);
 }
+const I0 = S.intro.from;
+impact(F(I0 + 4), 0.5, 0.9);
+[4, 7, 10].forEach((o) => click(F(I0 + o), 0.1, 1900));
+[22, 26, 30, 34].forEach((o) => click(F(I0 + o), 0.08, 2200));
+whoosh(F(I0 + 20), 0.8, 0.14, 300, 5000, 0.5);                      // phone rises
+[48, 53, 58, 63].forEach((o, n) => click(F(I0 + o), 0.08, 1800 + n * 150, -0.3));
+[62, 92].forEach((o) => { click(F(I0 + o), 0.12, 2400, 0.5); ding(F(I0 + o + 1), 0.05, 1568, 0.5); ding(F(I0 + o + 3), 0.035, 2093, 0.5); });   // auto-posted
+const H0 = S.hook.from;
+whoosh(F(H0 - 6), 0.5, 0.18, 500, 6000);
 const blips = (t0, n, pan = 0) => { for (let k = 0; k < n; k++) ding(F(t0 + k * 2.2), 0.018, [784, 880, 988, 1175, 1047][k % 5], pan); };
-ding(F(2), 0.05, 1568); ding(F(5), 0.04, 2093);                       // spark
-riser(F(0), F(24), 0.12);
-impact(F(22), 0.55, 0.9);                                             // Every token
-[20, 23, 26, 28, 31, 34].forEach((o) => click(F(o), 0.1, 1900));
-ding(F(30), 0.05, 1320);                                             // persona
+ding(F(H0 + 2), 0.05, 1568); ding(F(H0 + 5), 0.04, 2093);                       // spark
+riser(F(H0 + 0), F(24), 0.12);
+impact(F(H0 + 22), 0.55, 0.9);                                             // Every token
+[20, 23, 26, 28, 31, 34].forEach((o) => click(F(H0 + o), 0.1, 1900));
+ding(F(H0 + 30), 0.05, 1320);                                             // persona
 const T0 = S.steps.from;
 whoosh(F(T0 - 6), 0.5, 0.18, 500, 6000);
 [0, 1, 2, 3, 4].forEach((k) => { click(F(T0 + 30 + k * 30), 0.12, 1600 + k * 180, -0.3); ding(F(T0 + 31 + k * 30), 0.045, 880 * Math.pow(1.122, k * 2), -0.3); });

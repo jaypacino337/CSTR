@@ -178,6 +178,64 @@ const Influencer: React.FC<{name: string; w: number; h: number; f?: number; id: 
   );
 };
 
+// ── 0. launch on Persona ───────────────────────────────────
+const FEED = [
+  {t: '9:00 AM', p: 'X', c: '3am diner. the neon sign flickers in morse code and I am 80% sure it’s flirting with me.'},
+  {t: '6:00 PM', p: 'TikTok', c: 'rating every booth on the strip. booth 4 has lore.'},
+];
+const LaunchIntro: React.FC = () => {
+  const f = useCurrentFrame();
+  const phone = prog(f, 20, 22, expoOut);
+  return (
+    <AbsoluteFill>
+      <Ground f={f + 40} />
+      <div style={{position: 'absolute', left: 150, top: 200}}>
+        <Kicker f={f} at={2}>personapump.fun</Kicker>
+      </div>
+      <div style={{position: 'absolute', left: 150, top: 280}}>
+        <Head text="Launch on Persona." start={4} size={88} />
+      </div>
+      <div style={{position: 'absolute', left: 150, top: 420}}>
+        <Head text="Get an AI influencer" start={22} size={68} grad />
+      </div>
+      <div style={{position: 'absolute', left: 150, top: 510}}>
+        <Head text="that auto-posts for you." start={30} size={68} grad />
+      </div>
+      <div style={{position: 'absolute', left: 150, top: 690, display: 'flex', gap: 14}}>
+        {['X', 'TikTok', 'Instagram', '⏰ 2× a day'].map((t, k) => (
+          <div key={t} style={{padding: '12px 22px', borderRadius: 999, background: k === 3 ? 'rgba(76,242,194,0.12)' : INK3, border: `1px solid ${k === 3 ? MINT : LINE}`, fontFamily: SANS, fontWeight: 600, fontSize: 26, color: k === 3 ? MINT : CREAM, opacity: prog(f, 48 + k * 5, 12), transform: `translateY(${(1 - prog(f, 48 + k * 5, 14, expoOut)) * 12}px)`}}>{t}</div>
+        ))}
+      </div>
+      {/* phone */}
+      <div style={{position: 'absolute', left: 1330, top: 100, width: 470, height: 880, borderRadius: 56, background: '#05030A', border: `2px solid ${LINE}`, boxShadow: '0 60px 140px -40px rgba(139,61,255,0.6)', padding: 18, boxSizing: 'border-box', opacity: phone, transform: `translateY(${(1 - phone) * 80}px) rotate(${(1 - phone) * 4}deg)`}}>
+        <div style={{width: '100%', height: '100%', borderRadius: 40, overflow: 'hidden', background: INK2, position: 'relative'}}>
+          <Influencer name="Marlo" w={434} h={420} f={f} id="ph" radius={0} />
+          <div style={{position: 'absolute', left: 0, right: 0, top: 300, padding: '40px 24px 14px', background: 'linear-gradient(180deg, transparent, rgba(18,11,31,1))'}}>
+            <div style={{display: 'flex', alignItems: 'baseline', gap: 10}}>
+              <div style={{fontFamily: DISPLAY, fontWeight: 800, fontSize: 38, color: CREAM}}>Marlo</div>
+              <div style={{fontFamily: MONO, fontSize: 20, color: FLARE}}>$MARLO</div>
+            </div>
+            <div style={{fontFamily: MONO, fontSize: 14, letterSpacing: '0.1em', color: MINT, marginTop: 4}}>● AI INFLUENCER · AUTO-POSTING</div>
+          </div>
+          {FEED.map((p, k) => {
+            const at = 62 + k * 30;
+            const pr = prog(f, at, 14, expoOut);
+            return (
+              <div key={k} style={{position: 'absolute', left: 16, right: 16, top: 470 + k * 176, padding: '16px 18px', borderRadius: 20, background: INK3, border: `1px solid ${LINE}`, opacity: pr, transform: `translateY(${(1 - pr) * 30}px)`}}>
+                <div style={{display: 'flex', justifyContent: 'space-between', fontFamily: MONO, fontSize: 14, letterSpacing: '0.08em'}}>
+                  <span style={{color: MINT}}>AUTO-POSTED ✓</span>
+                  <span style={{color: DIM}}>{p.p.toUpperCase()} · {p.t}</span>
+                </div>
+                <div style={{fontFamily: SANS, fontSize: 21, lineHeight: 1.4, color: CREAM, marginTop: 10}}>{p.c}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 // ── 1. hook ────────────────────────────────────────────────
 const Hook: React.FC = () => {
   const f = useCurrentFrame();
@@ -491,6 +549,11 @@ const Finale: React.FC = () => {
 
 export const PersonaFilm: React.FC<{withAudio?: boolean}> = ({withAudio = true}) => (
   <AbsoluteFill style={{background: INK}}>
+    <Sequence from={S.intro.from} durationInFrames={S.intro.dur} name="00 Launch on Persona">
+      <Cut dur={S.intro.dur}>
+        <LaunchIntro />
+      </Cut>
+    </Sequence>
     <Sequence from={S.hook.from} durationInFrames={S.hook.dur} name="01 Every token gets a persona">
       <Cut dur={S.hook.dur}>
         <Hook />
