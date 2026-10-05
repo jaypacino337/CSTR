@@ -241,7 +241,7 @@ whoosh(F(G0 - 6), 0.5, 0.18, 500, 6000);
 [0, 1, 2, 3, 4].forEach((k) => click(F(G0 + 20 + k * 14), 0.07, 2100 + k * 120, 0.4));   // agent log
 ding(F(G0 + 70), 0.04, 988, 0.4);                                    // approval request
 click(F(G0 + 112), 0.16, 2400, 0.4); ding(F(G0 + 113), 0.06, 1568, 0.4);   // signed
-click(F(G0 + 150), 0.2, 700, 0.4); whoosh(F(G0 + 150), 0.6, 0.06, 4000, 600, 0.4);   // freeze
+[140, 158].forEach((o) => { click(F(G0 + o), 0.12, 2200, 0.4); ding(F(G0 + o + 1), 0.05, 1568, 0.4); });   // AM / PM posts
 const C0 = S.scenes.from;
 whoosh(F(C0 - 6), 0.5, 0.18, 500, 6000);
 whoosh(F(C0 + 20), 2.0, 0.05, 2000, 5000, -0.5);                    // chips marquee

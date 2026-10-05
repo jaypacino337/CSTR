@@ -110,9 +110,73 @@ const Cut: React.FC<{dur: number; last?: boolean; children: React.ReactNode}> = 
   return <AbsoluteFill style={{opacity: Math.min(1, i * 1.3) * (1 - o), transform: `scale(${lerp(1.03, 1, i) * lerp(1, 0.97, o)})`, filter: i < 1 || o > 0 ? `blur(${(1 - i) * 8 + o * 8}px)` : undefined}}>{children}</AbsoluteFill>;
 };
 
-const Avatar: React.FC<{name: string; a: string; b: string; size: number}> = ({name, a, b, size}) => (
-  <div style={{width: size, height: size, borderRadius: size / 2, background: `linear-gradient(140deg, ${a}, ${b})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: DISPLAY, fontWeight: 800, fontSize: size * 0.42, color: '#fff', boxShadow: `0 0 0 3px ${INK}, 0 0 0 5px ${LINE}`}}>{name[0]}</div>
-);
+// a fictional AI influencer portrait (illustrated), used for the sample coins
+type Look = {skin: string; hair: string; jacket: string; bg1: string; bg2: string; shades?: boolean; sign?: string};
+const LOOKS: Record<string, Look> = {
+  Marlo: {skin: '#E2AE88', hair: '#1E1428', jacket: '#3B1F6E', bg1: '#2A0F4F', bg2: '#8B3DFF', shades: true, sign: 'OPEN 24H'},
+  Juno: {skin: '#B9805C', hair: '#F4C15A', jacket: '#0F5C63', bg1: '#123A54', bg2: '#25F4EE'},
+  Bisou: {skin: '#F1C7A6', hair: '#7A2E3A', jacket: '#B03A72', bg1: '#4A1030', bg2: '#FF4F9A'},
+};
+const Influencer: React.FC<{name: string; w: number; h: number; f?: number; id: string; radius?: number}> = ({name, w, h, f = 0, id, radius = 18}) => {
+  const L = LOOKS[name];
+  const bob = Math.sin(f / 18) * 2;
+  const blink = f % 110 > 104 ? 0.15 : 1;
+  return (
+    <svg width={w} height={h} viewBox={w / h > 1.3 ? '-130 50 660 366' : '0 0 400 400'} preserveAspectRatio="xMidYMid slice" style={{borderRadius: radius, display: 'block'}}>
+      <defs>
+        <radialGradient id={`${id}bg`} cx=".7" cy=".25" r=".95"><stop offset="0" stopColor={L.bg2} stopOpacity=".85" /><stop offset="1" stopColor={L.bg1} /></radialGradient>
+        <linearGradient id={`${id}lens`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#FF4FB8" /><stop offset="1" stopColor="#8B3DFF" /></linearGradient>
+        <linearGradient id={`${id}sk`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={L.skin} /><stop offset="1" stopColor={L.skin} stopOpacity=".88" /></linearGradient>
+        <filter id={`${id}glow`}><feGaussianBlur stdDeviation="4" /></filter>
+      </defs>
+      <rect x="-200" y="0" width="800" height="420" fill={`url(#${id}bg)`} />
+      {L.sign && (
+        <g opacity=".9">
+          <text x="-96" y="120" fontFamily="Unbounded Variable, sans-serif" fontWeight="800" fontSize="30" fill="#FF4FB8" filter={`url(#${id}glow)`}>{L.sign}</text>
+          <text x="-96" y="120" fontFamily="Unbounded Variable, sans-serif" fontWeight="800" fontSize="30" fill="#FFD1F4" opacity={0.75 + 0.25 * Math.sin(f / 3)}>{L.sign}</text>
+        </g>
+      )}
+      <circle cx="330" cy="70" r="40" fill="#fff" opacity=".06" />
+      <g transform={`translate(0 ${bob})`}>
+        {/* shoulders */}
+        <path d="M54 410 C62 322 126 292 200 292 C274 292 338 322 346 410 Z" fill={L.jacket} />
+        <path d="M168 292 L200 340 L232 292 Z" fill="#000" opacity=".25" />
+        <rect x="178" y="248" width="44" height="54" rx="14" fill={`url(#${id}sk)`} />
+        {/* head */}
+        <ellipse cx="128" cy="196" rx="13" ry="20" fill={L.skin} />
+        <ellipse cx="272" cy="196" rx="13" ry="20" fill={L.skin} />
+        <ellipse cx="200" cy="186" rx="72" ry="86" fill={`url(#${id}sk)`} />
+        {/* hair */}
+        <path d="M126 176 C118 104 162 82 200 82 C246 82 286 104 276 176 C262 140 238 124 206 126 C176 128 146 138 126 176 Z" fill={L.hair} />
+        <path d="M150 118 C170 96 230 92 258 118" stroke="#fff" strokeOpacity=".12" strokeWidth="6" fill="none" strokeLinecap="round" />
+        {/* eyes / shades */}
+        {L.shades ? (
+          <g>
+            <rect x="140" y="170" width="54" height="34" rx="12" fill={`url(#${id}lens)`} />
+            <rect x="206" y="170" width="54" height="34" rx="12" fill={`url(#${id}lens)`} />
+            <rect x="192" y="182" width="16" height="5" rx="2" fill="#1E1428" />
+            <path d="M148 178 L170 178" stroke="#fff" strokeOpacity=".55" strokeWidth="4" strokeLinecap="round" />
+            <path d="M214 178 L236 178" stroke="#fff" strokeOpacity=".55" strokeWidth="4" strokeLinecap="round" />
+          </g>
+        ) : (
+          <g transform={`translate(0 186) scale(1 ${blink}) translate(0 -186)`}>
+            <ellipse cx="172" cy="186" rx="9" ry="11" fill="#1E1428" />
+            <ellipse cx="228" cy="186" rx="9" ry="11" fill="#1E1428" />
+            <circle cx="175" cy="182" r="3" fill="#fff" />
+            <circle cx="231" cy="182" r="3" fill="#fff" />
+            <path d="M156 164 Q172 156 186 164" stroke={L.hair} strokeWidth="6" fill="none" strokeLinecap="round" />
+            <path d="M214 164 Q228 156 244 164" stroke={L.hair} strokeWidth="6" fill="none" strokeLinecap="round" />
+          </g>
+        )}
+        <path d="M196 200 Q200 222 194 228" stroke="#000" strokeOpacity=".18" strokeWidth="4" fill="none" strokeLinecap="round" />
+        <path d="M176 238 Q200 256 226 236" stroke="#5A2230" strokeWidth="6" fill="none" strokeLinecap="round" />
+        <ellipse cx="160" cy="224" rx="12" ry="7" fill="#FF8AE0" opacity=".35" />
+        <ellipse cx="240" cy="224" rx="12" ry="7" fill="#FF8AE0" opacity=".35" />
+        <circle cx="128" cy="218" r="5" fill="#FFD166" />
+      </g>
+    </svg>
+  );
+};
 
 // ── 1. hook ────────────────────────────────────────────────
 const Hook: React.FC = () => {
@@ -167,7 +231,7 @@ const MeetSona: React.FC = () => {
         ))}
       </Card>
       <div style={{position: 'absolute', left: 820, top: 760, display: 'flex', gap: 14}}>
-        {['🔒 Fee split locked on-chain', '📐 Spending policy', '▶️ Posting is opt-in'].map((t, k) => (
+        {['🔒 Fee split locked on-chain', '📐 Spending policy', '⏰ Auto-posts 2× a day'].map((t, k) => (
           <div key={t} style={{padding: '14px 22px', borderRadius: 999, background: INK3, border: `1px solid ${LINE}`, fontFamily: SANS, fontWeight: 600, fontSize: 24, color: CREAM, opacity: prog(f, 150 + k * 6, 12), transform: `translateY(${(1 - prog(f, 150 + k * 6, 14, expoOut)) * 12}px)`}}>{t}</div>
         ))}
       </div>
@@ -180,8 +244,8 @@ const STEPS = [
   {t: 'Draft', d: 'Name the coin, pick platforms, choose the split.', s: 'Draft'},
   {t: 'Deploy', d: 'Your wallet launches it on pump.fun and locks the split.', s: 'Live on pump'},
   {t: 'Create influencer', d: 'One sentence becomes a face, voice and style.', s: 'Influencer created'},
-  {t: 'Activate', d: 'The page goes live. Nothing posts yet.', s: 'Page live'},
-  {t: 'Operate', d: 'Turn on posting: it plans, spends within policy, posts.', s: 'Operating'},
+  {t: 'Activate', d: 'The influencer’s page goes live.', s: 'Page live'},
+  {t: 'Operate', d: 'It auto-posts twice a day, within its spending policy.', s: 'Posting 2× daily'},
 ];
 const Steps: React.FC = () => {
   const f = useCurrentFrame();
@@ -215,31 +279,27 @@ const Steps: React.FC = () => {
         );
       })}
       {/* the coin card evolving */}
-      <Card style={{position: 'absolute', left: 1150, top: 200, width: 620, height: 700, padding: 40, boxSizing: 'border-box', opacity: prog(f, 10, 14), transform: `translateY(${(1 - prog(f, 10, 18, expoOut)) * 30}px)`}}>
+      <Card style={{position: 'absolute', left: 1150, top: 170, width: 620, height: 780, padding: 40, boxSizing: 'border-box', opacity: prog(f, 10, 14), transform: `translateY(${(1 - prog(f, 10, 18, expoOut)) * 30}px)`}}>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
           <div style={{fontFamily: MONO, fontSize: 16, letterSpacing: '0.14em', color: DIM}}>SAMPLE COIN</div>
           <div style={{padding: '8px 14px', borderRadius: 999, background: posting ? 'rgba(76,242,194,0.15)' : INK3, border: `1px solid ${posting ? MINT : LINE}`, fontFamily: MONO, fontSize: 15, letterSpacing: '0.08em', color: posting ? MINT : LILAC}}>● {STEPS[cur].s.toUpperCase()}</div>
         </div>
-        <div style={{display: 'flex', alignItems: 'center', gap: 26, marginTop: 40}}>
-          <div style={{position: 'relative', width: 150, height: 150}}>
-            <div style={{position: 'absolute', inset: 0, borderRadius: 75, border: `2px dashed ${LINE}`, opacity: 1 - face}} />
-            <div style={{position: 'absolute', inset: 0, opacity: face, transform: `scale(${lerp(0.6, 1, face)})`}}>
-              <Avatar name="Marlo" a="#8B3DFF" b="#FF4FB8" size={150} />
-            </div>
+        <div style={{position: 'relative', marginTop: 26, width: 540, height: 300, borderRadius: 18, overflow: 'hidden', border: `1px solid ${LINE}`}}>
+          <Influencer name="Marlo" w={540} h={300} f={f} id="mcard" />
+          <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, padding: '40px 22px 16px', background: 'linear-gradient(180deg, transparent, rgba(9,6,15,0.85))', display: 'flex', alignItems: 'baseline', gap: 14}}>
+            <div style={{fontFamily: DISPLAY, fontWeight: 800, fontSize: 44, color: CREAM}}>Marlo</div>
+            <div style={{fontFamily: MONO, fontSize: 24, color: FLARE}}>$MARLO</div>
           </div>
-          <div>
-            <div style={{fontFamily: DISPLAY, fontWeight: 800, fontSize: 52, color: CREAM}}>Marlo</div>
-            <div style={{fontFamily: MONO, fontSize: 26, color: FLARE, marginTop: 6}}>$MARLO</div>
-          </div>
+          <div style={{position: 'absolute', right: 14, top: 14, padding: '6px 12px', borderRadius: 999, background: 'rgba(9,6,15,0.7)', border: `1px solid ${face > 0.5 ? MINT : LINE}`, fontFamily: MONO, fontSize: 14, letterSpacing: '0.08em', color: face > 0.5 ? MINT : LILAC}}>{face > 0.5 ? 'FACE ✓ VOICE ✓ STYLE ✓' : 'AI INFLUENCER'}</div>
         </div>
-        <div style={{marginTop: 34, fontFamily: SANS, fontSize: 24, lineHeight: 1.5, color: MUTE, opacity: face}}>“A night-owl who rates every diner on the strip.” <span style={{color: DIM}}>· voice ✓ · style ✓</span></div>
-        <div style={{marginTop: 30, display: 'flex', gap: 10, opacity: prog(f, at(0) + 6, 12)}}>
+        <div style={{marginTop: 20, fontFamily: SANS, fontSize: 23, lineHeight: 1.45, color: MUTE}}>“A night-owl who rates every diner on the strip.”</div>
+        <div style={{marginTop: 18, display: 'flex', gap: 10, opacity: prog(f, at(0) + 6, 12)}}>
           {['X', 'TikTok', 'Instagram'].map((p) => (
             <div key={p} style={{padding: '8px 16px', borderRadius: 10, background: INK3, border: `1px solid ${LINE}`, fontFamily: SANS, fontWeight: 600, fontSize: 20, color: CREAM}}>{p}</div>
           ))}
         </div>
         <div style={{position: 'absolute', left: 40, right: 40, bottom: 40, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 22px', borderRadius: 16, background: INK3, border: `1px solid ${posting ? MINT : LINE}`}}>
-          <div style={{fontFamily: SANS, fontWeight: 600, fontSize: 24, color: CREAM}}>AI posting</div>
+          <div style={{fontFamily: SANS, fontWeight: 600, fontSize: 24, color: CREAM}}>Auto-posting <span style={{color: posting ? MINT : DIM, fontWeight: 500}}>· 2× daily</span></div>
           <div style={{width: 74, height: 40, borderRadius: 20, background: posting ? MINT : '#3A2C58', position: 'relative'}}>
             <div style={{position: 'absolute', top: 4, left: posting ? 38 : 4, width: 32, height: 32, borderRadius: 16, background: '#fff'}} />
           </div>
@@ -308,7 +368,6 @@ const Guard: React.FC = () => {
   const used = prog(f, 30, 60, inOut) * 0.72;
   const req = prog(f, 70, 14, expoOut);
   const signed = f >= 112;
-  const frozen = f >= 150;
   return (
     <AbsoluteFill>
       <Ground f={f + 740} />
@@ -319,7 +378,7 @@ const Guard: React.FC = () => {
         <Head text="It can’t overspend." start={4} size={86} />
       </div>
       <div style={{position: 'absolute', left: 150, top: 290}}>
-        <Head text="It can’t sneak-post." start={12} size={86} grad />
+        <Head text="It posts twice a day." start={12} size={86} grad />
       </div>
       {/* spending policy */}
       <Card style={{position: 'absolute', left: 150, top: 450, width: 760, padding: '32px 36px', boxSizing: 'border-box', opacity: prog(f, 16, 14)}}>
@@ -340,7 +399,7 @@ const Guard: React.FC = () => {
           ))}
         </div>
       </Card>
-      {/* approval + freeze */}
+      {/* approval */}
       <Card style={{position: 'absolute', left: 980, top: 450, width: 790, padding: '30px 34px', boxSizing: 'border-box', opacity: req, transform: `translateY(${(1 - req) * 24}px)`, border: `1px solid ${signed ? MINT : FLAME}`}}>
         <div style={{fontFamily: MONO, fontSize: 16, letterSpacing: '0.12em', color: signed ? MINT : FLARE}}>{signed ? 'APPROVED · WALLET SIGNED' : 'APPROVAL NEEDED'}</div>
         <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 34, color: CREAM, marginTop: 10}}>15s clip with voice line · $4.20</div>
@@ -350,14 +409,17 @@ const Guard: React.FC = () => {
           <div style={{padding: '12px 24px', borderRadius: 12, border: `1px solid ${LINE}`, fontFamily: SANS, fontWeight: 600, fontSize: 22, color: MUTE}}>Deny</div>
         </div>
       </Card>
-      <Card style={{position: 'absolute', left: 980, top: 718, width: 790, padding: '22px 34px', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'space-between', opacity: prog(f, 130, 14), border: `1px solid ${frozen ? '#FFD166' : LINE}`}}>
-        <div>
-          <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 30, color: CREAM}}>❄️ Freeze</div>
-          <div style={{fontFamily: SANS, fontSize: 21, color: MUTE, marginTop: 4}}>One switch denies every paid action.</div>
-        </div>
-        <div style={{width: 84, height: 46, borderRadius: 23, background: frozen ? '#FFD166' : '#3A2C58', position: 'relative'}}>
-          <div style={{position: 'absolute', top: 5, left: frozen ? 43 : 5, width: 36, height: 36, borderRadius: 18, background: '#fff'}} />
-        </div>
+      <Card style={{position: 'absolute', left: 980, top: 718, width: 790, padding: '22px 34px', boxSizing: 'border-box', display: 'flex', alignItems: 'center', gap: 22, opacity: prog(f, 120, 14)}}>
+        <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 28, color: CREAM, whiteSpace: 'nowrap'}}>⏰ Auto-post</div>
+        {['AM post', 'PM post'].map((t, k) => {
+          const done = f >= 140 + k * 18;
+          return (
+            <div key={t} style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', borderRadius: 12, background: INK3, border: `1px solid ${done ? MINT : LINE}`}}>
+              <span style={{fontFamily: MONO, fontSize: 20, color: CREAM}}>{t}</span>
+              <span style={{fontFamily: MONO, fontSize: 17, color: done ? MINT : DIM}}>{done ? 'POSTED ✓' : 'QUEUED'}</span>
+            </div>
+          );
+        })}
       </Card>
       {/* agent log */}
       <div style={{position: 'absolute', left: 980, top: 858, width: 790, display: 'flex', gap: 10, alignItems: 'center'}}>
@@ -370,7 +432,7 @@ const Guard: React.FC = () => {
       </div>
       <div style={{position: 'absolute', left: 980, top: 938, fontFamily: SANS, fontSize: 23, color: DIM, opacity: prog(f, 90, 14)}}>Every step and its reasoning is public in the coin’s Agent log.</div>
       <div style={{position: 'absolute', left: 150, top: 840, width: 760, fontFamily: SANS, fontSize: 26, lineHeight: 1.45, color: MUTE, opacity: prog(f, 100, 14)}}>
-        <span style={{color: CREAM, fontWeight: 700}}>▶️ AI posting is opt-in.</span> Off by default. Nothing is scheduled until you switch it on.
+        <span style={{color: CREAM, fontWeight: 700}}>⏰ Auto-posts 2× a day.</span> Every day, on schedule, within the spending policy.
       </div>
     </AbsoluteFill>
   );
@@ -411,7 +473,7 @@ const Scenes: React.FC = () => {
           <Card key={p.n} style={{position: 'absolute', left: 150 + k * 556, top: 540, width: 520, height: 380, padding: '28px 30px', boxSizing: 'border-box', opacity: pr, transform: `translateY(${(1 - pr) * 40}px) rotate(${(k - 1) * 1.2 * (1 - pr)}deg)`}}>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
-                <Avatar name={p.n} a={p.a} b={p.b} size={64} />
+                <div style={{width: 64, height: 64, borderRadius: 32, overflow: 'hidden', boxShadow: `0 0 0 3px ${INK}, 0 0 0 5px ${LINE}`, flexShrink: 0}}><Influencer name={p.n} w={64} h={64} f={f} id={`av${p.n}`} radius={32} /></div>
                 <div>
                   <div style={{fontFamily: SANS, fontWeight: 700, fontSize: 26, color: CREAM}}>{p.n}</div>
                   <div style={{fontFamily: MONO, fontSize: 17, color: FLARE}}>{p.t}</div>
@@ -454,7 +516,7 @@ const Finale: React.FC = () => {
         <div style={{padding: '18px 34px', borderRadius: 999, border: `1.5px solid ${CREAM}`, fontFamily: MONO, fontWeight: 600, fontSize: 34, letterSpacing: '0.06em', color: CREAM}}>PERSONAPUMP.FUN</div>
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 1010, textAlign: 'center', fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', color: DIM, opacity: prog(f, 64, 12)}}>
-        CHARACTERS ARE FICTIONAL · POSTING IS OPT-IN · NOT FINANCIAL ADVICE
+        CHARACTERS ARE FICTIONAL · AUTO-POSTS 2× DAILY · NOT FINANCIAL ADVICE
       </div>
     </AbsoluteFill>
   );
