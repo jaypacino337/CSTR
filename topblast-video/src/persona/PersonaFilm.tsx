@@ -3,7 +3,7 @@ import {expoIn, expoOut, inOut, lerp, prog} from '../theme';
 import tl from './timeline.json';
 
 // Persona (personapump.fun) — HQ film. Site system: deep ink, violet → flame → pink
-// glow, Unbounded display + DM Sans + JetBrains Mono. Aura, the purple flame, hosts.
+// glow, Unbounded display + DM Sans + JetBrains Mono. Sona, the purple flame, hosts.
 const INK = '#09060F';
 const INK2 = '#120B1F';
 const INK3 = '#1C1230';
@@ -23,8 +23,8 @@ const SANS = '"DM Sans", sans-serif';
 const MONO = '"JetBrains Mono", monospace';
 const S = tl.scenes;
 
-// ── Aura ───────────────────────────────────────────────────
-const Aura: React.FC<{size: number; f: number; id: string; talk?: boolean; glow?: number}> = ({size, f, id, talk = false, glow = 1}) => {
+// ── Sona ───────────────────────────────────────────────────
+const Sona: React.FC<{size: number; f: number; id: string; talk?: boolean; glow?: number}> = ({size, f, id, talk = false, glow = 1}) => {
   const blink = f % 96 > 90 ? 0.12 : 1;
   const flick = 1 + Math.sin(f / 4.3) * 0.018 + Math.sin(f / 2.7) * 0.01;
   const sway = Math.sin(f / 11) * 2.2;
@@ -124,7 +124,7 @@ const Hook: React.FC = () => {
       <Ground f={f} />
       <div style={{position: 'absolute', left: 960 - 650, top: 540 - 650, width: 1300, height: 1300, borderRadius: '50%', background: 'radial-gradient(closest-side, rgba(210,60,255,0.25), transparent)', opacity: grow}} />
       <div style={{position: 'absolute', left: 1400, top: 300, transform: `scale(${lerp(0.05, 1, grow)})`, transformOrigin: '50% 90%', opacity: spark}}>
-        <Aura size={380} f={f} id="ah" />
+        <Sona size={380} f={f} id="ah" />
       </div>
       <div style={{position: 'absolute', left: 150, top: 230}}>
         <Kicker f={f} at={16}>Built on Solana · launch, lock, let it post</Kicker>
@@ -142,9 +142,9 @@ const Hook: React.FC = () => {
   );
 };
 
-// ── 2. meet Aura ───────────────────────────────────────────
-const LINES = ['Hi. I’m Aura.', 'I live in every coin launched here.', 'I lock your fee split on-chain,', 'then give your coin a face and a voice.'];
-const MeetAura: React.FC = () => {
+// ── 2. meet Sona ───────────────────────────────────────────
+const LINES = ['Hi. I’m Sona.', 'I live in every coin launched here.', 'I lock your fee split on-chain,', 'then give your coin a face and a voice.'];
+const MeetSona: React.FC = () => {
   const f = useCurrentFrame();
   const starts = [14, 44, 90, 128];
   const typed = (k: number) => LINES[k].slice(0, Math.max(0, Math.floor((f - starts[k]) * 1.4)));
@@ -153,10 +153,10 @@ const MeetAura: React.FC = () => {
     <AbsoluteFill>
       <Ground f={f + 150} />
       <div style={{position: 'absolute', left: 150, top: 200, opacity: prog(f, 0, 14), transform: `translateY(${(1 - prog(f, 0, 18, expoOut)) * 30}px)`}}>
-        <Aura size={560} f={f} id="am" talk={talking} />
+        <Sona size={560} f={f} id="am" talk={talking} />
       </div>
       <div style={{position: 'absolute', left: 820, top: 120}}>
-        <Kicker f={f} at={4}>Meet Aura</Kicker>
+        <Kicker f={f} at={4}>Meet Sona</Kicker>
       </div>
       <Card style={{position: 'absolute', left: 820, top: 220, width: 960, padding: '44px 52px', boxSizing: 'border-box', borderRadius: '32px 32px 32px 8px', opacity: prog(f, 8, 14)}}>
         {LINES.map((l, k) => (
@@ -422,12 +422,11 @@ const Scenes: React.FC = () => {
             <div style={{fontFamily: SANS, fontSize: 27, lineHeight: 1.45, color: CREAM, marginTop: 24}}>{p.c}</div>
             <div style={{position: 'absolute', left: 30, bottom: 26, display: 'flex', gap: 10}}>
               <span style={{padding: '6px 12px', borderRadius: 8, background: INK3, fontFamily: MONO, fontSize: 14, color: LILAC, letterSpacing: '0.08em'}}>SAMPLE</span>
-              <span style={{padding: '6px 12px', borderRadius: 8, background: INK3, fontFamily: MONO, fontSize: 14, color: LILAC, letterSpacing: '0.08em'}}>#AIGENERATED</span>
             </div>
           </Card>
         );
       })}
-      <div style={{position: 'absolute', left: 150, top: 960, fontFamily: SANS, fontSize: 24, color: DIM, opacity: prog(f, 80, 14)}}>AI-labelled, always. Voice lines and clips post with sound on TikTok and Instagram.</div>
+      <div style={{position: 'absolute', left: 150, top: 960, fontFamily: SANS, fontSize: 24, color: DIM, opacity: prog(f, 80, 14)}}>Same character, new scene every post. Voice lines and clips post with sound on TikTok and Instagram.</div>
     </AbsoluteFill>
   );
 };
@@ -441,21 +440,21 @@ const Finale: React.FC = () => {
       <Ground f={f + 1120} />
       <div style={{position: 'absolute', left: 960 - 700, top: 0, width: 1400, height: 1000, borderRadius: '50%', background: 'radial-gradient(closest-side, rgba(210,60,255,0.28), transparent)', opacity: m}} />
       <div style={{position: 'absolute', left: 960 - 160, top: 90, opacity: m, transform: `scale(${lerp(0.6, 1, m)})`, transformOrigin: '50% 90%'}}>
-        <Aura size={320} f={f} id="af" />
+        <Sona size={320} f={f} id="af" />
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 500, textAlign: 'center', fontFamily: DISPLAY, fontWeight: 800, fontSize: 170, letterSpacing: '-0.04em', lineHeight: 1, opacity: prog(f, 20, 14), transform: `translateY(${(1 - prog(f, 20, 18, expoOut)) * 26}px)`}}>
         <span style={{color: CREAM}}>per</span>
         <span style={{backgroundImage: GRAD, WebkitBackgroundClip: 'text', color: 'transparent', paddingRight: 8}}>sona</span>
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 710, textAlign: 'center', fontFamily: SANS, fontWeight: 600, fontSize: 44, color: MUTE, opacity: prog(f, 36, 14)}}>
-        Every token gets a <span style={{color: CREAM}}>persona.</span>
+        Launch it, lock the split, give it a face. <span style={{color: CREAM}}>Yours next.</span>
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 820, display: 'flex', justifyContent: 'center', gap: 18, opacity: prog(f, 50, 12), transform: `translateY(${(1 - prog(f, 50, 14, expoOut)) * 14}px)`}}>
         <div style={{padding: '18px 32px', borderRadius: 999, backgroundImage: GRAD, fontFamily: DISPLAY, fontWeight: 800, fontSize: 36, color: '#fff'}}>$PERSONA</div>
         <div style={{padding: '18px 34px', borderRadius: 999, border: `1.5px solid ${CREAM}`, fontFamily: MONO, fontWeight: 600, fontSize: 34, letterSpacing: '0.06em', color: CREAM}}>PERSONAPUMP.FUN</div>
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 1010, textAlign: 'center', fontFamily: MONO, fontSize: 15, letterSpacing: '0.12em', color: DIM, opacity: prog(f, 64, 12)}}>
-        AI-LABELLED, ALWAYS · POSTING IS OPT-IN · NOT FINANCIAL ADVICE
+        CHARACTERS ARE FICTIONAL · POSTING IS OPT-IN · NOT FINANCIAL ADVICE
       </div>
     </AbsoluteFill>
   );
@@ -468,9 +467,9 @@ export const PersonaFilm: React.FC<{withAudio?: boolean}> = ({withAudio = true})
         <Hook />
       </Cut>
     </Sequence>
-    <Sequence from={S.aura.from} durationInFrames={S.aura.dur} name="02 Meet Aura">
-      <Cut dur={S.aura.dur}>
-        <MeetAura />
+    <Sequence from={S.sona.from} durationInFrames={S.sona.dur} name="02 Meet Sona">
+      <Cut dur={S.sona.dur}>
+        <MeetSona />
       </Cut>
     </Sequence>
     <Sequence from={S.steps.from} durationInFrames={S.steps.dur} name="03 Five steps">
